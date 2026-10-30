@@ -1,0 +1,40 @@
+services:
+  gateway-home-assistant:
+    profiles: [home-assistant]
+    build:
+      context: .
+      dockerfile: gateways/Dockerfile
+    command: ["python", "home_assistant.py"]
+    env_file:
+      - path: ./gateways/.env.home-assistant
+        required: false
+    environment:
+      KANCA_URL: http://api:8000
+    restart: unless-stopped
+    depends_on: [api]
+  gateway-mqtt:
+    profiles: [mqtt]
+    build:
+      context: .
+      dockerfile: gateways/Dockerfile
+    command: ["python", "mqtt.py"]
+    env_file:
+      - path: ./gateways/.env.mqtt
+        required: false
+    environment:
+      KANCA_URL: http://api:8000
+    restart: unless-stopped
+    depends_on: [api]
+  gateway-camera:
+    profiles: [camera]
+    build:
+      context: .
+      dockerfile: gateways/Dockerfile
+    command: ["python", "camera_motion.py"]
+    env_file:
+      - path: ./gateways/.env.camera
+        required: false
+    environment:
+      KANCA_URL: http://api:8000
+    restart: unless-stopped
+    depends_on: [api]

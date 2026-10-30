@@ -1,0 +1,10 @@
+.venv/
+__pycache__/
+.pytest_cache/
+*.pyc
+.env
+data/
+node_modules/
+frontend/dist/
+gateways/.env.*
+mini-pc-gateway/config.json

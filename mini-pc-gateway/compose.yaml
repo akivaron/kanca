@@ -1,0 +1,6 @@
+services:
+  gateway:
+    build: .
+    restart: unless-stopped
+    volumes:
+      - ./config.json:/config/config.json:ro

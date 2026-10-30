@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(find frontend/src -type f | head -50; echo ---; wc -l frontend/src/*.jsx frontend/src/*.css 2>/dev/null)",
+      "Bash(mkdir -p frontend/.backup-ui-20261029 && cp frontend/index.html frontend/src/style.css frontend/src/responsive.css frontend/src/App.jsx frontend/.backup-ui-20261029/ && ls frontend/.backup-ui-20261029)",
+      "Bash(rtk cd frontend && rtk npm install --no-audit --no-fund 2>&1 | tail -2 && rtk npm run build 2>&1 | tail -8)",
+      "Bash(rtk npm run build 2>&1 | tail -10)",
+      "Bash(ls frontend/node_modules/.bin 2>/dev/null | head -3; rtk npm install --no-audit --no-fund 2>&1 | tail -3 && rtk npm run build 2>&1 | tail -8)",
+      "Bash(rtk npm install --no-audit --no-fund 2>&1 | tail -3 && rtk npm run build 2>&1 | tail -8)",
+      "Bash(KANCA_DB_PATH=/tmp/kanca-ui-check.db rtk uvicorn app.main:app --port 8765 > /tmp/kanca-backend.log 2>&1 &\necho started)",
+      "Bash(rtk npm run dev > /tmp/kanca-frontend.log 2>&1 &\nsleep 3; curl -s -o /dev/null -w \"%{http_code}\\\\n\" http://127.0.0.1:5173/; curl -s http://127.0.0.1:8765/health)",
+      "Bash(lsof -ti :8765 | xargs kill 2>/dev/null; sleep 1; KANCA_API_KEY=localtest KANCA_DB_PATH=/tmp/kanca-ui-check.db nohup uvicorn app.main:app --port 8765 > /tmp/kanca-backend.log 2>&1 & sleep 2; curl -s -c /tmp/kanca-cookie.txt -X POST http://127.0.0.1:8765/v1/session; echo; curl -s -b /tmp/kanca-cookie.txt http://127.0.0.1:8765/v1/conversations)"
+    ]
+  }
+}

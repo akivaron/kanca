@@ -1,0 +1,331 @@
+/* ============================================================
+   Kanca responsive rules — single source of truth for layout
+   breakpoints. Component styling lives in style.css.
+   Mobile app layout: ≤ 820px (header + content + bottom tabs).
+   ============================================================ */
+
+html,
+body,
+#root {
+  min-width: 320px;
+  min-height: 100%;
+}
+
+body {
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+button,
+input,
+select,
+textarea {
+  max-width: 100%;
+}
+
+.app,
+.main,
+.scroll,
+.content,
+.workers,
+.worker-card,
+.plan,
+.source-form,
+.credential,
+.media-settings,
+.message-body,
+.bubble {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.workers-header > .primary,
+.workers-header > .secondary,
+.workers-header > .icon-button {
+  flex: 0 0 auto;
+}
+
+.worker-card .status {
+  white-space: normal;
+}
+
+.details pre {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+@media (max-width: 1000px) {
+  .app {
+    grid-template-columns: 236px minmax(0, 1fr);
+  }
+
+  .sidebar {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .topbar,
+  .content,
+  .workers,
+  .workers-error {
+    padding-left: 22px;
+    padding-right: 22px;
+  }
+}
+
+@media (max-width: 820px) {
+  body {
+    font-size: 16px;
+  }
+
+  .app {
+    height: 100dvh;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto minmax(0, 1fr) auto;
+  }
+
+  /* --- Header: sidebar collapses into the topbar row --- */
+  .sidebar {
+    display: none;
+  }
+
+  .brand-topbar {
+    display: flex;
+    flex: none;
+    gap: 9px;
+    font-size: 18px;
+  }
+
+  .brand-topbar .brand-icon {
+    width: 34px;
+    height: 34px;
+    flex: none;
+  }
+
+  /* --- Bottom tab bar --- */
+  .mobile-bottom-nav {
+    display: grid;
+    grid-row: 3;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 4px;
+    width: 100%;
+    padding: 6px 10px max(6px, env(safe-area-inset-bottom));
+    border-top: 1px solid var(--line);
+    background: var(--bg-blur);
+    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(16px);
+  }
+
+  /* --- Main column --- */
+  .main {
+    grid-row: 2;
+    height: auto;
+    min-height: 0;
+  }
+
+  .topbar {
+    min-height: 58px;
+    padding: 9px 16px;
+    gap: 10px;
+    justify-content: space-between;
+  }
+
+  .topbar-title {
+    display: none;
+  }
+
+  .topbar .badge {
+    display: none;
+  }
+
+  .topbar-actions {
+    flex: 1 1 auto;
+    min-width: 0;
+    justify-content: flex-end;
+    gap: 8px;
+  }
+
+  .topic-select {
+    flex: 1 1 0;
+    min-width: 0;
+    max-width: none;
+  }
+
+  .content {
+    padding: 22px 16px 16px;
+  }
+
+  .welcome h1 {
+    font-size: clamp(28px, 8vw, 34px);
+  }
+
+  .welcome p {
+    font-size: 15px;
+  }
+
+  .suggestions {
+    gap: 8px;
+    margin: 20px 0 26px;
+  }
+
+  .suggestions button {
+    flex: 1 1 140px;
+    min-height: var(--tap);
+  }
+
+  .message {
+    gap: 10px;
+    margin: 22px 0;
+  }
+
+  .plan,
+  .worker-card,
+  .worker-empty {
+    padding: 16px;
+  }
+
+  .composer-wrap {
+    padding: 0 12px max(12px, env(safe-area-inset-bottom));
+  }
+
+  .composer {
+    padding: 10px 12px;
+    border-radius: var(--radius-m);
+  }
+
+  .composer textarea {
+    min-height: 44px;
+  }
+
+  .composer-bottom > span {
+    max-width: calc(100% - 50px);
+    line-height: 1.4;
+  }
+
+  .footer {
+    margin: 8px 4px 0;
+    font-size: 11px;
+  }
+
+  /* --- Pages --- */
+  .workers,
+  .workers-error {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .workers {
+    padding-top: 20px;
+    padding-bottom: 40px;
+  }
+
+  .workers-header {
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 8px;
+  }
+
+  .workers-header h1 {
+    font-size: clamp(26px, 7.5vw, 32px);
+  }
+
+  .worker-summary {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 6px 12px;
+    padding: 14px 16px;
+  }
+
+  .worker-summary strong {
+    font-size: 20px;
+  }
+
+  .summary-divider {
+    display: none;
+  }
+
+  .worker-card .plan-top {
+    flex-wrap: wrap;
+  }
+
+  .notification .plan-top {
+    flex-wrap: nowrap;
+  }
+
+  .worker-card .plan-top > div {
+    flex-basis: 100%;
+  }
+
+  .worker-card .status {
+    margin-top: 2px;
+  }
+
+  .worker-meta {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px 10px;
+  }
+
+  .worker-card .actions > button,
+  .schedule-form .actions > button,
+  .source-form > button {
+    flex: 1 1 auto;
+    min-height: var(--tap);
+  }
+
+  .source-form {
+    align-items: stretch;
+    padding: 14px;
+  }
+
+  .source-form label,
+  .schedule-form label,
+  .credential label {
+    flex-basis: 100%;
+  }
+
+  .confirm-content {
+    padding: 22px;
+  }
+}
+
+@media (max-width: 420px) {
+  .brand-topbar {
+    font-size: 17px;
+  }
+
+  .topbar {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .mobile-bottom-nav {
+    padding-left: 6px;
+    padding-right: 6px;
+  }
+
+  .tab-button {
+    min-height: 52px;
+    font-size: 10px;
+  }
+
+  .content,
+  .workers,
+  .workers-error {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+
+  .worker-meta {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .confirm-actions {
+    flex-direction: column-reverse;
+  }
+
+  .confirm-actions button {
+    width: 100%;
+  }
+}

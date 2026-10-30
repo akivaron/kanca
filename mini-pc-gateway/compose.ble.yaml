@@ -1,0 +1,5 @@
+services:
+  gateway:
+    network_mode: host
+    volumes:
+      - /run/dbus/system_bus_socket:/run/dbus/system_bus_socket:ro
