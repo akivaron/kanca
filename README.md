@@ -107,7 +107,7 @@ Untuk mode model, set `BASETEN_API_KEY` dan kirim task tanpa `explicit_steps`. M
 
 ## MCP untuk agent lain
 
-Kanca menyediakan server MCP lokal melalui stdio. Tool yang tersedia mencakup daftar sumber dan koneksi, membaca event dan hasil task, membuat rancangan task, dan membuat rancangan rerun. Kedua operasi yang membuat rancangan tetap membutuhkan persetujuan pemilik di Kanca sebelum worker menjalankannya. MCP tidak menyediakan tool untuk menyetujui rencana atau mengontrol perangkat fisik secara langsung.
+Kanca menyediakan server MCP lokal melalui stdio. Tool yang tersedia mencakup daftar sumber dan koneksi, membaca event dan hasil task, bertanya dengan bahasa alami tentang observasi terbaru sumber (`ask_source`), membuat rancangan task, dan membuat rancangan rerun. Pertanyaan serta event terbaru yang diperlukan untuk menjawab dikirim ke Baseten. Jawaban sumber hanya memakai event yang sudah diterima dan analisis kamera yang sudah tersimpan; MCP tidak dapat meminta frame kamera baru. Rancangan task dan rerun tetap membutuhkan persetujuan pemilik di Kanca. Kontrol perangkat fisik secara langsung belum tersedia; setiap adapter kontrol harus menerbitkan aksi spesifik dan kebijakan persetujuannya sendiri.
 
 Setelah `./run.sh`, MCP client yang mendukung stdio dapat menjalankan perintah berikut dari folder proyek:
 

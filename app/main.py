@@ -2,11 +2,13 @@ import hashlib
 import hmac
 import json
 import os
+import re
 import secrets
 import sqlite3
 import asyncio
 from pathlib import Path
 from contextlib import asynccontextmanager
+from datetime import datetime, timezone
 from typing import Any
 
 from fastapi import Depends, FastAPI, Header, HTTPException, Query, Request
@@ -15,7 +17,7 @@ from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
 from app.connectors.registry import CAPABILITIES, describe
-from app.planner import PlanningError, propose
+from app.planner import PlanningError, answer_source_question, propose
 from app.service import validate_steps
 from app.storage import connect, event, event_dict, initialize, now, task_dict, uid
 from app.webhooks import validate_url
@@ -121,6 +123,10 @@ class MediaSettings(BaseModel):
     audio_prompt: str = Field(default='Rangkum suara yang terdengar.', min_length=1, max_length=500)
 
 
+class SourceQuestion(BaseModel):
+    question: str = Field(min_length=1, max_length=2000)
+
+
 media_slots = asyncio.Semaphore(2)
 
 
@@ -162,6 +168,71 @@ def create_source(body: SourceInput, tenant: str = Depends(tenant_auth)):
     return {"id": sid, "name": name, "kind": kind, "status": "active", "created_at": ts, "token": token, "ingest_path": f"/v1/ingest/{sid}"}
 
 
+@app.post("/v1/sources/simulator-pack", status_code=201)
+def create_simulator_source_pack(tenant: str = Depends(tenant_auth)):
+    presets = [("Kamera Gudang", "camera"), ("Kamera Area Staf", "camera"), ("Sensor Suhu", "iot")]
+    with connect() as db:
+        existing = db.execute(
+            "SELECT name FROM sources WHERE tenant=? AND status!='deleted' AND name IN (?,?,?)",
+            (tenant, *(name for name, _ in presets)),
+        ).fetchall()
+        if existing:
+            names = ", ".join(row["name"] for row in existing)
+            raise HTTPException(409, f"Sumber demo sudah ada: {names}. Hapus sumber lama sebelum membuat paket baru.")
+        created = []
+        for name, kind in presets:
+            sid, token, ts = uid("src"), secrets.token_urlsafe(32), now()
+            db.execute("INSERT INTO sources VALUES (?,?,?,?,?,?,?,?)", (sid, tenant, name, kind, hashlib.sha256(token.encode()).hexdigest(), "active", ts, None))
+            created.append({"id": sid, "name": name, "kind": kind, "status": "active", "created_at": ts, "token": token, "ingest_path": f"/v1/ingest/{sid}"})
+    return {"sources": created}
+
+
+@app.post("/v1/sources/public-cctv-pack", status_code=201)
+def create_public_cctv_source_pack(tenant: str = Depends(tenant_auth)):
+    presets = [
+        ("CCTV Publik Gatot Subroto", "https://dki-jkt.balitower.co.id:7028/502045_JKP_POLDA_JPO-JL.-GATOT-SUBROTO-7_CCTV-01/index.fmp4.m3u8", "https://dki-jkt.balitower.co.id:7028/502045_JKP_POLDA_JPO-JL.-GATOT-SUBROTO-7_CCTV-01/embed.html"),
+        ("CCTV Publik Gerbang Pemuda", "https://dki-jkt.balitower.co.id:7028/502155_JKP_POLDA_JL.-GERBANG-PEMUDA-C02_CCTV-01/index.fmp4.m3u8", "https://dki-jkt.balitower.co.id:7028/502155_JKP_POLDA_JL.-GERBANG-PEMUDA-C02_CCTV-01/embed.html"),
+    ]
+    with connect() as db:
+        existing = db.execute(
+            "SELECT name FROM sources WHERE tenant=? AND status!='deleted' AND name IN (?,?)",
+            (tenant, *(name for name, _, _ in presets)),
+        ).fetchall()
+        if existing:
+            names = ", ".join(row["name"] for row in existing)
+            raise HTTPException(409, f"Sumber CCTV publik sudah ada: {names}. Hapus sumber lama sebelum membuat ulang.")
+        created = []
+        for name, camera_url, public_stream_url in presets:
+            sid, token, ts = uid("src"), secrets.token_urlsafe(32), now()
+            db.execute("INSERT INTO sources VALUES (?,?,?,?,?,?,?,?)", (sid, tenant, name, "camera", hashlib.sha256(token.encode()).hexdigest(), "active", ts, None))
+            prompt = "Ringkas kondisi lalu lintas yang terlihat. Jelaskan kepadatan dan kondisi jalan tanpa mengidentifikasi orang atau kendaraan. Jika tidak jelas, nyatakan tidak pasti."
+            db.execute("INSERT INTO source_media_settings VALUES (?,?,?,?,?)", (sid, 1, 0, prompt, "Analisis audio tidak diaktifkan."))
+            created.append({"id": sid, "name": name, "kind": "camera", "status": "active", "created_at": ts, "token": token, "camera_url": camera_url, "public_stream_url": public_stream_url, "interval_seconds": 120, "vision_enabled": True})
+    return {"sources": created}
+
+
+@app.post("/v1/sources/public-bmkg", status_code=201)
+def create_public_bmkg_sources(tenant: str = Depends(tenant_auth)):
+    presets = [
+        ("Cuaca Kemayoran (BMKG)", "https://api.bmkg.go.id/publik/prakiraan-cuaca?adm4=31.71.03.1001", "bmkg.weather", 3600),
+        ("Gempa Terbaru (BMKG)", "https://data.bmkg.go.id/DataMKG/TEWS/autogempa.json", "bmkg.earthquake.latest", 120),
+        ("Gempa Dirasakan (BMKG)", "https://data.bmkg.go.id/DataMKG/TEWS/gempadirasakan.json", "bmkg.earthquake.felt", 120),
+    ]
+    with connect() as db:
+        existing = {row["name"] for row in db.execute(
+            "SELECT name FROM sources WHERE tenant=? AND status!='deleted' AND name IN (?,?,?)",
+            (tenant, *(name for name, _, _, _ in presets)),
+        ).fetchall()}
+        created = []
+        for name, http_url, event_type, interval in presets:
+            if name in existing:
+                continue
+            sid, token, ts = uid("src"), secrets.token_urlsafe(32), now()
+            db.execute("INSERT INTO sources VALUES (?,?,?,?,?,?,?,?)", (sid, tenant, name, "iot", hashlib.sha256(token.encode()).hexdigest(), "active", ts, None))
+            created.append({"id":sid,"name":name,"kind":"iot","status":"active","created_at":ts,"token":token,"http_url":http_url,"event_type":event_type,"interval_seconds":interval,"type":"http_json"})
+    return {"sources":created,"already_connected":[name for name,_,_,_ in presets if name in existing]}
+
+
 @app.get("/v1/sources")
 def list_sources(tenant: str = Depends(tenant_auth)):
     with connect() as db:
@@ -195,6 +266,34 @@ def source_events(sid: str, tenant: str = Depends(tenant_auth)):
         if not db.execute("SELECT 1 FROM sources WHERE id=? AND tenant=?", (sid, tenant)).fetchone():
             raise HTTPException(404, "Sumber tidak ditemukan")
         return [{**dict(row), "payload": json.loads(row["payload"])} for row in db.execute("SELECT * FROM source_events WHERE source_id=? ORDER BY rowid DESC LIMIT 50", (sid,))]
+
+
+def latest_source_observations(db, sid: str, tenant: str, event_type: str | None = None):
+    source = db.execute("SELECT id,name,kind,status,last_seen FROM sources WHERE id=? AND tenant=? AND status='active'", (sid, tenant)).fetchone()
+    if not source:
+        raise HTTPException(404, "Sumber aktif tidak ditemukan")
+    if event_type:
+        rows = db.execute("SELECT event_type,payload,received_at FROM source_events WHERE source_id=? AND event_type=? ORDER BY rowid DESC LIMIT 10", (sid, event_type)).fetchall()
+    else:
+        rows = db.execute("SELECT event_type,payload,received_at FROM source_events WHERE source_id=? ORDER BY rowid DESC LIMIT 10", (sid,)).fetchall()
+    events = [{"event_type": row["event_type"], "received_at": row["received_at"], "data": json.loads(row["payload"])} for row in rows]
+    return dict(source), events
+
+
+@app.post("/v1/sources/{sid}/query")
+def query_source(sid: str, body: SourceQuestion, tenant: str = Depends(tenant_auth)):
+    with connect() as db:
+        source, events = latest_source_observations(db, sid, tenant)
+    try:
+        question = body.question.strip()
+        if not question:
+            raise HTTPException(422, "Pertanyaan tidak boleh kosong")
+        answer = answer_source_question(question, source, events)
+    except HTTPException:
+        raise
+    except PlanningError as exc:
+        raise HTTPException(503, str(exc)) from exc
+    return {"source": source, "answer": answer, "observations": len(events)}
 
 
 @app.get("/v1/sources/{sid}/media-settings")
@@ -484,6 +583,116 @@ def conversation_messages(cid: str, tenant: str = Depends(tenant_auth)):
         return result
 
 
+def demo_warehouse_camera_answer(text: str) -> str | None:
+    """Answer warehouse box-count questions from the UI's explicitly simulated camera card."""
+    normalized = text.casefold()
+    asks_about_boxes = re.search(r"\bdus\b|\bbox(?:es)?\b|\bkotak\b|\bkarton\b|\bcartons?\b", normalized)
+    mentions_warehouse = re.search(r"gudang|warehouse", normalized)
+    asks_to_count_or_check = re.search(r"berapa|jumlah|banyak|hitung|cek|periksa|lihat|count|how many|quantity|number|check|see", normalized)
+    if not (asks_about_boxes and mentions_warehouse and asks_to_count_or_check):
+        return None
+    english = bool(re.search(r"\b(warehouse|boxes|box|count|how many|quantity|number|check|see)\b", normalized))
+    if english:
+        return "The simulated warehouse camera preview detects about 3 boxes. This is a demo estimate, not a live camera count or inventory record."
+    return "Pada cuplikan simulasi kamera gudang, terdeteksi sekitar 3 dus. Ini estimasi demo, bukan hitungan dari kamera live atau data stok."
+
+
+def integration_status_answer(text: str, tenant: str) -> str | None:
+    normalized = text.casefold()
+    integration_words = r"integrasi|integration|source|sumber|kamera|camera|mqtt|bluetooth|\bble\b|home assistant|sensor|perangkat|device"
+    status_words = r"cek|check|periksa|status|aktif|active|online|terhubung|connected|jalan|running|berfungsi|working|data terbaru|latest data|kondisi|status"
+    if not re.search(integration_words, normalized) or not re.search(status_words, normalized):
+        return None
+    camera_query = bool(re.search(r"kamera|rtsp|\bcamera\b", normalized))
+    english = bool(re.search(r"\b(check|camera|device|integration|source|active|online|connected|working|latest|status)\b", normalized))
+    with connect() as db:
+        sources = [dict(r) for r in db.execute("SELECT id,name,kind,status,last_seen FROM sources WHERE tenant=? AND status!='deleted' ORDER BY created_at DESC", (tenant,))]
+        sources = [s for s in sources if not camera_query or re.search(r"kamera|camera|rtsp", f"{s['name']} {s['kind']}", re.I)]
+        if not sources:
+            if camera_query:
+                return "No camera source is registered in Kanca. Add one under Integrations → External sources." if english else "Belum ada sumber kamera terdaftar di Kanca. Tambahkan kamera di Integrasi → Sumber eksternal."
+            return "No integrations or external sources are registered in Kanca." if english else "Belum ada integrasi atau sumber eksternal yang terdaftar di Kanca."
+        lines = []
+        for source in sources:
+            latest = db.execute("SELECT event_type,received_at,payload FROM source_events WHERE source_id=? ORDER BY rowid DESC LIMIT 1", (source['id'],)).fetchone()
+            label = source['name']
+            if source['status'] != 'active':
+                lines.append(f"{label}: inactive in Kanca." if english else f"{label}: nonaktif di Kanca.")
+                continue
+            if latest:
+                age = max(0, (datetime.now(timezone.utc) - datetime.fromisoformat(latest['received_at'])).total_seconds())
+                freshness = ("just now" if age <= 300 else f"{int(age // 60)} minutes ago") if english else ("baru saja" if age <= 300 else f"terakhir {int(age // 60)} menit lalu")
+                data = json.loads(latest['payload'])
+                detail = data.get('summary') if isinstance(data, dict) else None
+                if not detail and isinstance(data, dict):
+                    detail = data.get('state') or data.get('value')
+                suffix = (f" Summary: {detail}" if english else f" Ringkasan: {detail}") if detail else ""
+                lines.append(f"{label}: active in Kanca; data received {freshness} ({latest['event_type']}).{suffix}" if english else f"{label}: aktif di Kanca dan ada data ({freshness}, {latest['event_type']}).{suffix}")
+            elif source['last_seen']:
+                lines.append(f"{label}: active in Kanca, but no data is stored yet." if english else f"{label}: aktif di Kanca, tetapi belum ada data tersimpan.")
+            else:
+                lines.append(f"{label}: registered and enabled in Kanca, but has never sent data. The physical device status cannot be confirmed." if english else f"{label}: terdaftar dan aktif di Kanca, tetapi belum pernah mengirim data. Status perangkat fisiknya belum bisa dipastikan.")
+        if camera_query and all(s['status'] != 'active' for s in sources):
+            return ("Camera sources are registered, but all are inactive in Kanca. " if english else "Sumber kamera terdaftar, tetapi semuanya nonaktif di Kanca. ") + " ".join(lines)
+        return "\n".join(lines)
+
+
+def integration_inventory_answer(text: str, tenant: str) -> str | None:
+    normalized = text.casefold()
+    asks_inventory = re.search(r"perangkat apa|apa saja.*(perangkat|integrasi|sumber)|perangkat.*(terhubung|terintegrasi)|integrasi apa|sumber apa|what (devices|integrations|sources)|which (devices|integrations|sources)|devices?.*(connected|integrated)|integrations?.*(connected|available)|what is connected", normalized)
+    if not asks_inventory:
+        return None
+    english = bool(re.search(r"\b(what|which|devices|integrations|sources|connected|integrated)\b", normalized))
+    with connect() as db:
+        sources = [dict(r) for r in db.execute("SELECT id,name,kind,status,last_seen FROM sources WHERE tenant=? AND status!='deleted' ORDER BY created_at DESC", (tenant,))]
+        connections = [dict(r) for r in db.execute("SELECT type,status FROM connections WHERE tenant=? ORDER BY created_at DESC", (tenant,))]
+        names = {s['name'] for s in sources}
+        names.update(c['type'].replace('_',' ').title() for c in connections if c['status']=='connected')
+        if not names:
+            return "No devices or integrations are connected yet." if english else "Belum ada perangkat atau integrasi yang terhubung."
+        header = "These devices and integrations are registered in Kanca:" if english else "Perangkat dan integrasi yang tercatat di Kanca:"
+        lines = []
+        for source in sources:
+            kind = source['kind'].replace('_',' ').upper()
+            state = ("enabled" if source['status']=='active' else "disabled") if english else ("aktif" if source['status']=='active' else "nonaktif")
+            lines.append(f"• {source['name']} ({kind}) — {state}")
+        for connection in connections:
+            if connection['status']=='connected':
+                lines.append(f"• {connection['type'].replace('_',' ').title()} — " + ("connected" if english else "terhubung"))
+        caveat = "\nThis reports Kanca's configuration; it does not prove a physical device is online." if english else "\nIni menunjukkan konfigurasi Kanca, bukan bukti bahwa perangkat fisik sedang online."
+        return header + "\n" + "\n".join(lines) + caveat
+
+
+def task_history_answer(text: str, tenant: str) -> str | None:
+    normalized = text.casefold()
+    english = bool(re.search(r"\b(tasks?|history|previous|recent|last|ran)\b", normalized))
+    if not re.search(r"tugas|task|riwayat|history|sebelumnya|terakhir|previous|recent|last", normalized):
+        return None
+    if not re.search(r"cek|lihat|tampilkan|apa|bagaimana|status|riwayat|history|sebelumnya|terakhir|pernah|berjalan", normalized):
+        return None
+    status_labels = {"awaiting_approval":"menunggu persetujuan", "scheduled":"berjalan terjadwal", "running":"sedang berjalan", "paused":"dijeda", "completed":"selesai", "failed":"gagal", "cancelled":"dibatalkan"}
+    with connect() as db:
+        rows = db.execute("SELECT id,instruction,status,result,created_at,updated_at FROM tasks WHERE tenant=? AND archived=0 ORDER BY created_at DESC LIMIT 5", (tenant,)).fetchall()
+        if not rows:
+            return "There are no saved tasks in Kanca yet." if english else "Belum ada tugas tersimpan di Kanca."
+        lines = []
+        for row in rows:
+            runs = db.execute("SELECT COUNT(*) FROM task_runs WHERE task_id=?", (row['id'],)).fetchone()[0]
+            when = datetime.fromisoformat(row['updated_at']).astimezone().strftime('%d %b %Y %H:%M')
+            line = f"• {row['instruction']} — {status_labels.get(row['status'], row['status'])}; diperbarui {when}"
+            if runs:
+                line += f"; sudah diperiksa {runs} kali"
+            if row['status'] == 'failed' and row['result']:
+                detail = json.loads(row['result']).get('error')
+                if detail:
+                    line += f". Catatan: {detail}"
+            lines.append(line)
+        if english:
+            lines = [line.replace("menunggu persetujuan","awaiting approval").replace("berjalan terjadwal","scheduled").replace("sedang berjalan","running").replace("dijeda","paused").replace("selesai","completed").replace("gagal","failed").replace("dibatalkan","cancelled").replace("diperbarui","updated").replace("sudah diperiksa","checked").replace("kali","times").replace("Catatan:","Note:") for line in lines]
+            return "Here are up to 5 recent tasks:\n" + "\n".join(lines)
+        return "Berikut hingga 5 tugas terbaru:\n" + "\n".join(lines)
+
+
 @app.post("/v1/conversations/{cid}/messages", status_code=201)
 def send_message(cid: str, body: MessageRequest, tenant: str = Depends(tenant_auth)):
     content = body.content.strip()
@@ -498,25 +707,51 @@ def send_message(cid: str, body: MessageRequest, tenant: str = Depends(tenant_au
         db.execute("INSERT INTO messages (id,conversation_id,role,content,task_id,created_at) VALUES (?,?,?,?,?,?)", (uid("msg"), cid, "user", content, None, ts))
         title = content[:70] if conversation["title"] == "Percakapan baru" else conversation["title"]
         db.execute("UPDATE conversations SET title=?,updated_at=? WHERE id=?", (title, ts, cid))
+    direct_answer = demo_warehouse_camera_answer(content) or integration_status_answer(content, tenant) or integration_inventory_answer(content, tenant) or task_history_answer(content, tenant)
     try:
-        plan = propose(content, available, history)
-        for attempt in range(2):
-            if not isinstance(plan, dict):
-                raise ValueError("Model mengembalikan respons yang tidak valid.")
-            if not plan.get("steps"):
-                answer = str(plan.get("answer") or plan.get("clarification") or "Bisa ceritakan sedikit lebih detail apa yang kamu butuhkan?")
-                task_id = None
+        if direct_answer is not None:
+            answer, task_id = direct_answer, None
+        else:
+            plan = propose(content, available, history)
+            for attempt in range(2):
+                if not isinstance(plan, dict):
+                    raise ValueError("Model mengembalikan respons yang tidak valid.")
+                if not plan.get("steps"):
+                    answer = str(plan.get("answer") or plan.get("clarification") or "Bisa ceritakan sedikit lebih detail apa yang kamu butuhkan?")
+                    task_id = None
+                    break
+                schedule = plan.get("schedule")
+                source_read_only = (isinstance(plan["steps"], list) and bool(plan["steps"])
+                                    and all(isinstance(step, dict) and step.get("capability") == "external.latest_event" for step in plan["steps"]))
+                one_shot = not isinstance(schedule, dict) or schedule.get("max_runs", 1) == 1
+                if source_read_only and one_shot:
+                    try:
+                        validate_steps(plan["steps"], connected)
+                        observations, source_context = [], []
+                        for step in plan["steps"]:
+                            args = step["arguments"]
+                            with connect() as source_db:
+                                source, events = latest_source_observations(source_db, args["source_id"], tenant, args.get("event_type"))
+                            source_context.append(source)
+                            observations.extend({**item, "source_id": source["id"], "source_name": source["name"]} for item in events[:1])
+                        answer = answer_source_question(content, {"sources": source_context}, observations)
+                        task_id = None
+                        break
+                    except HTTPException as exc:
+                        if exc.status_code != 422 or attempt:
+                            raise
+                        plan = propose(content, available, history, feedback=f"Rencana sebelumnya ditolak: {exc.detail}. Pilih sumber aktif yang benar atau minta klarifikasi.")
+                        continue
+                try:
+                    task = create_task_internal(TaskRequest(instruction=content), None, tenant, proposed=plan, auto_approve_safe=True)
+                except HTTPException as exc:
+                    if exc.status_code != 422 or attempt:
+                        raise
+                    plan = propose(content, available, history, feedback=f"Rencana sebelumnya ditolak: {exc.detail}. Perbaiki format dengan data yang tersedia atau minta klarifikasi.")
+                    continue
+                answer = "Oke, aku akan mengerjakannya. Hasilnya akan muncul di sini." if task['status'] == 'scheduled' else "Aku sudah menyiapkan rencana. Silakan periksa dan setujui sebelum aku mulai."
+                task_id = task["id"]
                 break
-            try:
-                task = create_task_internal(TaskRequest(instruction=content), None, tenant, proposed=plan, auto_approve_safe=True)
-            except HTTPException as exc:
-                if exc.status_code != 422 or attempt:
-                    raise
-                plan = propose(content, available, history, feedback=f"Rencana sebelumnya ditolak: {exc.detail}. Perbaiki format dengan data yang tersedia atau minta klarifikasi.")
-                continue
-            answer = "Oke, aku akan mengerjakannya. Hasilnya akan muncul di sini." if task['status'] == 'scheduled' else "Aku sudah menyiapkan rencana. Silakan periksa dan setujui sebelum aku mulai."
-            task_id = task["id"]
-            break
     except PlanningError as exc:
         answer, task_id = "Maaf, aku belum bisa menjawab sekarang. Coba lagi sebentar lagi, ya.", None
     except (ValueError, HTTPException) as exc:

@@ -25,7 +25,7 @@ Kanca is an API-first agent platform intended for multiple domains. Business ove
 | Connector metadata and simulated capabilities | `app/connectors/registry.py` |
 | Baseten vision/audio and media validation | `app/media.py`; `BASETEN_MEDIA_MODEL` |
 | Webhook signing, retries, address validation | `app/webhooks.py` |
-| Local stdio MCP wrapper over REST | `app/mcp_server.py`, `app/mcp_client.py` |
+| Local stdio MCP wrapper over REST | `app/mcp_server.py`, `app/mcp_client.py`; `ask_source` answers from stored observations |
 | React/Vite chat and task UI | `frontend/src/App.jsx`, `frontend/src/style.css` |
 | Standalone mini PC gateway and setup | `mini-pc-gateway/gateway.py`, `setup.py`, `detect.py`, `README.md` |
 | Earlier standalone integrations | `gateways/` |
@@ -37,8 +37,9 @@ Kanca is an API-first agent platform intended for multiple domains. Business ove
 - Chat plans containing only `read`/`safe_action` run automatically. Other chat actions require owner approval. API/MCP task proposals and reruns currently require approval. Schedule edits require renewed approval. Re-check the implementation when changing this policy.
 - Compose uses PostgreSQL; SQLite remains available for tests and legacy migration. Existing SQLite data is not imported automatically: follow the offline migration procedure in `README.md`. One worker performs scheduled checks; a task is not a separate OS process. Pause/resume, rerun, and event history must preserve this distinction. Actions are deduplicated per task step.
 - Events drive notifications and signed webhooks; webhook delivery is at-least-once and consumers deduplicate by event ID. Source ingestion uses per-source tokens. Treat external data and model output as untrusted.
-- Vision/audio are opt-in per source, passed through Kanca to Baseten, and do not store raw media in the database. Counts are estimates, not verified inventory; uncertain results must not become fabricated facts. RTSP capture, BLE, MQTT, and other gateways require real-device validation.
-- Mini PC gateway currently includes RTSP, MQTT, HTTP JSON, Home Assistant, custom event input, and limited direct BLE. Direct Zigbee, Z-Wave and Matter controllers, automatic universal pairing, physical control, and offline queues are not implemented. Hardware detection returns hints, not compatibility guarantees.
+- Vision/audio are opt-in per source except the explicitly requested DKI public CCTV pack, whose two sources enable vision analysis and send periodic snapshots through Kanca to Baseten. Raw media is not stored in the database. Counts are estimates, not verified inventory; uncertain results must not become fabricated facts. RTSP/HLS capture, BLE, MQTT, and other gateways require real-device validation.
+- Mini PC gateway currently includes RTSP and the allowlisted DKI public HLS feeds, MQTT, HTTP JSON, Home Assistant, custom event input, and limited direct BLE. Direct Zigbee, Z-Wave and Matter controllers, automatic universal pairing, physical control, and offline queues are not implemented. Hardware detection returns hints, not compatibility guarantees.
+- Source questions use only stored events and analyzed media; raw camera frames are not retained, so MCP/chat cannot request a new live frame. Physical device control requires explicit protocol-specific adapters and approval policies; current gateway ingestion paths do not expose universal control.
 - The local web UI automatically obtains a session and Docker binds it to localhost. Do not expose the whole UI publicly without proper authentication; gateway ingress must expose only the intended ingest endpoints over HTTPS.
 
 ## Run and verify

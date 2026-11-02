@@ -18,6 +18,12 @@ def get_source_events(source_id: str) -> list[dict]:
 
 
 @mcp.tool()
+def ask_source(source_id: str, question: str) -> dict:
+    """Answer a natural-language question using recent stored observations from one source. Camera answers use previously analyzed frames; they cannot inspect a new live frame."""
+    return KancaClient().query_source(source_id, question)
+
+
+@mcp.tool()
 def list_connections() -> list[dict]:
     """List available demo connections. Read-only."""
     return KancaClient().connections()

@@ -1,0 +1,23 @@
+services:
+  rtsp:
+    image: bluenviron/mediamtx:latest
+    ports: ["8554:8554"]
+  camera-warehouse:
+    image: linuxserver/ffmpeg:latest
+    depends_on: [rtsp]
+    volumes: ["../frontend/src/assets:/assets:ro"]
+    command: ["-re", "-loop", "1", "-framerate", "10", "-i", "/assets/gudang-demo.webp", "-vf", "scale=1280:720:force_original_aspect_ratio=decrease,pad=1280:720:(ow-iw)/2:(oh-ih)/2", "-c:v", "libx264", "-preset", "ultrafast", "-tune", "zerolatency", "-an", "-f", "rtsp", "rtsp://rtsp:8554/kamera-gudang"]
+  camera-staff:
+    image: linuxserver/ffmpeg:latest
+    depends_on: [rtsp]
+    volumes: ["../frontend/src/assets:/assets:ro"]
+    command: ["-re", "-loop", "1", "-framerate", "10", "-i", "/assets/staff-camera-demo.webp", "-vf", "scale=1280:720:force_original_aspect_ratio=decrease,pad=1280:720:(ow-iw)/2:(oh-ih)/2", "-c:v", "libx264", "-preset", "ultrafast", "-tune", "zerolatency", "-an", "-f", "rtsp", "rtsp://rtsp:8554/kamera-staf"]
+  mqtt:
+    image: eclipse-mosquitto:2
+    ports: ["8883:8883"]
+    volumes: ["./mosquitto.conf:/mosquitto/config/mosquitto.conf:ro", "./certs:/mosquitto/certs:ro"]
+  homeassistant:
+    image: python:3.12-alpine
+    command: ["python", "/sim/ha_mock.py"]
+    ports: ["8123:8123"]
+    volumes: ["./ha_mock.py:/sim/ha_mock.py:ro"]

@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="300" viewBox="0 0 360 300" fill="none">
+  <defs>
+    <pattern id="hatch" width="5" height="5" patternTransform="rotate(42)" patternUnits="userSpaceOnUse">
+      <path d="M0 0v5" stroke="#28714f" stroke-opacity=".3" stroke-width=".7"/>
+    </pattern>
+    <pattern id="fine-hatch" width="3" height="3" patternTransform="rotate(-42)" patternUnits="userSpaceOnUse">
+      <path d="M0 0v3" stroke="#28714f" stroke-opacity=".25" stroke-width=".55"/>
+    </pattern>
+  </defs>
+  <g stroke="#28714f" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Guilloche arcs and fine engraved frame -->
+    <path d="M-15 276c58-87 132-119 225-99 64 14 109 4 166-38M-8 291c62-87 139-119 231-98 62 14 110 2 156-32M-2 306c64-87 141-119 231-98 63 14 108 1 147-27" stroke-opacity=".34" stroke-width="1.15"/>
+    <path d="M-18 264c60-87 136-120 229-100 65 14 111 5 170-43" stroke-opacity=".22" stroke-width=".7" stroke-dasharray="1 3"/>
+    <path d="M15 260c29-31 63-49 103-56M242 198c36 5 68 1 101-12" stroke-opacity=".3" stroke-width=".8"/>
+    <!-- Security rosette -->
+    <g transform="translate(188 112)" stroke-opacity=".46">
+      <circle r="79" stroke-width=".8"/><circle r="73" stroke-width=".55" stroke-dasharray="1.2 2.6"/>
+      <circle r="66" stroke-width=".8"/><circle r="61" stroke-width=".55"/>
+      <path d="M0-75C35-40 35 40 0 75c-35-35-35-115 0-150ZM0-75c-35 35-35 115 0 150 35-35 35-115 0-150ZM-73 0C-38-35 38-35 73 0c-35 35-111 35-146 0ZM-73 0C-38 35 38 35 73 0c-35-35-111-35-146 0Z" stroke-width=".65"/>
+      <circle r="51" fill="url(#hatch)" stroke-width="1"/>
+      <circle r="43" fill="#f1f4ef" fill-opacity=".58" stroke-width=".7"/>
+    </g>
+    <!-- Abstract autonomous agent medallion -->
+    <g transform="translate(188 112)" stroke-opacity=".73" stroke-width="1.2">
+      <path d="M-28-11c0-17 12-28 28-28s28 11 28 28v21c0 17-12 29-28 29S-28 27-28 10v-21Z" fill="url(#fine-hatch)"/>
+      <path d="M-17-7c0-8 6-14 13-14M17-7c0-8-6-14-13-14"/>
+      <path d="M-13 0h.1M13 0h.1" stroke-width="4"/>
+      <path d="M-10 15c5 5 15 5 20 0M0-39v-9M-4-48h8M-28 1h-9M28 1h9M-19 32l-7 7M19 32l7 7"/>
+      <circle cx="-38" cy="1" r="2.2" fill="#28714f"/><circle cx="38" cy="1" r="2.2" fill="#28714f"/>
+      <circle cy="-51" r="2.4" fill="#28714f"/>
+    </g>
+    <!-- Circuit traces and node medallions -->
+    <g stroke-opacity=".48" stroke-width=".9">
+      <path d="M109 77H79l-16-16H31M266 78h32l13-13h28M108 145H82l-19 19H37M267 146h26l16 19h22"/>
+      <path d="M129 54 111 35V20M248 54l18-18V22M129 169l-17 17v17M247 170l20 20v14"/>
+      <circle cx="28" cy="61" r="4"/><circle cx="332" cy="65" r="4"/><circle cx="34" cy="166" r="4"/><circle cx="326" cy="165" r="4"/>
+      <circle cx="111" cy="19" r="3"/><circle cx="266" cy="21" r="3"/><circle cx="112" cy="201" r="3"/><circle cx="267" cy="204" r="3"/>
+    </g>
+    <!-- Engraved leaves and tiny stars -->
+    <g stroke-opacity=".38" stroke-width=".8">
+      <path d="M48 229c20-22 39-26 58-22-7 18-23 30-48 34M54 237c18-16 32-22 51-25M301 231c-17-22-36-27-55-23 7 18 22 30 46 35M294 239c-17-17-31-23-48-27"/>
+      <path d="m75 219 8 13m-18-7 6 11m216-18-8 13m17-7-6 11"/>
+      <path d="m88 58 2 5 5 2-5 2-2 5-2-5-5-2 5-2 2-5Zm201 1 2 5 5 2-5 2-2 5-2-5-5-2 5-2 2-5ZM63 117l1.5 4 4 1.5-4 1.5-1.5 4-1.5-4-4-1.5 4-1.5 1.5-4Zm250 0 1.5 4 4 1.5-4 1.5-1.5 4-1.5-4-4-1.5 4-1.5 1.5-4Z"/>
+    </g>
+  </g>
+</svg>

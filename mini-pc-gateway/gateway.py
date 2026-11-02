@@ -21,7 +21,7 @@ MAX_BYTES = 4 * 1024 * 1024
 def load_config(path):
     config = json.loads(Path(path).read_text())
     parsed = urllib.parse.urlparse(config.get('server_url', ''))
-    if not parsed.hostname or parsed.username or parsed.password or parsed.query or parsed.fragment or (parsed.scheme != 'https' and not (parsed.scheme == 'http' and parsed.hostname in ('localhost', '127.0.0.1', '::1'))):
+    if not parsed.hostname or parsed.username or parsed.password or parsed.query or parsed.fragment or (parsed.scheme != 'https' and not (parsed.scheme == 'http' and parsed.hostname in ('localhost', '127.0.0.1', '::1', 'host.docker.internal'))):
         raise ValueError('URL Kanca harus HTTPS, kecuali localhost untuk pengujian')
     if 'sources' not in config:
         config['sources'] = [{**{k:v for k,v in config.items() if k != 'server_url'}, 'type':'camera'}]
@@ -32,12 +32,17 @@ def load_config(path):
     for source in sources:
         if not isinstance(source, dict) or not source.get('source_id') or not source.get('source_token') or source['source_id'] in ids:
             raise ValueError('ID dan token sumber wajib unik')
+        if 'name' in source and (not isinstance(source['name'], str) or not 1 <= len(source['name'].strip()) <= 100):
+            raise ValueError('Nama sumber tidak valid')
         ids.add(source['source_id'])
         kind = source.get('type')
         if kind in ('camera', 'home_assistant', 'http_json', 'ble') and (type(source.get('interval_seconds')) is not int or not 10 <= source['interval_seconds'] <= 86400):
             raise ValueError('Interval tidak valid')
         if kind == 'camera':
-            if not str(source.get('camera_url', '')).startswith(('rtsp://', 'rtsps://')) or type(source.get('audio_enabled', False)) is not bool:
+            camera_url = urllib.parse.urlparse(str(source.get('camera_url', '')))
+            rtsp_camera = camera_url.scheme in ('rtsp', 'rtsps') and bool(camera_url.hostname)
+            public_hls_camera = camera_url.scheme == 'https' and camera_url.hostname == 'dki-jkt.balitower.co.id' and camera_url.path.endswith('/index.fmp4.m3u8') and not camera_url.username and not camera_url.password and not camera_url.query and not camera_url.fragment
+            if not (rtsp_camera or public_hls_camera) or type(source.get('audio_enabled', False)) is not bool:
                 raise ValueError('Konfigurasi kamera tidak valid')
         elif kind == 'mqtt':
             if not source.get('mqtt_host') or not source.get('mqtt_topic') or any(c in source['mqtt_topic'] for c in '#+') or type(source.get('mqtt_port', 8883)) is not int or not 1 <= source.get('mqtt_port', 8883) <= 65535:
@@ -48,7 +53,8 @@ def load_config(path):
                 raise ValueError('Konfigurasi Home Assistant tidak valid')
         elif kind == 'http_json':
             url = urllib.parse.urlparse(source.get('http_url', ''))
-            if url.scheme not in ('http','https') or not url.hostname or url.username or url.password or url.fragment or (source.get('http_token') and url.scheme != 'https'):
+            event_type = source.get('event_type', 'http.json')
+            if not isinstance(event_type, str) or not re.fullmatch(r'[A-Za-z0-9._-]{1,100}', event_type) or url.scheme not in ('http','https') or not url.hostname or url.username or url.password or url.fragment or (source.get('http_token') and url.scheme != 'https'):
                 raise ValueError('Konfigurasi HTTP JSON tidak valid; bearer token memerlukan HTTPS')
         elif kind == 'custom':
             pass
@@ -67,12 +73,23 @@ def load_config(path):
     return config
 
 
+def source_label(config):
+    return config.get('name') or config['source_id']
+
+
 def capture(config, kind):
     suffix = '.jpg' if kind == 'vision' else '.wav'
     fd, path = tempfile.mkstemp(suffix=suffix)
     os.close(fd)
     try:
-        cmd = ['ffmpeg','-nostdin','-v','error','-y','-rtsp_transport','tcp','-i',config['camera_url']]
+        cmd = ['ffmpeg','-nostdin','-v','error','-y']
+        camera_scheme = urllib.parse.urlparse(config['camera_url']).scheme
+        if camera_scheme in ('rtsp', 'rtsps'):
+            cmd += ['-rtsp_transport','tcp']
+        elif camera_scheme == 'https':
+            # BaliTower HLS fragments use a provider-specific .hls.fmp4 suffix.
+            cmd += ['-extension_picky','0']
+        cmd += ['-i',config['camera_url']]
         if kind == 'vision':
             cmd += ['-frames:v','1','-vf','scale=1280:720:force_original_aspect_ratio=decrease','-q:v','4',path]
         else:
@@ -142,10 +159,10 @@ def run_camera(config):
         for kind in (['vision', 'audio'] if config.get('audio_enabled') else ['vision']):
             try:
                 send(config, kind, capture(config, kind))
-                print(f'camera {config["source_id"]}: {kind} terkirim', flush=True)
+                print(f'camera {source_label(config)}: {kind} terkirim', flush=True)
             except (OSError, ValueError, subprocess.SubprocessError, urllib.error.URLError) as exc:
                 status = getattr(exc, 'code', None)
-                print(f'camera {config["source_id"]}: {kind} gagal' + (f' (HTTP {status})' if status else ''), flush=True)
+                print(f'camera {source_label(config)}: {kind} gagal' + (f' (HTTP {status})' if status else ''), flush=True)
         time.sleep(config['interval_seconds'])
 
 
@@ -159,14 +176,14 @@ def run_home_assistant(config):
                 raw = response.read(65537)
             if len(raw) > 65536: raise ValueError('Respons terlalu besar')
             send_event(config, 'home_assistant.state', normalize_ha(entity, json.loads(raw)))
-            print(f'home_assistant {config["source_id"]}: terkirim', flush=True)
+            print(f'home_assistant {source_label(config)}: terkirim', flush=True)
         except (OSError, ValueError, KeyError, TypeError, urllib.error.URLError):
-            print(f'home_assistant {config["source_id"]}: gagal membaca atau mengirim', flush=True)
+            print(f'home_assistant {source_label(config)}: gagal membaca atau mengirim', flush=True)
         time.sleep(config['interval_seconds'])
 
 
 def read_http_json(config):
-    headers = {'Accept':'application/json'}
+    headers = {'Accept':'application/json', 'User-Agent':'KancaGateway/1.0 (+https://bmkg.go.id)'}
     if config.get('http_token'):
         headers['Authorization'] = 'Bearer ' + config['http_token']
     request = urllib.request.Request(config['http_url'], headers=headers)
@@ -183,7 +200,7 @@ def read_http_json(config):
 def run_http_json(config):
     while True:
         try:
-            send_event(config, 'http.json', {'payload': read_http_json(config)})
+            send_event(config, config.get('event_type', 'http.json'), {'payload': read_http_json(config)})
             print(f'http_json {config["source_id"]}: terkirim', flush=True)
         except (OSError, ValueError, UnicodeDecodeError, urllib.error.URLError):
             print(f'http_json {config["source_id"]}: gagal membaca atau mengirim', flush=True)

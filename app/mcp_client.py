@@ -35,6 +35,9 @@ class KancaClient:
     def source_events(self, source_id):
         return self.request('GET', f'/v1/sources/{quote(source_id, safe="")}/events')
 
+    def query_source(self, source_id, question):
+        return self.request('POST', f'/v1/sources/{quote(source_id, safe="")}/query', body={'question': question})
+
     def connections(self):
         return self.request('GET', '/v1/connections')
 

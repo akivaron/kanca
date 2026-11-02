@@ -127,12 +127,18 @@ def main():
         source = {'type': {'1':'camera','2':'mqtt','3':'home_assistant','4':'http_json','5':'custom','6':'ble'}[choice], 'source_id':input('ID sumber Kanca: ').strip(), 'source_token':getpass.getpass('Token sumber Kanca: ').strip()}
         if not source['source_id'] or not source['source_token']:
             raise SystemExit('ID dan token sumber wajib diisi.')
+        source['name'] = input('Nama perangkat untuk log gateway (opsional): ').strip()
+        if not source['name']:
+            source.pop('name')
         if any(item['source_id'] == source['source_id'] for item in sources):
             raise SystemExit('Gunakan sumber Kanca yang berbeda untuk tiap koneksi.')
         if choice == '1':
-            source['camera_url'] = getpass.getpass('URL RTSP kamera (input tersembunyi): ').strip()
-            if not source['camera_url'].startswith(('rtsp://','rtsps://')):
-                raise SystemExit('Gunakan URL RTSP/rtsps yang valid.')
+            source['camera_url'] = getpass.getpass('URL kamera RTSP atau HLS publik (input tersembunyi): ').strip()
+            parsed_camera = urlparse(source['camera_url'])
+            rtsp_camera = parsed_camera.scheme in ('rtsp','rtsps') and bool(parsed_camera.hostname)
+            public_hls_camera = parsed_camera.scheme == 'https' and parsed_camera.hostname == 'dki-jkt.balitower.co.id' and parsed_camera.path.endswith('/index.fmp4.m3u8') and not parsed_camera.username and not parsed_camera.password and not parsed_camera.query and not parsed_camera.fragment
+            if not (rtsp_camera or public_hls_camera):
+                raise SystemExit('Gunakan URL RTSP/rtsps atau HLS publik DKI Jakarta yang didukung.')
             source['interval_seconds'] = interval_prompt()
             source['audio_enabled'] = input('Kirim audio dari kamera? Hanya dengan izin yang sesuai [y/N]: ').strip().lower() == 'y'
         elif choice == '2':

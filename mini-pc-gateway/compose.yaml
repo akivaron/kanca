@@ -2,5 +2,7 @@ services:
   gateway:
     build: .
     restart: unless-stopped
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     volumes:
       - ./config.json:/config/config.json:ro

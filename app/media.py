@@ -2,6 +2,7 @@
 import base64
 import io
 import json
+import logging
 import math
 import os
 import wave
@@ -49,8 +50,10 @@ async def analyze(media_type, raw, mime, prompt):
             response = await client.post('https://inference.baseten.co/v1/chat/completions', headers={'Authorization': f'Bearer {key}'}, json={
                 'model': os.getenv('BASETEN_MEDIA_MODEL', 'meta-models/muse-spark-open'),
                 'messages': [{'role':'system','content':system}, {'role':'user','content':[{'type':'text','text':prompt},{'type':kind,kind:{'url':media_url}}]}],
-                'response_format': {'type':'json_object'},
             })
+            if response.is_error:
+                # Provider response bodies can contain request details; log status only.
+                logging.error('Baseten media inference returned HTTP %s', response.status_code)
             response.raise_for_status()
             result = json.loads(response.json()['choices'][0]['message']['content'])
         if not isinstance(result, dict) or not isinstance(result.get('summary'), str) or type(result.get('uncertain')) is not bool:

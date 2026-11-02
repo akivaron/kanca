@@ -1,0 +1,33 @@
+{
+  "server_url": "https://YOUR_KANCA_URL",
+  "sources": [
+    {
+      "type": "camera",
+      "name": "Kamera Gudang",
+      "source_id": "src_REPLACE_GUDANG_ID",
+      "source_token": "REPLACE_WITH_KANCA_TOKEN",
+      "camera_url": "rtsp://YOUR_SIMULATOR_HOST:8554/kamera-gudang",
+      "interval_seconds": 30,
+      "audio_enabled": false
+    },
+    {
+      "type": "camera",
+      "name": "Kamera Area Staf",
+      "source_id": "src_REPLACE_STAF_ID",
+      "source_token": "REPLACE_WITH_KANCA_TOKEN",
+      "camera_url": "rtsp://YOUR_SIMULATOR_HOST:8554/kamera-staf",
+      "interval_seconds": 30,
+      "audio_enabled": false
+    },
+    {
+      "type": "home_assistant",
+      "name": "Sensor Suhu",
+      "source_id": "src_REPLACE_SENSOR_ID",
+      "source_token": "REPLACE_WITH_KANCA_TOKEN",
+      "ha_url": "http://YOUR_SIMULATOR_HOST:8123",
+      "ha_token": "simulator-token",
+      "ha_entity": "sensor.kanca_temperature",
+      "interval_seconds": 30
+    }
+  ]
+}
