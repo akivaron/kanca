@@ -1,22 +1,22 @@
-# Kanca — fondasi platform agent
+# Kanca — Agent Platform Foundation
 
-Backend API-first untuk task agent lintas domain. Contoh connector bisnis dan perangkat menggunakan data dan tindakan **simulasi**. Lihat [PLAN.md](PLAN.md) untuk arah lengkap proyek.
+An API-first backend for cross-domain agent tasks. Business and device connector examples use **simulated** data and actions. See [PLAN.md](PLAN.md) for the project roadmap.
 
-## Menjalankan
+## Quick Start
 
-Butuh Docker dan Docker Compose. Salin `.env.example` menjadi `.env`, ubah `KANCA_API_KEY` dan `POSTGRES_PASSWORD`, lalu:
+Requires Docker and Docker Compose. Copy `.env.example` to `.env`, update `KANCA_API_KEY` and `POSTGRES_PASSWORD`, then run:
 
 ```bash
 ./run.sh
 ```
 
-Jalankan `./restart.sh` untuk membangun ulang image lalu restart API dan worker tanpa menghapus volume data. Untuk menghentikan layanan, jalankan `./stop.sh`. Lihat log menggunakan `docker compose logs -f`.
+Run `./restart.sh` to rebuild the image and restart the API and worker without removing data volumes. To stop the services, run `./stop.sh`. View logs with `docker compose logs -f`.
 
-UI demo tersedia di `http://localhost:8765`, dokumentasi interaktif di `http://localhost:8765/docs`, health check di `http://localhost:8765/health`. Server menggunakan `KANCA_API_KEY` dari `.env` untuk sesi UI lokal; klien API eksternal tetap menggunakan header `X-API-Key`. PostgreSQL berjalan di jaringan internal Compose dan datanya disimpan dalam volume `kanca-postgres`.
+The demo UI is available at `http://localhost:8765`. API documentation is at `http://localhost:8765/docs`, and the health check is at `http://localhost:8765/health`. The server uses `KANCA_API_KEY` from `.env` to create a local UI session; external API clients authenticate with the `X-API-Key` header. PostgreSQL is available only on the internal Compose network, and its data is stored in the `kanca-postgres` volume.
 
-### Data SQLite lama
+### Legacy SQLite Data
 
-PostgreSQL adalah database baru; data dari volume SQLite lama **tidak dipindahkan otomatis**. Untuk mempertahankan data sebelum menggunakan database baru, hentikan API dan worker, pastikan PostgreSQL aktif, lalu jalankan migrasi satu kali:
+PostgreSQL is a new database; data from the old SQLite volume is **not migrated automatically**. To preserve that data before switching to the new database, stop the API and worker, make sure PostgreSQL is running, then run the migration once:
 
 ```bash
 docker compose up -d db
@@ -26,19 +26,19 @@ docker compose run --rm --no-deps api python -m app.migrate_sqlite /data/kanca.d
 ./run.sh
 ```
 
-Migrasi membaca SQLite tanpa mengubahnya, mempertahankan ID dan cursor event, dan menolak PostgreSQL yang sudah berisi data. Jangan biarkan API, worker, atau proses lain menulis ke kedua database saat migrasi. Jika file SQLite berada di lokasi lain, sesuaikan path dalam kontainer. Periksa hasil sebelum menghapus volume lama; `./stop.sh` tidak menghapus volume.
+The migration reads SQLite without modifying it, preserves IDs and event cursors, and refuses to run if PostgreSQL already contains data. Do not allow the API, worker, or any other process to write to either database during migration. If the SQLite file is in another location, adjust the path inside the container. Check the result before removing the old volume; `./stop.sh` does not remove volumes.
 
-`POSTGRES_PASSWORD` digunakan saat volume PostgreSQL pertama kali dibuat. Mengubahnya di `.env` setelah inisialisasi tidak otomatis mengubah password yang tersimpan. Gunakan karakter aman untuk URL pada password Compose.
+`POSTGRES_PASSWORD` is used when the PostgreSQL volume is first created. Changing it in `.env` after initialization does not automatically change the stored password. Use URL-safe characters for the Compose password.
 
-Di UI, pilih connector simulasi, lalu kirim instruksi. Gunakan **Percakapan baru** untuk memisahkan topik dan sidebar untuk membuka riwayat. Dua belas pesan terakhir pada topik tersebut dikirim sebagai konteks saat model menyusun jawaban; setiap rencana yang dihasilkan menjadi task tersendiri. Rencana dari chat yang hanya membaca data atau memakai tindakan aman yang terdaftar dimulai otomatis; tindakan lain menunggu persetujuan. Saat ini tindakan aman terbatas pada pengingat simulasi dan pembuatan event eskalasi. Status diperbarui otomatis. Pembuatan task langsung melalui API/MCP dan rerun masih menunggu persetujuan. UI membuka sesi lokal otomatis; siapa pun yang dapat mengakses UI dapat mengakses data dan tindakan demo. Compose membatasi akses ke localhost; jangan mengekspos UI ke jaringan tanpa autentikasi pengguna yang sesuai. Jika menggunakan Docker, jalankan `./run.sh` kembali untuk membangun image setelah perubahan kode.
+To try the UI, select a simulated connector and send an instruction. **New conversation** starts a separate topic; use the sidebar to reopen conversation history. Kanca includes the latest 12 messages from the topic as model context, and each generated plan becomes its own task. Chat plans that only read data or use registered safe actions run automatically. Other actions require approval. Safe actions are currently limited to simulated reminders and escalation events. Task status updates automatically. Tasks created directly through the API or MCP, and reruns, require approval. The UI creates a local session automatically, so anyone who can access it can use the demo data and actions. Compose binds the app to localhost; add proper user authentication before exposing it to a network. After changing code, run `./run.sh` to rebuild the Docker image.
 
-Menu **Tugas latar belakang** menampilkan task dari semua percakapan. Task baru dibuat melalui chat; jadwal task yang belum selesai bisa diubah dan harus disetujui ulang. Menghapus task dari daftar menghentikan task yang masih aktif dan mengarsipkannya; riwayat dan event tetap tersimpan. Task adalah pekerjaan yang dijalankan oleh worker bersama, bukan proses worker terpisah.
+The **Background tasks** menu shows tasks from all conversations. New tasks are created through chat; schedules for unfinished tasks can be changed and must be approved again. Removing a task from the list stops an active task and archives it; its history and events remain stored. A task is work run by the shared worker, not a separate worker process.
 
-Gunakan **Jeda** untuk menangguhkan pemeriksaan berikutnya dan **Lanjutkan** untuk mengaktifkannya kembali. Progres dan tindakan yang sudah dilakukan tetap tersimpan. Jika jadwal sudah terlewat saat dilanjutkan, pemeriksaan berikutnya dapat langsung berjalan. Jeda tidak membatalkan pemeriksaan yang sudah mulai. Perubahan jadwal saat dijeda tetap membutuhkan persetujuan ulang. Integrasi API tersedia melalui `POST /v1/tasks/{id}/pause` dan `POST /v1/tasks/{id}/resume`.
+Use **Pause** to suspend the next check and **Resume** to reactivate it. Progress and completed actions remain stored. If a scheduled check is overdue when resumed, it may run immediately. Pausing does not cancel a check that has already started. Schedule changes made while paused still require approval again. API endpoints are available at `POST /v1/tasks/{id}/pause` and `POST /v1/tasks/{id}/resume`.
 
-Menu **Notifikasi** menampilkan hingga 100 pembaruan terbaru tentang persetujuan, penyelesaian, kegagalan, eskalasi, penghentian, jeda, dan kelanjutan tugas. Jenis notifikasi yang ditampilkan dapat dipilih; preferensinya tersimpan per tenant. Status baca tersimpan. Tugas yang selesai, gagal, atau dihentikan dapat dibuat ulang dari notifikasi, daftar tugas, atau chat. Rerun membuat task baru dari awal dan membutuhkan persetujuan lagi; riwayat task asli tetap ada. Notifikasi ini ditampilkan di aplikasi dan tersedia melalui API, bukan notifikasi push sistem operasi. Kematian proses worker itu sendiri belum dideteksi secara otomatis.
+The **Notifications** menu shows up to 100 recent task updates, including approvals, completions, failures, escalations, cancellations, pauses, and resumptions. Choose which notification types to display; preferences and read status are stored per tenant. Completed, failed, or stopped tasks can be rerun from a notification, the task list, or chat. A rerun creates a new task from scratch and requires approval; the original task history remains. These notifications appear in the app and are available through the API; they are not operating-system push notifications. Worker process termination is not detected automatically.
 
-Menu **Integrasi → Sumber perangkat** memungkinkan pembuatan, pembaruan, penonaktifan, dan penghapusan sumber yang mengirim event JSON melalui HTTP. Tab **Public Sources** menyediakan 100 feed prakiraan BMKG per kelurahan/desa di 38 provinsi serta 400 feed CCTV publik. Feed publik default-nya tidak dipolling berkala: tombol **Get Data** atau permintaan data yang diarahkan AI di chat mengambil satu pembaruan; otomasi hanya berjalan setelah diaktifkan per sumber. Forecast BMKG berisi prakiraan tiga hari per tiga jam dan diperbarui dua kali sehari; API membatasi 60 permintaan per menit per IP dan mewajibkan atribusi BMKG. Simpan token saat sumber dibuat; hanya hash token disimpan oleh server. Contoh pengiriman dari mesin yang sama:
+Under **Integrations → Device Sources**, create and manage sources that send JSON events over HTTP. The **Public Sources** tab includes 100 BMKG village-level forecast feeds across 38 provinces and 400 public CCTV feeds. Public feeds are not polled on a schedule by default. **Get Data** and AI-routed chat requests fetch a single update; enable automation on a source to poll it regularly. BMKG forecasts cover three days in three-hour intervals and update twice daily. BMKG limits requests to 60 per minute per IP and requires attribution. Save the token when creating a source; the server stores only its hash. Example request from the same machine:
 
 ```bash
 curl -X POST http://localhost:8765/v1/ingest/SOURCE_ID \
@@ -46,40 +46,46 @@ curl -X POST http://localhost:8765/v1/ingest/SOURCE_ID \
   -d '{"type":"temperature","data":{"value":29}}'
 ```
 
-Event tersimpan dan dapat dilihat di UI serta menghasilkan event `source.event.v1` untuk subscriber. Sumber menyimpan `expected_interval_seconds` (default 300) untuk memperkirakan status penerimaan: menunggu data, terbaru, terlambat, atau nonaktif. Status ini hanya menunjukkan waktu event terakhir tiba; Kanca tidak memantau proses gateway secara langsung. Batas kesegaran untuk task adalah nilai yang lebih besar antara 5 menit dan dua kali interval yang diharapkan. UI menandai observasi yang lebih tua dari batas tersebut dan menandai hasil media yang tidak pasti. Sumber dihapus secara lunak agar riwayatnya tetap tersimpan. Ekspor event sumber tersedia di `/v1/sources/{id}/events/export`; ekspor event platform di `/v1/events/export`. Keduanya mendukung `format=json|csv`, maksimal 1.000 baris per permintaan, dan cursor `after` untuk melanjutkan ekspor. CSV mengamankan teks yang dapat dibaca spreadsheet sebagai formula. Aplikasi Compose hanya menerima koneksi localhost; perangkat lain membutuhkan gateway atau deployment yang aman dengan HTTPS. Streaming video, pairing QR/Bluetooth, dan kontrol perangkat belum tersedia. Jangan mengirim video atau foto melalui endpoint ini (batas 32 KiB).
+Events are stored, visible in the UI, and emitted as `source.event.v1` for subscribers. Each source stores `expected_interval_seconds` (default 300) to estimate its reception status: waiting for data, recent, overdue, or inactive. This status reflects only when the last event arrived; Kanca does not monitor the gateway process directly. A task considers data fresh for the greater of five minutes or twice the expected interval. The UI flags observations older than this limit and marks uncertain media results. Sources are soft-deleted so their history remains stored. Source event exports are available at `/v1/sources/{id}/events/export`; platform event exports are available at `/v1/events/export`. Both support `format=json|csv`, up to 1,000 rows per request, and an `after` cursor to continue an export. CSV exports protect text that spreadsheet software could interpret as formulas. The Compose app accepts localhost connections only; other devices require a secure gateway or deployment with HTTPS. Video streaming, QR/Bluetooth pairing, and device control are not available. Do not send video or photos through this endpoint (32 KiB limit).
 
-Task yang disetujui dapat membaca event terbaru dari satu sumber aktif melalui `external.latest_event` dan memicu `external.escalate` sebagai event `task.escalated.v1` berdasarkan kondisi. UI Integrasi menyediakan pembuat aturan ambang dari field numerik yang sudah diterima; task yang dibuat tetap menunggu persetujuan dan menghasilkan eskalasi maksimal sekali per langkah. Data yang melewati batas kesegaran dinyatakan tidak dapat diverifikasi. Gunakan satu sumber Kanca per sensor atau entity agar pembacaan terbaru tidak tertimpa oleh perangkat lain. Event tidak secara otomatis membangunkan task: task memeriksa data sesuai jadwal yang disetujui. Eskalasi adalah event untuk consumer, bukan pesan yang dikirim langsung.
+Approved tasks can read the latest event from one active source through `external.latest_event` and trigger `external.escalate` as a `task.escalated.v1` event when a condition is met. The Integrations UI provides a threshold-rule builder for numeric fields already received; created tasks still require approval and emit at most one escalation per step. Data older than the freshness limit cannot be verified. Assign one Kanca source to each sensor or entity to prevent readings from different devices from overwriting one another. Events do not automatically wake tasks: tasks check data according to their approved schedule. An escalation is an event for a consumer, not a message sent directly.
 
-### Gateway perangkat
+### Device Gateways
 
-Contoh di `gateways/` berjalan terpisah dari API dan worker; dependensi opsional dipasang dengan `pip install -r gateways/requirements.txt`. Untuk masing-masing gateway, buat sumber di UI terlebih dahulu dan atur `KANCA_URL`, `KANCA_SOURCE_ID`, serta `KANCA_SOURCE_TOKEN` pada lingkungan gateway. Jalankan gateway di mesin yang bisa mengakses Kanca dan perangkat; jangan commit token. Jika koneksi lintas mesin, gunakan HTTPS dan gateway jaringan yang aman. Konfigurasi Compose bawaan tidak membuka port ke perangkat lain.
+Examples in `gateways/` run separately from the API and worker; install optional dependencies with `pip install -r gateways/requirements.txt`. For each gateway, first create a source in the UI and set `KANCA_URL`, `KANCA_SOURCE_ID`, and `KANCA_SOURCE_TOKEN` in the gateway environment. Run the gateway on a machine that can access both Kanca and the device; do not commit tokens. For cross-machine connections, use HTTPS and a secure network gateway. The default Compose configuration does not expose ports to other devices.
 
-- **Home Assistant:** atur `HA_URL`, `HA_TOKEN`, dan `HA_ENTITIES` (contoh `sensor.suhu`), lalu jalankan `python gateways/home_assistant.py`. Gateway membaca state entity tiap 30 detik; `GATEWAY_INTERVAL` dapat diubah. Perangkat Matter yang sudah ditambahkan dan didukung Home Assistant dapat digunakan melalui entity yang tersedia di sana; Kanca tidak melakukan pairing Matter sendiri. State diteruskan sebagai string di `data.state`.
-- **MQTT:** atur `MQTT_HOST`, `MQTT_TOPIC`, dan bila diperlukan `MQTT_USERNAME` serta `MQTT_PASSWORD`, lalu jalankan `python gateways/mqtt.py`. Broker harus menyediakan TLS terpercaya; port default `8883`. Pesan harus berupa objek JSON dan masuk di `data.payload`. Pengiriman gateway bersifat best effort, belum memiliki antrean lokal atau jaminan tidak ada kehilangan pesan.
-- **Kamera:** atur `CAMERA_SOURCE` ke indeks kamera atau URL stream yang didukung OpenCV, lalu jalankan `python gateways/camera_motion.py`. Gateway hanya mengirim metadata perkiraan gerak, tidak mengirim frame, mengenali objek, atau memastikan paket aman. Gerakan bisa disebabkan perubahan cahaya; perlakukan sebagai sinyal untuk diperiksa.
-- **ESP32:** `examples/esp32/kanca_sensor.ino` adalah contoh pengiriman bacaan dummy melalui HTTPS. Isi konfigurasi Wi-Fi, URL, token, dan sertifikat CA, lalu ganti nilai dummy dengan pembacaan sensor. Contoh belum diuji pada perangkat fisik.
+- **Home Assistant:** set `HA_URL`, `HA_TOKEN`, and `HA_ENTITIES` (for example, `sensor.temperature`), then run `python gateways/home_assistant.py`. The gateway reads entity state every 30 seconds; `GATEWAY_INTERVAL` can be changed. Matter devices already added to and supported by Home Assistant can be used through their available entities; Kanca does not pair Matter devices itself. State is forwarded as a string in `data.state`.
+- **MQTT:** set `MQTT_HOST`, `MQTT_TOPIC`, and, if needed, `MQTT_USERNAME` and `MQTT_PASSWORD`, then run `python gateways/mqtt.py`. The broker must provide trusted TLS; the default port is `8883`. Messages must be JSON objects and are placed in `data.payload`. Gateway delivery is best effort, with no local queue or guarantee against message loss.
+- **Camera:** set `CAMERA_SOURCE` to a camera index or stream URL supported by OpenCV, then run `python gateways/camera_motion.py`. The gateway sends only estimated motion metadata; it does not send frames, recognize objects, or verify packages. Motion can be caused by lighting changes, so treat it as a signal that needs review.
+- **ESP32:** `examples/esp32/kanca_sensor.ino` demonstrates sending dummy readings over HTTPS. Fill in the Wi-Fi, URL, token, and CA certificate configuration, then replace the dummy value with a sensor reading. The example has not been tested on physical hardware.
 
-Gateway ini belum diuji pada hub, broker, kamera, atau perangkat fisik, belum memiliki mekanisme pemulihan menyeluruh, dan tidak menyediakan kontrol perangkat. Gunakan untuk eksperimen lokal sebelum membangun deployment produksi. Untuk paket mini PC yang mengirim cuplikan gambar atau audio ke server Kanca untuk analisis Baseten, lihat [mini-pc-gateway/README.md](mini-pc-gateway/README.md).
+These gateways have not been tested with hubs, brokers, cameras, or physical devices, do not have comprehensive recovery mechanisms, and do not provide device control. Use them for local experiments before building a production deployment. For the mini PC package that sends image or audio snapshots to the Kanca server for Baseten analysis, see [mini-pc-gateway/README.md](mini-pc-gateway/README.md).
 
-Untuk menjalankan gateway dengan Docker di mesin yang sama dengan Kanca:
+#### Run a Gateway with Docker
 
-1. Buat sumber pada halaman **Sumber eksternal** dan simpan ID serta token yang ditampilkan sekali.
-2. Salin salah satu contoh `gateways/home-assistant.env.example`, `gateways/mqtt.env.example`, atau `gateways/camera.env.example` ke `gateways/.env.home-assistant`, `gateways/.env.mqtt`, atau `gateways/.env.camera`. Isi ID, token, dan konfigurasi perangkat atau layanan yang sesuai. File tersebut diabaikan Git dan tidak disalin ke image.
-3. Jalankan profil yang dipilih, contohnya:
+To run a gateway with Docker on the same machine as Kanca:
+
+1. Create a source on the **External Sources** page and save the ID and token, which are shown only once.
+2. Copy one of `gateways/home-assistant.env.example`, `gateways/mqtt.env.example`, or `gateways/camera.env.example` to `gateways/.env.home-assistant`, `gateways/.env.mqtt`, or `gateways/.env.camera`. Fill in the ID, token, and relevant device or service configuration. These files are ignored by Git and are not copied into the image.
+3. Start the selected profile, for example:
 
    ```bash
    docker compose -f compose.yaml -f compose.gateways.yaml --profile home-assistant up -d --build
    ```
 
-   Gunakan profil `mqtt` atau `camera` untuk gateway lainnya. Untuk kamera pada jaringan, `CAMERA_SOURCE` dapat berupa URL RTSP yang didukung OpenCV; perangkat USB memerlukan konfigurasi akses perangkat host yang sesuai dan belum disediakan otomatis. `./stop.sh` menghentikan seluruh profil gateway bersama Kanca.
+   Use the `mqtt` or `camera` profile for other gateways. For a network camera, `CAMERA_SOURCE` can be an RTSP URL supported by OpenCV; USB devices require appropriate host device access configuration, which is not provided automatically. `./stop.sh` stops all gateway profiles along with Kanca.
 
-Satu gateway Home Assistant dikonfigurasi untuk satu entity dan satu sumber Kanca. Nilai numerik disediakan sebagai `data.value`, sedangkan nilai asli tersedia sebagai `data.state`; `unknown` dan `unavailable` tidak diteruskan sebagai bacaan. MQTT melewati retained message karena waktu pengukurannya tidak dapat dipastikan. Kanca hanya mengenali struktur dari data yang sudah pernah diterima; kirim bacaan pertama sebelum meminta pemantauan. Menandai data sebagai baru berdasarkan waktu diterima tidak membuktikan bahwa perangkat atau hub mengukur ulang pada saat itu.
+Each Home Assistant gateway is configured for one entity and one Kanca source. Numeric values are provided as `data.value`, while the original value is available as `data.state`; `unknown` and `unavailable` are not forwarded as readings. MQTT skips retained messages because their measurement time cannot be confirmed. Kanca recognizes data structure only after data has been received; send an initial reading before requesting monitoring. Marking data as new based on its receipt time does not prove the device or hub took a new measurement at that time.
 
-Frontend menggunakan React dan Vite di folder `frontend/`. Untuk development, jalankan API pada port 8765, lalu jalankan `npm install` dan `npm run dev` di folder `frontend/`. Vite meneruskan request `/v1` ke API. Untuk menyajikan frontend melalui FastAPI tanpa Docker, jalankan `npm run build` di folder tersebut terlebih dahulu.
+### Frontend Development
 
-Tanpa Docker: buat virtual environment, `pip install -r requirements.txt`, atur `KANCA_API_KEY` dan `DATABASE_URL` ke PostgreSQL, lalu jalankan `uvicorn app.main:app --reload --port 8765` dan `python -m app.worker` di terminal terpisah. Jika `DATABASE_URL` tidak diatur, SQLite melalui `KANCA_DB_PATH` masih tersedia untuk pengujian dan migrasi legacy.
+The frontend uses React and Vite in `frontend/`. For development, start the API on port 8765, then run `npm install` and `npm run dev` from that directory. Vite proxies `/v1` requests to the API. To serve the built frontend through FastAPI without Docker, run `npm run build` first.
 
-## Contoh API
+### Run Without Docker
+
+Create a virtual environment, install dependencies with `pip install -r requirements.txt`, and set `KANCA_API_KEY` and `DATABASE_URL` for PostgreSQL. Run `uvicorn app.main:app --reload --port 8765` and `python -m app.worker` in separate terminals. If `DATABASE_URL` is not set, SQLite through `KANCA_DB_PATH` remains available for testing and legacy migrations.
+
+## API Examples
 
 ```bash
 export KANCA_API_KEY='change-me'
@@ -89,11 +95,11 @@ curl -X POST http://localhost:8765/v1/connections \
 
 curl -X POST http://localhost:8765/v1/tasks \
   -H "X-API-Key: $KANCA_API_KEY" -H 'Content-Type: application/json' \
-  -H 'Idempotency-Key: contoh-1' \
-  -d '{"instruction":"Periksa suhu","explicit_steps":[{"capability":"device.read_temperature","arguments":{}}]}'
+  -H 'Idempotency-Key: example-1' \
+  -d '{"instruction":"Check the temperature","explicit_steps":[{"capability":"device.read_temperature","arguments":{}}]}'
 ```
 
-Ambil `id` dari respons, tinjau `plan`, lalu setujui versinya:
+Get the `id` from the response, review the `plan`, then approve its version:
 
 ```bash
 curl -X POST "http://localhost:8765/v1/tasks/TASK_ID/approve" \
@@ -103,36 +109,36 @@ curl "http://localhost:8765/v1/tasks/TASK_ID" -H "X-API-Key: $KANCA_API_KEY"
 curl "http://localhost:8765/v1/events" -H "X-API-Key: $KANCA_API_KEY"
 ```
 
-Untuk mode model, set `BASETEN_API_KEY` dan kirim task tanpa `explicit_steps`. Muse Spark Open di Baseten mengusulkan capability dan jadwal; backend memvalidasi dan tetap meminta persetujuan. Model dapat dikonfigurasi dengan `BASETEN_MODEL`. Tanpa key, gunakan `explicit_steps`: ini mode demo, bukan AI. `examples/poll_events.py` menunjukkan konsumen eksternal yang membaca event dengan cursor; konsumen produksi harus menyimpan cursor dan ID event yang telah diproses.
+For model mode, set `BASETEN_API_KEY` and submit a task without `explicit_steps`. Muse Spark Open on Baseten proposes capabilities and a schedule; the backend validates them and still requires approval. Configure the model with `BASETEN_MODEL`. Without a key, use `explicit_steps`; this is demo mode, not AI. `examples/poll_events.py` shows an external consumer reading events with a cursor; production consumers should store the cursor and IDs of processed events.
 
-## MCP untuk agent lain
+## MCP Integration
 
-Kanca menyediakan server MCP lokal melalui stdio. Tool yang tersedia mencakup daftar sumber dan koneksi, membaca event dan hasil task, bertanya dengan bahasa alami tentang observasi terbaru sumber (`ask_source`), membuat rancangan task, dan membuat rancangan rerun. Pertanyaan serta event terbaru yang diperlukan untuk menjawab dikirim ke Baseten. Jawaban sumber hanya memakai event yang sudah diterima dan analisis kamera yang sudah tersimpan; MCP tidak dapat meminta frame kamera baru. Rancangan task dan rerun tetap membutuhkan persetujuan pemilik di Kanca. Kontrol perangkat fisik secara langsung belum tersedia; setiap adapter kontrol harus menerbitkan aksi spesifik dan kebijakan persetujuannya sendiri.
+Kanca provides a local MCP server over stdio. Available tools include listing sources and connections, reading events and task results, asking natural-language questions about recent source observations (`ask_source`), creating task proposals, and proposing reruns. Questions and the latest events needed to answer them are sent to Baseten. Source answers use only received events and stored camera analysis; MCP cannot request a new camera frame. Task and rerun proposals still require owner approval in Kanca. Direct physical device control is not available; each control adapter must define its own specific actions and approval policy.
 
-Setelah `./run.sh`, MCP client yang mendukung stdio dapat menjalankan perintah berikut dari folder proyek:
+After `./run.sh`, an MCP client that supports stdio can run the following command from the project directory:
 
 ```bash
 docker compose exec -T -e KANCA_URL=http://api:8000 api python -m app.mcp_server
 ```
 
-Perintah tersebut adalah proses MCP, bukan perintah interaktif untuk diketik lalu digunakan sebagai chat. Konfigurasikan command `docker` dan argumen `compose`, `exec`, `-T`, `-e`, `KANCA_URL=http://api:8000`, `api`, `python`, `-m`, `app.mcp_server` di MCP client. Jalankan dari folder proyek agar Compose menemukan konfigurasinya. API key digunakan dari environment container dan tidak dikirim melalui model. Akses ke proses dan API key memberi agent akses ke data akun demo ini; jangan bagikan akses tersebut sembarangan. Penggunaan dari host lain memerlukan transport dan autentikasi terpisah; endpoint MCP HTTP publik belum tersedia.
+This command starts the MCP process; it is not an interactive command to type and use as a chat. Configure the MCP client with command `docker` and arguments `compose`, `exec`, `-T`, `-e`, `KANCA_URL=http://api:8000`, `api`, `python`, `-m`, `app.mcp_server`. Run it from the project directory so Compose can find its configuration. The API key is read from the container environment and is not sent through the model. Access to this process and API key gives the agent access to this demo account data; share access carefully. Use from another host requires separate transport and authentication; a public HTTP MCP endpoint is not available.
 
-### Monitoring berulang
+### Recurring Monitoring
 
-Task dapat menyertakan `schedule` seperti `{"interval_seconds":60,"max_runs":5}`. Pada langkah eksplisit, kondisi opsional menggunakan `{"step":0,"field":"temperature_c","operator":"gt","value":28}` untuk memeriksa hasil langkah sebelumnya. Operator tersedia: `eq`, `ne`, `gt`, `gte`, `lt`, `lte`. Aksi hanya dilakukan sekali per langkah per task; hasil setiap pemeriksaan tersedia di `/v1/tasks/{id}/runs`. Semua connector saat ini simulasi.
+Add a `schedule` to a task, for example: `{"interval_seconds":60,"max_runs":5}`. For explicit steps, an optional condition such as `{"step":0,"field":"temperature_c","operator":"gt","value":28}` checks the result of a previous step. Available operators are `eq`, `ne`, `gt`, `gte`, `lt`, and `lte`. Each action runs only once per step per task; each check result is available at `/v1/tasks/{id}/runs`. All connectors are currently simulated.
 
-### Webhook
+### Webhooks
 
-Buat subscription dengan `POST /v1/webhook-subscriptions` dan body `{"url":"https://example.com/webhook"}`. Secret hanya dikembalikan saat dibuat; simpan di sisi penerima. Event dapat dibatasi lewat `event_types` saat membuat subscription atau `PUT /v1/webhook-subscriptions/{id}/event-types`; default `["*"]` berarti semua event. Event baru dibuat bersama delivery dalam transaksi yang sama. Worker mengirimnya dengan header `X-Kanca-Timestamp` dan `X-Kanca-Signature: sha256=<hex>`, menggunakan HMAC-SHA256 atas `timestamp + "." + raw_body`. Penerima harus memverifikasi signature, membatasi umur timestamp, dan melakukan deduplikasi berdasarkan ID event. Pengiriman at-least-once, dengan maksimal lima percobaan; lihat `/v1/webhook-deliveries`. Webhook hanya menerima HTTPS port 443 dan alamat IP publik; redirect tidak diikuti. Subscription hanya menerima event yang dibuat setelah subscription aktif dan cocok dengan filter.
+Create a subscription with `POST /v1/webhook-subscriptions` using the body `{"url":"https://example.com/webhook"}`. The secret is returned only when the subscription is created; store it on the receiving side. Filter events with `event_types` when creating the subscription or with `PUT /v1/webhook-subscriptions/{id}/event-types`; the default `["*"]` means all events. New events and deliveries are created in the same transaction. The worker sends them with the `X-Kanca-Timestamp` and `X-Kanca-Signature: sha256=<hex>` headers, using HMAC-SHA256 over `timestamp + "." + raw_body`. Receivers must verify the signature, limit the timestamp age, and deduplicate by event ID. Delivery is at least once, with up to five attempts; see `/v1/webhook-deliveries`. Webhooks accept only HTTPS on port 443 and public IP addresses; redirects are not followed. A subscription receives only events created after it becomes active and matching its filter.
 
-## Kondisi dan batas saat ini
+## Current Status and Limitations
 
-Ini MVP lokal, bukan implementasi lengkap dari PLAN.md. Compose menggunakan PostgreSQL; satu API key masih memetakan ke satu tenant. Webhook secret tersimpan dalam database; amankan volume dan gunakan TLS di depan API. Tidak ada LangGraph, Celery, pairing universal, SAM, atau tindakan nyata. Integrasi perangkat dan Baseten memerlukan pengujian langsung. Jangan gunakan untuk data atau tindakan produksi sampai autentikasi multi-tenant, penyimpanan secret, policy, dan recovery diperkuat.
+This is a local MVP, not a complete implementation of PLAN.md. Compose uses PostgreSQL; one API key still maps to one tenant. Webhook secrets are stored in the database; secure the volume and use TLS in front of the API. LangGraph, Celery, universal pairing, SAM, and real-world actions are not included. Device integrations and Baseten require direct testing. Do not use this for production data or actions until multi-tenant authentication, secret storage, policies, and recovery are strengthened.
 
-## Tes
+## Verification
 
 ```bash
 python -m pytest -q
 ```
 
-Tes PostgreSQL tambahan dijalankan dengan `KANCA_TEST_DATABASE_URL` yang menunjuk ke database test dengan izin membuat dan menghapus schema. Jangan gunakan database produksi.
+Additional PostgreSQL tests run with `KANCA_TEST_DATABASE_URL` pointing to a test database that can create and drop schemas. Do not use a production database.
