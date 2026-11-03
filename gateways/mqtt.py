@@ -15,20 +15,20 @@ def main():
     client.tls_set(cert_reqs=ssl.CERT_REQUIRED)
     def on_connect(client, userdata, flags, reason_code, properties):
         if reason_code.is_failure:
-            print('Koneksi MQTT ditolak', flush=True)
+            print('MQTT connection rejected', flush=True)
         else:
             client.subscribe(topic, qos=1)
     def on_message(client, userdata, message):
         try:
             if message.retain:
-                print('Pesan MQTT retained dilewati karena waktu pengukuran tidak diketahui', flush=True)
+                print('Pesan MQTT retained dilewati karena waktu pengukuran unknown', flush=True)
                 return
             payload = json.loads(message.payload)
             if not isinstance(payload, dict):
                 raise ValueError('payload must be object')
             emit('mqtt.message', {'topic': message.topic, 'payload': payload})
         except (ValueError, UnicodeDecodeError, httpx.HTTPError):
-            print('Pesan MQTT tidak valid atau gagal diteruskan', flush=True)
+            print('MQTT message is invalid or could not be forwarded', flush=True)
     client.on_connect = on_connect
     client.on_message = on_message
     client.connect(host, int(os.getenv('MQTT_PORT', '8883')), 60)

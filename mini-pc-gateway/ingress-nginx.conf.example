@@ -1,4 +1,4 @@
-# Contoh untuk operator server: isi hostname dan sertifikat valid.
+# Example for server operators: provide a hostname and a valid certificate.
 # Konfigurasi ini hanya mempublikasikan endpoint ingest, bukan UI atau API admin.
 limit_req_zone $binary_remote_addr zone=kanca_gateway:10m rate=30r/m;
 server {

@@ -14,14 +14,14 @@ from app.storage import connect, event_dict, now
 def validate_url(url):
     parsed = urlsplit(url)
     if parsed.scheme != "https" or not parsed.hostname or parsed.username or parsed.password or parsed.fragment or parsed.port not in (None, 443):
-        raise ValueError("Webhook harus berupa URL HTTPS publik pada port 443 tanpa kredensial atau fragment.")
+        raise ValueError("Webhook must be URL HTTPS publik pada port 443 tanpa kredensial atau fragment.")
     return parsed
 
 
 def public_ip(host):
     addresses = {item[4][0] for item in socket.getaddrinfo(host, 443, type=socket.SOCK_STREAM)}
     if not addresses or any(not ipaddress.ip_address(ip).is_global for ip in addresses):
-        raise ValueError("Alamat webhook harus menggunakan IP publik.")
+        raise ValueError("Webhook address must use a public IP address.")
     return sorted(addresses)[0]
 
 

@@ -1,0 +1,2007 @@
+{
+  "catalog_source": "https://cctvhub.upset.dev/",
+  "verified_at": "2026-11-03",
+  "verified_count": 200,
+  "sources": [
+    {
+      "catalog_id": "jogja-kota-1",
+      "name": "Simpang APMD (PTZ)",
+      "url": "https://cctvjss.jogjakota.go.id/atcs/ATCS_apmd.stream/playlist.m3u8",
+      "address": "Baciro, Gondokusuman",
+      "area": "Gondokusuman",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-2",
+      "name": "Simpang Jlagran (PTZ)",
+      "url": "https://cctvjss.jogjakota.go.id/atcs/ATCS_jlagran.stream/playlist.m3u8",
+      "address": "Pringgokusuman, Gedongtengen",
+      "area": "Gedongtengen",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-6",
+      "name": "Simpang Gondomanan (PTZ)",
+      "url": "https://cctvjss.jogjakota.go.id/atcs/ATCS_gondomanan.stream/playlist.m3u8",
+      "address": "Prawirodirjan, Gondomanan",
+      "area": "Gondomanan",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-9",
+      "name": "Simpang Jokteng Kulon (PTZ)",
+      "url": "https://cctvjss.jogjakota.go.id/atcs/ATCS_joktengkulon.stream/playlist.m3u8",
+      "address": "Gedongkiwo, Mantrijeron",
+      "area": "Mantrijeron",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-10",
+      "name": "Simpang Jokteng Wetan",
+      "url": "https://cctvjss.jogjakota.go.id/atcs/ATCS_joktengwetan.stream/playlist.m3u8",
+      "address": "Panembahan, Kraton",
+      "area": "Kraton",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-14",
+      "name": "Simpang KM Nol (PTZ)",
+      "url": "https://cctvjss.jogjakota.go.id/atcs/ATCS_kmnol.stream/playlist.m3u8",
+      "address": "Ngupasan, Gondomanan",
+      "area": "Gondomanan",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-16",
+      "name": "Simpang Permata (PTZ)",
+      "url": "https://cctvjss.jogjakota.go.id/atcs/ATCS_permata.stream/playlist.m3u8",
+      "address": "Gunung Ketur, Pakualaman",
+      "area": "Pakualaman",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-17",
+      "name": "Simpang PKU Muh. (PTZ)",
+      "url": "https://cctvjss.jogjakota.go.id/atcs/ATCS_pkumuh.stream/playlist.m3u8",
+      "address": "Ngupasan, Gondomanan",
+      "area": "Gondomanan",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-19",
+      "name": "Simpang Sentul (PTZ)",
+      "url": "https://cctvjss.jogjakota.go.id/atcs/ATCS_sentul.stream/playlist.m3u8",
+      "address": "Gunungketur, Pakualaman",
+      "area": "Pakualaman",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-20",
+      "name": "Simpang Serangan (PTZ)",
+      "url": "https://cctvjss.jogjakota.go.id/atcs/ATCS_serangan.stream/playlist.m3u8",
+      "address": "Ngampilan, Ngampilan",
+      "area": "Ngampilan",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-21",
+      "name": "Simpang SGM (PTZ)",
+      "url": "https://cctvjss.jogjakota.go.id/atcs/ATCS_simpangsgm.stream/playlist.m3u8",
+      "address": "Muja Muju, Umbulharjo",
+      "area": "Umbulharjo",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-22",
+      "name": "Simpang Tungkak (PTZ)",
+      "url": "https://cctvjss.jogjakota.go.id/atcs/ATCS_tungkak.stream/playlist.m3u8",
+      "address": "Wirogunan, Mergangsan",
+      "area": "Mergangsan",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-23",
+      "name": "Simpang Tunjung (PTZ)",
+      "url": "https://cctvjss.jogjakota.go.id/atcs/ATCS_tunjung.stream/playlist.m3u8",
+      "address": "Bausasran, Danurejan",
+      "area": "Danurejan",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-24",
+      "name": "Simpang UKDW (PTZ)",
+      "url": "https://cctvjss.jogjakota.go.id/atcs/ATCS_ukdw.stream/playlist.m3u8",
+      "address": "Klitren, Gondokusuman",
+      "area": "Gondokusuman",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-25",
+      "name": "Simpang Wirobrajan (PTZ)",
+      "url": "https://cctvjss.jogjakota.go.id/atcs/ATCS_wirobrajan.stream/playlist.m3u8",
+      "address": "Wirobrajan, Wirobrajan",
+      "area": "Wirobrajan",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-29",
+      "name": "Sungai Gajah Wong 2",
+      "url": "https://cctvjss.jogjakota.go.id/bpbd/BPBD_gajahwong2.stream/playlist.m3u8",
+      "address": "Muja Muju, Umbulharjo",
+      "area": "Umbulharjo",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-30",
+      "name": "Sungai Winongo",
+      "url": "https://cctvjss.jogjakota.go.id/bpbd/BPBD_kaliwinongo.stream/playlist.m3u8",
+      "address": "Pringgokusuman, Gedongtengen",
+      "area": "Gedongtengen",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-31",
+      "name": "Sungai Ngentak",
+      "url": "https://cctvjss.jogjakota.go.id/bpbd/BPBD_ngentak.stream/playlist.m3u8",
+      "address": "Sinduharjo, Ngaglik",
+      "area": "Ngaglik",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-33",
+      "name": "Malioboro Selatan Teteg",
+      "url": "https://cctvjss.jogjakota.go.id/malioboro/Malioboro_1_Selatan_Teteg.stream/playlist.m3u8",
+      "address": "Sosromenduran, Gedongtengen",
+      "area": "Gedongtengen",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-34",
+      "name": "Malioboro Depan Toko Subur",
+      "url": "https://cctvjss.jogjakota.go.id/malioboro/Malioboro_2_Depan_Toko_Subur.stream/playlist.m3u8",
+      "address": "Sosromenduran, Gedong Tengen",
+      "area": "Gedong Tengen",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-35",
+      "name": "Malioboro Depan Dispar",
+      "url": "https://cctvjss.jogjakota.go.id/malioboro/Malioboro_3_Depan_Dispar.stream/playlist.m3u8",
+      "address": "Sosromenduran, Gedong Tengen",
+      "area": "Gedong Tengen",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-89",
+      "name": "Malioboro Depan DPRD",
+      "url": "https://cctvjss.jogjakota.go.id/malioboro/Malioboro_4_Depan_DPRD.stream/playlist.m3u8",
+      "address": "Sosromenduran, Gedong Tengen",
+      "area": "Gedong Tengen",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-91",
+      "name": "Malioboro Perwakilan",
+      "url": "https://cctvjss.jogjakota.go.id/malioboro/Malioboro_5_Perwakilan.stream/playlist.m3u8",
+      "address": "Sosromenduran, Gedong Tengen",
+      "area": "Gedong Tengen",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-92",
+      "name": "Malioboro Mall Utara",
+      "url": "https://cctvjss.jogjakota.go.id/malioboro/Malioboro_6_Mall_Utara.stream/playlist.m3u8",
+      "address": "Sosromenduran, Gedong Tengen",
+      "area": "Gedong Tengen",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-93",
+      "name": "Malioboro Mall Selatan",
+      "url": "https://cctvjss.jogjakota.go.id/malioboro/Malioboro_7_Mall_Selatan.stream/playlist.m3u8",
+      "address": "Sosromenduran, Gedong Tengen",
+      "area": "Gedong Tengen",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-94",
+      "name": "Malioboro Pasar Beringharjo",
+      "url": "https://cctvjss.jogjakota.go.id/malioboro/Malioboro_30_Pasar_Beringharjo.stream/playlist.m3u8",
+      "address": "Ngupasan, Gondomanan",
+      "area": "Gondomanan",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-129",
+      "name": "Simpang UST (PTZ)",
+      "url": "https://cctvjss.jogjakota.go.id/atcs/ATCS_UST.stream/playlist.m3u8",
+      "address": "Muja Muju, Umbulharjo",
+      "area": "Umbulharjo",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-130",
+      "name": "Simpang Glagahsari",
+      "url": "https://cctvjss.jogjakota.go.id/atcs/ATCS_Glagahsari.stream/playlist.m3u8",
+      "address": "Muja Muju, Umbulharjo",
+      "area": "Umbulharjo",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-147",
+      "name": "Simpang Ibu Ruswo (PTZ)",
+      "url": "https://cctvjss.jogjakota.go.id/atcs/ATCS_Ibu_Ruswo.stream/playlist.m3u8",
+      "address": "Prawirodirjan, Gondomanan",
+      "area": "Gondomanan",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-148",
+      "name": "Simpang BPK (PTZ)",
+      "url": "https://cctvjss.jogjakota.go.id/atcs/ATCS_bpk.stream/playlist.m3u8",
+      "address": "Tegalrejo, Tegalrejo",
+      "area": "Tegalrejo",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-151",
+      "name": "Malioboro Mutiara Lama",
+      "url": "https://cctvjss.jogjakota.go.id/malioboro/Malioboro_8_Mutiara_Lama.stream/playlist.m3u8",
+      "address": "Sosromenduran, Gedong Tengen",
+      "area": "Gedong Tengen",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-152",
+      "name": "Malioboro Mutiara Baru",
+      "url": "https://cctvjss.jogjakota.go.id/malioboro/Malioboro_9_Mutiara_Baru.stream/playlist.m3u8",
+      "address": "Sosromenduran, Gedong Tengen",
+      "area": "Gedong Tengen",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-153",
+      "name": "Malioboro Kepatihan",
+      "url": "https://cctvjss.jogjakota.go.id/malioboro/Malioboro_10_Kepatihan.stream/playlist.m3u8",
+      "address": "Sosromenduran, Gedong Tengen",
+      "area": "Gedong Tengen",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-154",
+      "name": "Malioboro Terang Bulan",
+      "url": "https://cctvjss.jogjakota.go.id/malioboro/Malioboro_11_Terang_Bulan.stream/playlist.m3u8",
+      "address": "Sosromenduran, Gedong Tengen",
+      "area": "Gedong Tengen",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-155",
+      "name": "Malioboro Ramayana",
+      "url": "https://cctvjss.jogjakota.go.id/malioboro/Malioboro_12_Ramayana.stream/playlist.m3u8",
+      "address": "Ngupasan, Gondomanan",
+      "area": "Gondomanan",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-156",
+      "name": "Malioboro Gunungmas",
+      "url": "https://cctvjss.jogjakota.go.id/malioboro/Malioboro_13_Gunungmas.stream/playlist.m3u8",
+      "address": "Ngupasan, Gondomanan",
+      "area": "Gondomanan",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-157",
+      "name": "Simpang Jogokariyan V. Selatan",
+      "url": "https://cctvjss.jogjakota.go.id/atcs/ATCS_jogokaryan.stream/playlist.m3u8",
+      "address": "Brontokusuman, Mergangsan",
+      "area": "Mergangsan",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-159",
+      "name": "Simpang APPI - JL.Mentri Supeno",
+      "url": "https://cctvjss.jogjakota.go.id/atcs/ATCS_Lampu_Merah_JlMentriSupeno.stream/playlist.m3u8",
+      "address": "Pandeyan, Umbulharjo",
+      "area": "Umbulharjo",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-160",
+      "name": "Simpang Kiai Mojo 1 (Barat)",
+      "url": "https://cctvjss.jogjakota.go.id/atcs/ATCS_Lampu_Merah_KyaiMojo.stream/playlist.m3u8",
+      "address": "Bumijo, Jetis",
+      "area": "Jetis",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-161",
+      "name": "Simpang Kiai Mojo 2 (Timur)",
+      "url": "https://cctvjss.jogjakota.go.id/atcs/ATCS_Lampu_Merah_KyaiMojo2.stream/playlist.m3u8",
+      "address": "Bumijo, Jetis",
+      "area": "Jetis",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-163",
+      "name": "Simpang Pingit 1 - Jl.Tentara Pelajar",
+      "url": "https://cctvjss.jogjakota.go.id/atcs/ATCS_Lampu_Merah_Pingit1.stream/playlist.m3u8",
+      "address": "Bumijo, Jetis",
+      "area": "Jetis",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-164",
+      "name": "Simpang Pingit 2 - Jl. Tentara Pelajar",
+      "url": "https://cctvjss.jogjakota.go.id/atcs/ATCS_Lampu_Merah_Pingit2.stream/playlist.m3u8",
+      "address": "Bumijo, Jetis",
+      "area": "Jetis",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-165",
+      "name": "Simpang Pingit 3 - Jl. Tentara Pelajar",
+      "url": "https://cctvjss.jogjakota.go.id/atcs/ATCS_Lampu_Merah_Pingit3.stream/playlist.m3u8",
+      "address": "Bumijo, Jetis",
+      "area": "Jetis",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-166",
+      "name": "Simpang Gambiran 1 - Jl.Veteran",
+      "url": "https://cctvjss.jogjakota.go.id/atcs/ATCS_Lampu_Merah_Gambiran1.stream/playlist.m3u8",
+      "address": "Pandeyan, Umbulharjo",
+      "area": "Umbulharjo",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-167",
+      "name": "Simpang Gambiran 2 - Jl.Veteran",
+      "url": "https://cctvjss.jogjakota.go.id/atcs/ATCS_Lampu_Merah_Gambiran2.stream/playlist.m3u8",
+      "address": "Pandeyan, Umbulharjo",
+      "area": "Umbulharjo",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-168",
+      "name": "Simpang APPI 2 - Jl.Mentri Supeno",
+      "url": "https://cctvjss.jogjakota.go.id/atcs/ATCS_Lampu_Merah_JlMentriSupeno2.stream/playlist.m3u8",
+      "address": "Pandeyan, Umbulharjo",
+      "area": "Umbulharjo",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-169",
+      "name": "Simpang Karang Tunggal (S3 Jl. Kol.Sugiyono - Jl. Sisingamangaraja) 1",
+      "url": "https://cctvjss.jogjakota.go.id/atcs/ATCS_Lampu_Merah_SopMerah1.stream/playlist.m3u8",
+      "address": "Brontokusuman, Mergangsan",
+      "area": "Mergangsan",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-170",
+      "name": "Simpang Karang Tunggal (S3 Jl. Kol.Sugiyono - Jl. Sisingamangaraja) 2",
+      "url": "https://cctvjss.jogjakota.go.id/atcs/ATCS_Lampu_Merah_SopMerah2.stream/playlist.m3u8",
+      "address": "Brontokusuman, Mergangsan",
+      "area": "Mergangsan",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-171",
+      "name": "Simpang Jokteng Wetan - Jl. Parangtritis (PTZ)",
+      "url": "https://cctvjss.jogjakota.go.id/atcs/ATCS_Lampu_Merah_JoktengWetan.stream/playlist.m3u8",
+      "address": "Kota Yogyakarta",
+      "area": "Kota Yogyakarta",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-172",
+      "name": "Simpang Pasar Gading 1 (Timur)",
+      "url": "https://cctvjss.jogjakota.go.id/atcs/ATCS_Lampu_Merah_PasarGading1.stream/playlist.m3u8",
+      "address": "Mantrijeron, Mantrijeron",
+      "area": "Mantrijeron",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-173",
+      "name": "Simpang Pasar Gading 2 (Barat)",
+      "url": "https://cctvjss.jogjakota.go.id/atcs/ATCS_Lampu_Merah_PasarGading2.stream/playlist.m3u8",
+      "address": "Mantrijeron, Mantrijeron",
+      "area": "Mantrijeron",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-174",
+      "name": "Simpang Sugeng Jeroni (Bugisan) 1",
+      "url": "https://cctvjss.jogjakota.go.id/atcs/ATCS_Lampu_Merah_SugengJeroni1.stream/playlist.m3u8",
+      "address": "Patangpuluhan, Wirobrajan",
+      "area": "Wirobrajan",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-175",
+      "name": "Simpang Sugeng Jeroni (Bugisan) 2",
+      "url": "https://cctvjss.jogjakota.go.id/atcs/ATCS_Lampu_Merah_SugengJeroni2.stream/playlist.m3u8",
+      "address": "Patangpuluhan, Wirobrajan",
+      "area": "Wirobrajan",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-176",
+      "name": "Parkiran Ngabean",
+      "url": "https://cctvjss.jogjakota.go.id/atcs/ATCS_Parkiran_Ngabean.stream/playlist.m3u8",
+      "address": "Ngampilan, Ngampilan",
+      "area": "Ngampilan",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-177",
+      "name": "Simpang Pingit 4 - Jl. Tentara Pelajar",
+      "url": "https://cctvjss.jogjakota.go.id/atcs/ATCS_Lampu_Merah_Pingit4.stream/playlist.m3u8",
+      "address": "Bumijo, Jetis",
+      "area": "Jetis",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-178",
+      "name": "Simpang Mirota (PTZ)",
+      "url": "https://cctvjss.jogjakota.go.id/atcs/ATCS_mirota.stream/playlist.m3u8",
+      "address": "Terban, Gondokusuman",
+      "area": "Gondokusuman",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-179",
+      "name": "Simpang Taman Sari (PTZ)",
+      "url": "https://cctvjss.jogjakota.go.id/atcs/ATCS_tamansari.stream/playlist.m3u8",
+      "address": "Gedongkiwo, Mantrijeron",
+      "area": "Mantrijeron",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-180",
+      "name": "RTHP Semaki 1",
+      "url": "https://cctvjss.jogjakota.go.id/rthp/rthp_semaki_1.stream/playlist.m3u8",
+      "address": "Semaki, Umbulharjo",
+      "area": "Umbulharjo",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-181",
+      "name": "RTHP Semaki 2",
+      "url": "https://cctvjss.jogjakota.go.id/rthp/rthp_semaki_2.stream/playlist.m3u8",
+      "address": "Semaki, Umbulharjo",
+      "area": "Umbulharjo",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-195",
+      "name": "RTHP Klitren 2",
+      "url": "https://cctvjss.jogjakota.go.id/rthp/rthp_klitren_2.stream/playlist.m3u8",
+      "address": "Klitren, Gondokusuman",
+      "area": "Gondokusuman",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-196",
+      "name": "RTHP Gunungketur 1",
+      "url": "https://cctvjss.jogjakota.go.id/rthp/rthp_gunungketur_1.stream/playlist.m3u8",
+      "address": "Purwo Kinanti, Pakualaman",
+      "area": "Pakualaman",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-197",
+      "name": "RTHP Gunungketur 2",
+      "url": "https://cctvjss.jogjakota.go.id/rthp/rthp_gunungketur_2.stream/playlist.m3u8",
+      "address": "Gunung Ketur, Pakualaman",
+      "area": "Pakualaman",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-199",
+      "name": "RTHP Brontokusuman (blkg Kel) 2",
+      "url": "https://cctvjss.jogjakota.go.id/rthp/rthp_brontokusuman_blkgKel_2.stream/playlist.m3u8",
+      "address": "Brontokusuman, Mergangsan",
+      "area": "Mergangsan",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-201",
+      "name": "RTHP Segoro Amarto Tegalrejo 2",
+      "url": "https://cctvjss.jogjakota.go.id/rthp/rthp_segoro_amarto_tegalrejo_2.stream/playlist.m3u8",
+      "address": "Tegalrejo, Tegalrejo",
+      "area": "Tegalrejo",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-202",
+      "name": "RTHP Pakudaya Pakuncen 1",
+      "url": "https://cctvjss.jogjakota.go.id/rthp/rthp_pakudaya_pakuncen_1.stream/playlist.m3u8",
+      "address": "Pakuncen, Wirobrajan",
+      "area": "Wirobrajan",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-203",
+      "name": "RTHP Pakudaya Pakuncen 2",
+      "url": "https://cctvjss.jogjakota.go.id/rthp/rthp_pakudaya_pakuncen_2.stream/playlist.m3u8",
+      "address": "Pakuncen, Wirobrajan",
+      "area": "Wirobrajan",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-204",
+      "name": "Simpang Amongrogo View Timur",
+      "url": "https://cctvjss.jogjakota.go.id/atcs/ATCS_Simpang_Amongrogo_View_Timur.stream/playlist.m3u8",
+      "address": "Semaki, Umbulharjo",
+      "area": "Umbulharjo",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-205",
+      "name": "Simpang Demangan View Utara",
+      "url": "https://cctvjss.jogjakota.go.id/atcs/ATCS_Simpang_Demangan_View_Utara.stream/playlist.m3u8",
+      "address": "Klitren, Gondokusuman",
+      "area": "Gondokusuman",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-206",
+      "name": "Simpang Demangan View Selatan",
+      "url": "https://cctvjss.jogjakota.go.id/atcs/ATCS_Simpang_Demangan_View_Selatan.stream/playlist.m3u8",
+      "address": "Demangan, Gondokusuman",
+      "area": "Gondokusuman",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-207",
+      "name": "Simpang Demangan View Timur",
+      "url": "https://cctvjss.jogjakota.go.id/atcs/ATCS_Simpang_Demangan_View_Timur.stream/playlist.m3u8",
+      "address": "Kota Yogyakarta",
+      "area": "Kota Yogyakarta",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-227",
+      "name": "Simpang De Britto View Utara",
+      "url": "https://cctvjss.jogjakota.go.id/atcs/ATCS_Simpang_DeBritto_View_Utara.stream/playlist.m3u8",
+      "address": "Catur Tunggal, Depok",
+      "area": "Depok",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-228",
+      "name": "Simpang Terban View Utara",
+      "url": "https://cctvjss.jogjakota.go.id/atcs/ATCS_Simpang_Terban_View_Utara.stream/playlist.m3u8",
+      "address": "Terban, Gondokusuman",
+      "area": "Gondokusuman",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-232",
+      "name": "Simpang Rejowinangun View Timur",
+      "url": "https://cctvjss.jogjakota.go.id/atcs/ATCS_Simpang_Rejowinangun_View_Timur.stream/playlist.m3u8",
+      "address": "Rejowinangun, Kotagede",
+      "area": "Kotagede",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-233",
+      "name": "Simpang Balaikota View Timur",
+      "url": "https://cctvjss.jogjakota.go.id/atcs/ATCS_Simpang_Balaikota_View_Utara.stream/playlist.m3u8",
+      "address": "Muja Muju, Umbulharjo",
+      "area": "Umbulharjo",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-234",
+      "name": "Simpang Balaikota View Utara-Barat",
+      "url": "https://cctvjss.jogjakota.go.id/atcs/ATCS_Simpang_Balaikota_View_Timur.stream/playlist.m3u8",
+      "address": "Muja Muju, Umbulharjo",
+      "area": "Umbulharjo",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-235",
+      "name": "Malioboro Simpang Pajeksan Suryatmajan",
+      "url": "https://cctvjss.jogjakota.go.id/malioboro/Malioboro_22_Simpang_Pajeksan_Suryatmajan.stream/playlist.m3u8",
+      "address": "Ngupasan, Gondomanan",
+      "area": "Gondomanan",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-236",
+      "name": "Malioboro Simpang Reksobayan",
+      "url": "https://cctvjss.jogjakota.go.id/malioboro/Malioboro_24_Simpang_Reksobayan.stream/playlist.m3u8",
+      "address": "Ngupasan, Gondomanan",
+      "area": "Gondomanan",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-237",
+      "name": "Simpang Gedongkuning (PTZ)",
+      "url": "https://cctvjss.jogjakota.go.id/atcs/ATCS_Gedongkuning.stream/playlist.m3u8",
+      "address": "Banguntapan, Banguntapan",
+      "area": "Banguntapan",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-241",
+      "name": "Simpang Terban View Timur",
+      "url": "https://cctvjss.jogjakota.go.id/atcs/ATCS_Simpang_Terban_View_Timur.stream/playlist.m3u8",
+      "address": "Terban, Gondokusuman",
+      "area": "Gondokusuman",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-242",
+      "name": "Simpang Terban View Barat",
+      "url": "https://cctvjss.jogjakota.go.id/atcs/ATCS_Simpang_Terban_View_Barat.stream/playlist.m3u8",
+      "address": "Terban, Gondokusuman",
+      "area": "Gondokusuman",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-243",
+      "name": "Pasar Demangan View Selatan",
+      "url": "https://cctvjss.jogjakota.go.id/atcs/ATCS_Pasar_Demangan_View_Selatan.stream/playlist.m3u8",
+      "address": "Demangan, Gondokusuman",
+      "area": "Gondokusuman",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-244",
+      "name": "Simpang Galeria (PTZ)",
+      "url": "https://cctvjss.jogjakota.go.id/atcs/ATCS_Simpang_Galeria_TimurSelatan.stream/playlist.m3u8",
+      "address": "Kotabaru, Gondokusuman",
+      "area": "Gondokusuman",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-245",
+      "name": "Nol Km. - Utara",
+      "url": "https://cctvjss.jogjakota.go.id/malioboro/NolKm_Utara.stream/playlist.m3u8",
+      "address": "Ngupasan, Gondomanan",
+      "area": "Gondomanan",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-246",
+      "name": "Nol Km. - Timur",
+      "url": "https://cctvjss.jogjakota.go.id/malioboro/NolKm_Timur.stream/playlist.m3u8",
+      "address": "Kota Yogyakarta",
+      "area": "Kota Yogyakarta",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-247",
+      "name": "Nol Km. - Gd. Agung",
+      "url": "https://cctvjss.jogjakota.go.id/malioboro/NolKm_GdAgung.stream/playlist.m3u8",
+      "address": "Ngupasan, Gondomanan",
+      "area": "Gondomanan",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-248",
+      "name": "Simpang Gramedia (PTZ)",
+      "url": "https://cctvjss.jogjakota.go.id/atcs/ATCS_Gramedia_2.stream/playlist.m3u8",
+      "address": "Kotabaru, Gondokusuman",
+      "area": "Gondokusuman",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-249",
+      "name": "Simpang Jati Kencana (PTZ)",
+      "url": "https://cctvjss.jogjakota.go.id/atcs/ATCS_Simpang_JatiKencana.stream/playlist.m3u8",
+      "address": "Tegalrejo, Tegalrejo",
+      "area": "Tegalrejo",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-250",
+      "name": "Simpang Borobudur Plaza",
+      "url": "https://cctvjss.jogjakota.go.id/atcs/ATCS_Simpang_Borobudur_Plaza.stream/playlist.m3u8",
+      "address": "Kricak, Tegalrejo",
+      "area": "Tegalrejo",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-251",
+      "name": "Simpang Tugu (PTZ)",
+      "url": "https://cctvjss.jogjakota.go.id/atcs/ATCS_Simpang_Tugu.stream/playlist.m3u8",
+      "address": "Gowongan, Jetis",
+      "area": "Jetis",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-273",
+      "name": "Simpang Bausasran (PTZ)",
+      "url": "https://cctvjss.jogjakota.go.id/atcs/ATCS_S4_Bausasran.stream/playlist.m3u8",
+      "address": "Tegalpanggung, Danurejan",
+      "area": "Danurejan",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-275",
+      "name": "Simpang Pingit 5 (PTZ)",
+      "url": "https://cctvjss.jogjakota.go.id/atcs/ATCS_Lampu_Merah_Pingit5.stream/playlist.m3u8",
+      "address": "Bumijo, Jetis",
+      "area": "Jetis",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-323",
+      "name": "Gerbang Masuk Utara V. Timur (Luar)",
+      "url": "https://cctvjss.jogjakota.go.id/balaikota/Balaikota_Gerbang_Masuk_Utara_View_Timur-Luar.stream/playlist.m3u8",
+      "address": "Muja Muju, Umbulharjo",
+      "area": "Umbulharjo",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-324",
+      "name": "Gerbang Timur PKK V. Utara (Luar)",
+      "url": "https://cctvjss.jogjakota.go.id/balaikota/Balaikota_Gerbang_Timur_PKK_View_Utara-Luar.stream/playlist.m3u8",
+      "address": "Muja Muju, Umbulharjo",
+      "area": "Umbulharjo",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-325",
+      "name": "Gerbang Timur PKK V. Selatan (Luar)",
+      "url": "https://cctvjss.jogjakota.go.id/balaikota/Balaikota_Gerbang_Timur_PKK_View_Selatan-Luar.stream/playlist.m3u8",
+      "address": "Muja Muju, Umbulharjo",
+      "area": "Umbulharjo",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-327",
+      "name": "Malioboro Utara Inna Malioboro",
+      "url": "https://cctvjss.jogjakota.go.id/malioboro/Malioboro_21_Utara_Inna_Malioboro.stream/playlist.m3u8",
+      "address": "Suryatmajan, Danurejan",
+      "area": "Danurejan",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-331",
+      "name": "Malioboro Depan BPD Kepatihan",
+      "url": "https://cctvjss.jogjakota.go.id/malioboro/Malioboro_23_Depan_BPD_Kepatihan.stream/playlist.m3u8",
+      "address": "Sosromenduran, Gedong Tengen",
+      "area": "Gedong Tengen",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-360",
+      "name": "Simpang Balaikota (PTZ)",
+      "url": "https://cctvjss.jogjakota.go.id/atcs/ATCS_Simpang_Balaikota_PTZ.stream/playlist.m3u8",
+      "address": "Kota Yogyakarta",
+      "area": "Kota Yogyakarta",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-361",
+      "name": "Simpang Mandala Krida (PTZ)",
+      "url": "https://cctvjss.jogjakota.go.id/atcs/ATCS_Simpang_Mandala_Krida_PTZ.stream/playlist.m3u8",
+      "address": "Kota Yogyakarta",
+      "area": "Kota Yogyakarta",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-362",
+      "name": "Simpang Basen",
+      "url": "https://cctvjss.jogjakota.go.id/atcs/ATCS_Simpang_Basen.stream/playlist.m3u8",
+      "address": "Prenggan, Kotagede",
+      "area": "Kotagede",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-368",
+      "name": "Simpang Melia Purosani (PTZ)",
+      "url": "https://cctvjss.jogjakota.go.id/atcs/ATCS_Simpang_Melia_Purosani.stream/playlist.m3u8",
+      "address": "Kota Yogyakarta",
+      "area": "Kota Yogyakarta",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-369",
+      "name": "Simpang Patangpuluhan (PTZ)",
+      "url": "https://cctvjss.jogjakota.go.id/atcs/ATCS_Simpang_Patangpuluhan.stream/playlist.m3u8",
+      "address": "Kota Yogyakarta",
+      "area": "Kota Yogyakarta",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-370",
+      "name": "Simpang Atmosukarto (PTZ)",
+      "url": "https://cctvjss.jogjakota.go.id/atcs/ATCS_Simpang_Atmosukarto.stream/playlist.m3u8",
+      "address": "Kota Yogyakarta",
+      "area": "Kota Yogyakarta",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-371",
+      "name": "Simpang Gondomanan View Selatan",
+      "url": "https://cctvjss.jogjakota.go.id/atcs/ATCS_Simpang_Gondomanan_View_Selatan.stream/playlist.m3u8",
+      "address": "Kota Yogyakarta",
+      "area": "Kota Yogyakarta",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-396",
+      "name": "Simpang Pasar Telo View Selatan",
+      "url": "https://cctvjss.jogjakota.go.id/atcs/ATCS_Simpang_Pasar_Telo_View_Selatan.stream/playlist.m3u8",
+      "address": "Kota Yogyakarta",
+      "area": "Kota Yogyakarta",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-397",
+      "name": "Simpang Pasar Telo View Utara",
+      "url": "https://cctvjss.jogjakota.go.id/atcs/ATCS_Simpang_Pasar_Telo_View_Utara.stream/playlist.m3u8",
+      "address": "Kota Yogyakarta",
+      "area": "Kota Yogyakarta",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-398",
+      "name": "Simpang Gambiran View Timur",
+      "url": "https://cctvjss.jogjakota.go.id/atcs/ATCS_Simpang_Gambiran_View_Timur.stream/playlist.m3u8",
+      "address": "Kota Yogyakarta",
+      "area": "Kota Yogyakarta",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-399",
+      "name": "Simpang Gambiran View Barat",
+      "url": "https://cctvjss.jogjakota.go.id/atcs/ATCS_Simpang_Gambiran_View_Barat.stream/playlist.m3u8",
+      "address": "Kota Yogyakarta",
+      "area": "Kota Yogyakarta",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-428",
+      "name": "Utara Jl. Gowongan Lor",
+      "url": "https://cctvjss.jogjakota.go.id/margo-utomo/Gowongan-Lor.stream/playlist.m3u8",
+      "address": "Kota Yogyakarta",
+      "area": "Kota Yogyakarta",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-429",
+      "name": "Optic Tugu",
+      "url": "https://cctvjss.jogjakota.go.id/margo-utomo/Optic-Tugu.stream/playlist.m3u8",
+      "address": "Kota Yogyakarta",
+      "area": "Kota Yogyakarta",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-430",
+      "name": "Selatan Olive",
+      "url": "https://cctvjss.jogjakota.go.id/margo-utomo/Selatan-Olive.stream/playlist.m3u8",
+      "address": "Kota Yogyakarta",
+      "area": "Kota Yogyakarta",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-431",
+      "name": "Selatan Tugu",
+      "url": "https://cctvjss.jogjakota.go.id/margo-utomo/Toko-Cat-Wahyu.stream/playlist.m3u8",
+      "address": "Kota Yogyakarta",
+      "area": "Kota Yogyakarta",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-432",
+      "name": "Wijaya Baru Travel",
+      "url": "https://cctvjss.jogjakota.go.id/margo-utomo/Wijaya-Baru-Travel.stream/playlist.m3u8",
+      "address": "Kota Yogyakarta",
+      "area": "Kota Yogyakarta",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-433",
+      "name": "Utara Teteg",
+      "url": "https://cctvjss.jogjakota.go.id/margo-utomo/Wisma-Ratih.stream/playlist.m3u8",
+      "address": "Kota Yogyakarta",
+      "area": "Kota Yogyakarta",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-434",
+      "name": "Jl. Nyoman Oka (Gereja Kotabaru)",
+      "url": "https://cctvjss.jogjakota.go.id/kotabaru/Jl-Nyoman-Oka.stream/playlist.m3u8",
+      "address": "Kotabaru, Gondokusuman",
+      "area": "Gondokusuman",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-435",
+      "name": "Jl. Sajiono (Roemi)",
+      "url": "https://cctvjss.jogjakota.go.id/kotabaru/Jl-Sajiono.stream/playlist.m3u8",
+      "address": "Kotabaru, Gondokusuman",
+      "area": "Gondokusuman",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-436",
+      "name": "Jl. Yos Sudarso (Mie Gacoan)",
+      "url": "https://cctvjss.jogjakota.go.id/kotabaru/ANPR-Jl-Yos-Sudarso.stream/playlist.m3u8",
+      "address": "Kotabaru, Gondokusuman",
+      "area": "Gondokusuman",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-437",
+      "name": "Jl. Wardhani (Selatan-Timur SMPN 5)",
+      "url": "https://cctvjss.jogjakota.go.id/kotabaru/ANPR-Jl-Wardhani.stream/playlist.m3u8",
+      "address": "Kotabaru, Gondokusuman",
+      "area": "Gondokusuman",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-439",
+      "name": "Jl. Ahmad Jazuli (Apotek K24)",
+      "url": "https://cctvjss.jogjakota.go.id/kotabaru/ANPR-Jl-Ahmad-Jazuli.stream/playlist.m3u8",
+      "address": "Kotabaru, Gondokusuman",
+      "area": "Gondokusuman",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-440",
+      "name": "Jl. F.M. Noto (Raminten)",
+      "url": "https://cctvjss.jogjakota.go.id/kotabaru/ANPR-Jl-FM-Noto-Raminten.stream/playlist.m3u8",
+      "address": "Kotabaru, Gondokusuman",
+      "area": "Gondokusuman",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-441",
+      "name": "Jl. F.M. Noto (Gardu Aniem)",
+      "url": "https://cctvjss.jogjakota.go.id/kotabaru/ANPR-Jl-FM-Noto-Gardu-Aniem.stream/playlist.m3u8",
+      "address": "Kotabaru, Gondokusuman",
+      "area": "Gondokusuman",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-443",
+      "name": "Jl. Juadi (Pojok Utara-Barat Telkom)",
+      "url": "https://cctvjss.jogjakota.go.id/kotabaru/Jl-Juadi.stream/playlist.m3u8",
+      "address": "Kotabaru, Gondokusuman",
+      "area": "Gondokusuman",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-444",
+      "name": "Jl. F.M. Noto (Mc Donalds)",
+      "url": "https://cctvjss.jogjakota.go.id/kotabaru/ANPR-Jl-FM-Noto-McDonalds.stream/playlist.m3u8",
+      "address": "Kotabaru, Gondokusuman",
+      "area": "Gondokusuman",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-448",
+      "name": "Kem MJ-Timur Kemantren",
+      "url": "https://cctvjss.jogjakota.go.id/kecamatan/KemMJ-TimurKemantren.stream/playlist.m3u8",
+      "address": "Suryodiningratan, Mantrijeron",
+      "area": "Mantrijeron",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-449",
+      "name": "Kem MJ-Pendopo Kemantren",
+      "url": "https://cctvjss.jogjakota.go.id/kecamatan/KemMJ-PendopoKemantren.stream/playlist.m3u8",
+      "address": "Suryodiningratan, Mantrijeron",
+      "area": "Mantrijeron",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-450",
+      "name": "Kem MJ-Jalan Selatan Kemantren",
+      "url": "https://cctvjss.jogjakota.go.id/kecamatan/KemMJ-JalanSelatanKemantren.stream/playlist.m3u8",
+      "address": "Suryodiningratan, Mantrijeron",
+      "area": "Mantrijeron",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-466",
+      "name": "Simpang Wirosaban View Selatan",
+      "url": "https://cctvjss.jogjakota.go.id/atcs/ATCS_Simpang_Wirosaban_View_Selatan.stream/playlist.m3u8",
+      "address": "Sorosutan, Umbulharjo",
+      "area": "Umbulharjo",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-467",
+      "name": "Simpang Wirosaban View Utara",
+      "url": "https://cctvjss.jogjakota.go.id/atcs/ATCS_Simpang_Wirosaban_View_Utara.stream/playlist.m3u8",
+      "address": "Sorosutan, Umbulharjo",
+      "area": "Umbulharjo",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-468",
+      "name": "Simpang Wirosaban View Barat",
+      "url": "https://cctvjss.jogjakota.go.id/atcs/ATCS_Simpang_Wirosaban_View_Barat.stream/playlist.m3u8",
+      "address": "Sorosutan, Umbulharjo",
+      "area": "Umbulharjo",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-469",
+      "name": "Simpang Wirosaban View Timur",
+      "url": "https://cctvjss.jogjakota.go.id/atcs/ATCS_Simpang_Wirosaban_View_Timur.stream/playlist.m3u8",
+      "address": "Sorosutan, Umbulharjo",
+      "area": "Umbulharjo",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-477",
+      "name": "Simpang Jogokariyan V. Utara",
+      "url": "https://cctvjss.jogjakota.go.id/atcs/ATCS_Simpang_Jogokariyan_View_Utara.stream/playlist.m3u8",
+      "address": "Kota Yogyakarta",
+      "area": "Kota Yogyakarta",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-522",
+      "name": "Simpang Tegalgendu V. Selatan",
+      "url": "https://cctvjss.jogjakota.go.id/atcs/ATCS_Simpang_Tegalgendu.stream/playlist.m3u8",
+      "address": "Giwangan, Umbulharjo",
+      "area": "Umbulharjo",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-523",
+      "name": "Simpang Letjen Suprapto-KS. Tubun V. Selatan",
+      "url": "https://cctvjss.jogjakota.go.id/atcs/ATCS_Simpang_Letjen_Suprapto_KS_Tubun_View_Selatan.stream/playlist.m3u8",
+      "address": "Ngampilan, Ngampilan",
+      "area": "Ngampilan",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-524",
+      "name": "Simpang Letjen Suprapto-KS. Tubun V. Utara",
+      "url": "https://cctvjss.jogjakota.go.id/atcs/ATCS_Simpang_Letjen_Suprapto_KS_Tubun_View_Utara.stream/playlist.m3u8",
+      "address": "Ngampilan, Ngampilan",
+      "area": "Ngampilan",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-525",
+      "name": "Simpang Glagahsari (PTZ)",
+      "url": "https://cctvjss.jogjakota.go.id/atcs/ATCS_Glagahsari_PTZ.stream/playlist.m3u8",
+      "address": "Muja Muju, Umbulharjo",
+      "area": "Umbulharjo",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-755",
+      "name": "Simpang Gramedia V. Utara-Timur",
+      "url": "https://cctvjss.jogjakota.go.id/atcs/ATCS_gramedia.stream/playlist.m3u8",
+      "address": "Kotabaru, Gondokusuman",
+      "area": "Gondokusuman",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-816",
+      "name": "RTHP Jopraban 3",
+      "url": "https://cctvjss.jogjakota.go.id/rthp/rthp_jopraban_3.stream/playlist.m3u8",
+      "address": "Wirobrajan, Wirobrajan",
+      "area": "Wirobrajan",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-817",
+      "name": "RTHP Jopraban 2",
+      "url": "https://cctvjss.jogjakota.go.id/rthp/rthp_jopraban_2.stream/playlist.m3u8",
+      "address": "Wirobrajan, Wirobrajan",
+      "area": "Wirobrajan",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-818",
+      "name": "RTHP Jopraban 1",
+      "url": "https://cctvjss.jogjakota.go.id/rthp/rthp_jopraban_1.stream/playlist.m3u8",
+      "address": "Wirobrajan, Wirobrajan",
+      "area": "Wirobrajan",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-839",
+      "name": "RTHP Bumen",
+      "url": "https://cctvjss.jogjakota.go.id/rthp/rthp_bumen.stream/playlist.m3u8",
+      "address": "Purbayan, Kotagede",
+      "area": "Kotagede",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-842",
+      "name": "Depan DPRD V. Utara",
+      "url": "https://cctvjss.jogjakota.go.id/dprd-kota/depan-dprd-v-utara.stream/playlist.m3u8",
+      "address": "Muja Muju, Umbulharjo",
+      "area": "Umbulharjo",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-843",
+      "name": "Depan DPRD V. Selatan",
+      "url": "https://cctvjss.jogjakota.go.id/dprd-kota/depan-dprd-v-selatan.stream/playlist.m3u8",
+      "address": "Muja Muju, Umbulharjo",
+      "area": "Umbulharjo",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-844",
+      "name": "Depan DPRD Pos Security",
+      "url": "https://cctvjss.jogjakota.go.id/dprd-kota/depan-dprd-pos-security.stream/playlist.m3u8",
+      "address": "Muja Muju, Umbulharjo",
+      "area": "Umbulharjo",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-850",
+      "name": "Simpang Pasar Telo (PTZ)",
+      "url": "https://cctvjss.jogjakota.go.id/atcs/ATCS_Pasar_Telo_PTZ.stream/playlist.m3u8",
+      "address": "Brontokusuman, Mergangsan",
+      "area": "Mergangsan",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-856",
+      "name": "Simpang Gramedia V. Timur",
+      "url": "https://cctvjss.jogjakota.go.id/kotabaru/ANPR-Simpang-Gramedia-V-Timur_Ex-Jl-Prau.stream/playlist.m3u8",
+      "address": "Kotabaru, Gondokusuman",
+      "area": "Gondokusuman",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-873",
+      "name": "Simpang Mantrigawen (PTZ)",
+      "url": "https://cctvjss.jogjakota.go.id/atcs/ATCS_Mantrigawen_PTZ.stream/playlist.m3u8",
+      "address": "Keparakan, Mergangsan",
+      "area": "Mergangsan",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-896",
+      "name": "Simpang Mirota V. Barat (FIX)",
+      "url": "https://cctvjss.jogjakota.go.id/atcs/ATCS_Simpang_Mirota_View_Barat.stream/playlist.m3u8",
+      "address": "Terban, Gondokusuman",
+      "area": "Gondokusuman",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "jogja-kota-900",
+      "name": "Simpang Jati Kencana V. Barat",
+      "url": "https://cctvjss.jogjakota.go.id/atcs/ATCS_Simpang_JatiKencana_Fix.stream/playlist.m3u8",
+      "address": "Bener, Tegalrejo",
+      "area": "Tegalrejo",
+      "city": "Kota Yogyakarta",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "bantul-3685768a-94ea-4ac4-aef1-1a91dd1a3c1e",
+      "name": "Bundaran Srandakan",
+      "url": "https://stream.bantulkab.go.id/memfs/3685768a-94ea-4ac4-aef1-1a91dd1a3c1e.m3u8",
+      "address": "Bantul",
+      "area": "Bantul",
+      "city": "Bantul",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "bantul-bd7c1728-f86f-4a7b-b759-82c7320f5040",
+      "name": "Gerbang Pemda II Manding View Selatan",
+      "url": "https://stream.bantulkab.go.id/memfs/bd7c1728-f86f-4a7b-b759-82c7320f5040.m3u8",
+      "address": "Bantul",
+      "area": "Bantul",
+      "city": "Bantul",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "bantul-488d8a30-d485-4532-90be-dbd5655f2b24",
+      "name": "Gerbang Pemda II Manding View Utara",
+      "url": "https://stream.bantulkab.go.id/memfs/488d8a30-d485-4532-90be-dbd5655f2b24.m3u8",
+      "address": "Bantul",
+      "area": "Bantul",
+      "city": "Bantul",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "bantul-fabc5c97-17be-4c1b-93a2-fdf5b3bc03e1",
+      "name": "Makam Kotagede - Kalurahan Jagalan",
+      "url": "https://stream.bantulkab.go.id/memfs/fabc5c97-17be-4c1b-93a2-fdf5b3bc03e1.m3u8",
+      "address": "Bantul",
+      "area": "Bantul",
+      "city": "Bantul",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "bantul-20870ab0-03fa-49f3-b499-382acc94a676",
+      "name": "Makam Pajimatan Imogiri - Tangga Atas",
+      "url": "https://stream.bantulkab.go.id/memfs/20870ab0-03fa-49f3-b499-382acc94a676.m3u8",
+      "address": "Bantul",
+      "area": "Bantul",
+      "city": "Bantul",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "bantul-96cf71a7-c6d6-4634-acf3-43dbc47ce84e",
+      "name": "Makam Pajimatan Imogiri - Terminal View Selatan",
+      "url": "https://stream.bantulkab.go.id/memfs/96cf71a7-c6d6-4634-acf3-43dbc47ce84e.m3u8",
+      "address": "Bantul",
+      "area": "Bantul",
+      "city": "Bantul",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "bantul-e7cc3b8e-74da-44e6-a6c9-783fe6e9cfd5",
+      "name": "Masjid Agung - Ruang Bermain 01",
+      "url": "https://stream.bantulkab.go.id/memfs/e7cc3b8e-74da-44e6-a6c9-783fe6e9cfd5.m3u8",
+      "address": "Bantul",
+      "area": "Bantul",
+      "city": "Bantul",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "bantul-b3ac084f-c75c-45d4-a093-717e997cc478",
+      "name": "Masjid Agung - Ruang Bermain 02",
+      "url": "https://stream.bantulkab.go.id/memfs/b3ac084f-c75c-45d4-a093-717e997cc478.m3u8",
+      "address": "Bantul",
+      "area": "Bantul",
+      "city": "Bantul",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "bantul-d1bd78e1-0a23-4d08-a47f-84f9e1fae9ca",
+      "name": "Masjid Agung - Ruang Bermain 03",
+      "url": "https://stream.bantulkab.go.id/memfs/d1bd78e1-0a23-4d08-a47f-84f9e1fae9ca.m3u8",
+      "address": "Bantul",
+      "area": "Bantul",
+      "city": "Bantul",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "bantul-ac18010c-1051-4749-af35-03c3d18e0d5f",
+      "name": "Masjid Agung - Ruang Bermain 04",
+      "url": "https://stream.bantulkab.go.id/memfs/ac18010c-1051-4749-af35-03c3d18e0d5f.m3u8",
+      "address": "Bantul",
+      "area": "Bantul",
+      "city": "Bantul",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "bantul-6dffc8de-cd16-4caa-a161-1fed712ea8f8",
+      "name": "Simpang Gose View Barat Daya",
+      "url": "https://stream.bantulkab.go.id/memfs/6dffc8de-cd16-4caa-a161-1fed712ea8f8.m3u8",
+      "address": "Bantul",
+      "area": "Bantul",
+      "city": "Bantul",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "bantul-758afeb5-8281-4053-ba95-5c12d41ef3a1",
+      "name": "Simpang Gose View Tenggara",
+      "url": "https://stream.bantulkab.go.id/memfs/758afeb5-8281-4053-ba95-5c12d41ef3a1.m3u8",
+      "address": "Bantul",
+      "area": "Bantul",
+      "city": "Bantul",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "bantul-0ab0421e-9bcd-4cea-8022-aef0d92e784f",
+      "name": "Simpang Gose View Timur Laut",
+      "url": "https://stream.bantulkab.go.id/memfs/0ab0421e-9bcd-4cea-8022-aef0d92e784f.m3u8",
+      "address": "Bantul",
+      "area": "Bantul",
+      "city": "Bantul",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "bantul-5b08c057-2b07-4b17-a49e-40d1f58cc3b7",
+      "name": "Simpang Jejeran View Selatan",
+      "url": "https://stream.bantulkab.go.id/memfs/5b08c057-2b07-4b17-a49e-40d1f58cc3b7.m3u8",
+      "address": "Bantul",
+      "area": "Bantul",
+      "city": "Bantul",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "bantul-b9a3b5ad-9404-43db-a91a-f369eeef511a",
+      "name": "Simpang Jejeran View Utara",
+      "url": "https://stream.bantulkab.go.id/memfs/b9a3b5ad-9404-43db-a91a-f369eeef511a.m3u8",
+      "address": "Bantul",
+      "area": "Bantul",
+      "city": "Bantul",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "bantul-918ae1a2-4073-450c-9742-202f70cac18a",
+      "name": "Simpang Klodran View Barat",
+      "url": "https://stream.bantulkab.go.id/memfs/918ae1a2-4073-450c-9742-202f70cac18a.m3u8",
+      "address": "Bantul",
+      "area": "Bantul",
+      "city": "Bantul",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "bantul-d595eb28-2232-4eb5-936a-9508dac6a179",
+      "name": "Simpang Klodran View Selatan",
+      "url": "https://stream.bantulkab.go.id/memfs/d595eb28-2232-4eb5-936a-9508dac6a179.m3u8",
+      "address": "Bantul",
+      "area": "Bantul",
+      "city": "Bantul",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "bantul-e53ccfe9-dc51-4e99-8106-d8aeca971f16",
+      "name": "Simpang Klodran View Utara",
+      "url": "https://stream.bantulkab.go.id/memfs/e53ccfe9-dc51-4e99-8106-d8aeca971f16.m3u8",
+      "address": "Bantul",
+      "area": "Bantul",
+      "city": "Bantul",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "bantul-38fe6b1c-2563-4c03-bc81-6737c9e4b48c",
+      "name": "Simpang Korpri View Barat",
+      "url": "https://stream.bantulkab.go.id/memfs/38fe6b1c-2563-4c03-bc81-6737c9e4b48c.m3u8",
+      "address": "Bantul",
+      "area": "Bantul",
+      "city": "Bantul",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "bantul-f33a4a0f-2746-408e-88ec-55c83b625b78",
+      "name": "Simpang Korpri View Selatan",
+      "url": "https://stream.bantulkab.go.id/memfs/f33a4a0f-2746-408e-88ec-55c83b625b78.m3u8",
+      "address": "Bantul",
+      "area": "Bantul",
+      "city": "Bantul",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "bantul-6f2e19d8-0269-4c9d-a9e6-60ebdb285900",
+      "name": "Simpang Lima Bejen View Barat",
+      "url": "https://stream.bantulkab.go.id/memfs/6f2e19d8-0269-4c9d-a9e6-60ebdb285900.m3u8",
+      "address": "Bantul",
+      "area": "Bantul",
+      "city": "Bantul",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "bantul-0628dbb6-e7f0-4b07-afae-171693e8520a",
+      "name": "Simpang Lima Bejen View Timur Selatan",
+      "url": "https://stream.bantulkab.go.id/memfs/0628dbb6-e7f0-4b07-afae-171693e8520a.m3u8",
+      "address": "Bantul",
+      "area": "Bantul",
+      "city": "Bantul",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "bantul-ddb035fe-5450-4f43-8cca-a7510f333540",
+      "name": "Simpang Lima Bejen View Utara",
+      "url": "https://stream.bantulkab.go.id/memfs/ddb035fe-5450-4f43-8cca-a7510f333540.m3u8",
+      "address": "Bantul",
+      "area": "Bantul",
+      "city": "Bantul",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "bantul-d1123bc9-ea65-4d4a-86be-c123ad7b485b",
+      "name": "Simpang Palbapang View Barat",
+      "url": "https://stream.bantulkab.go.id/memfs/d1123bc9-ea65-4d4a-86be-c123ad7b485b.m3u8",
+      "address": "Bantul",
+      "area": "Bantul",
+      "city": "Bantul",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "bantul-f6654a21-2ab2-4a0f-937d-41fcd7ca6d13",
+      "name": "Simpang Palbapang View Selatan",
+      "url": "https://stream.bantulkab.go.id/memfs/f6654a21-2ab2-4a0f-937d-41fcd7ca6d13.m3u8",
+      "address": "Bantul",
+      "area": "Bantul",
+      "city": "Bantul",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "bantul-5de5699b-0227-44d8-99a4-bb513f8c2dbc",
+      "name": "Simpang Paseban View Barat",
+      "url": "https://stream.bantulkab.go.id/memfs/5de5699b-0227-44d8-99a4-bb513f8c2dbc.m3u8",
+      "address": "Bantul",
+      "area": "Bantul",
+      "city": "Bantul",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "bantul-d2728a49-8a62-4d02-903a-6467727853b5",
+      "name": "Simpang Paseban View Selatan",
+      "url": "https://stream.bantulkab.go.id/memfs/d2728a49-8a62-4d02-903a-6467727853b5.m3u8",
+      "address": "Bantul",
+      "area": "Bantul",
+      "city": "Bantul",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "bantul-c7bf64d5-9248-4cba-a944-c6ec425674d0",
+      "name": "Simpang Paseban View Utara",
+      "url": "https://stream.bantulkab.go.id/memfs/c7bf64d5-9248-4cba-a944-c6ec425674d0.m3u8",
+      "address": "Bantul",
+      "area": "Bantul",
+      "city": "Bantul",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "bantul-b7497d14-7eb8-4f17-97b5-efe710616c2c",
+      "name": "Stadion Sultan Agung - Pintu Masuk",
+      "url": "https://stream.bantulkab.go.id/memfs/b7497d14-7eb8-4f17-97b5-efe710616c2c.m3u8",
+      "address": "Bantul",
+      "area": "Bantul",
+      "city": "Bantul",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "bantul-0ea9cc1a-743a-4cfe-b7ff-496917206924",
+      "name": "Stadion Sultan Agung - Timur Stadion View Barat",
+      "url": "https://stream.bantulkab.go.id/memfs/0ea9cc1a-743a-4cfe-b7ff-496917206924.m3u8",
+      "address": "Bantul",
+      "area": "Bantul",
+      "city": "Bantul",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "bantul-26db46a5-6347-4c2e-9c2e-be99e5a4eb09",
+      "name": "Tanjakan Cinomati",
+      "url": "https://stream.bantulkab.go.id/memfs/26db46a5-6347-4c2e-9c2e-be99e5a4eb09.m3u8",
+      "address": "Bantul",
+      "area": "Bantul",
+      "city": "Bantul",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "gunungkidul-630843dd-4488-4360-8f86-b23f3e67980d",
+      "name": "Pantai Baron",
+      "url": "https://stream.gunungkidulkab.go.id:8888/630843dd-4488-4360-8f86-b23f3e67980d/index.m3u8",
+      "address": "Gunungkidul",
+      "area": "Gunungkidul",
+      "city": "Gunungkidul",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "gunungkidul-53fa897a-dc59-435b-841b-ce544d559a20",
+      "name": "Pantai Kukup",
+      "url": "https://stream.gunungkidulkab.go.id:8888/53fa897a-dc59-435b-841b-ce544d559a20/index.m3u8",
+      "address": "Gunungkidul",
+      "area": "Gunungkidul",
+      "city": "Gunungkidul",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "gunungkidul-097ef287-a064-4730-8b65-0fdfad75f327",
+      "name": "Kalurahan Getas",
+      "url": "https://stream.gunungkidulkab.go.id:8888/097ef287-a064-4730-8b65-0fdfad75f327/index.m3u8",
+      "address": "Gunungkidul",
+      "area": "Gunungkidul",
+      "city": "Gunungkidul",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "gunungkidul-cdb69448-349b-460e-ac6c-545199e93599",
+      "name": "Pertigaan Bunder",
+      "url": "https://stream.gunungkidulkab.go.id:8888/cdb69448-349b-460e-ac6c-545199e93599/index.m3u8",
+      "address": "Gunungkidul",
+      "area": "Gunungkidul",
+      "city": "Gunungkidul",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "gunungkidul-5858ca16-f730-49d1-a494-9d20a82b9b55",
+      "name": "Kalurahan Planjan - Fix",
+      "url": "https://stream.gunungkidulkab.go.id:8888/5858ca16-f730-49d1-a494-9d20a82b9b55/index.m3u8",
+      "address": "Gunungkidul",
+      "area": "Gunungkidul",
+      "city": "Gunungkidul",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "gunungkidul-c43d6c28-d03d-4aab-a589-7410b655908d",
+      "name": "SMP 1 Playen",
+      "url": "https://stream.gunungkidulkab.go.id:8888/c43d6c28-d03d-4aab-a589-7410b655908d/index.m3u8",
+      "address": "Gunungkidul",
+      "area": "Gunungkidul",
+      "city": "Gunungkidul",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "gunungkidul-97561df3-c774-495a-b4d6-e5654108ac43",
+      "name": "SD Karangrejek 2",
+      "url": "https://stream.gunungkidulkab.go.id:8888/97561df3-c774-495a-b4d6-e5654108ac43/index.m3u8",
+      "address": "Gunungkidul",
+      "area": "Gunungkidul",
+      "city": "Gunungkidul",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "gunungkidul-d237c46b-f15b-490c-869c-b5375df3a020",
+      "name": "Perempatan Patuk",
+      "url": "https://stream.gunungkidulkab.go.id:8888/d237c46b-f15b-490c-869c-b5375df3a020/index.m3u8",
+      "address": "Gunungkidul",
+      "area": "Gunungkidul",
+      "city": "Gunungkidul",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "gunungkidul-f156c1d9-9381-45f5-a20f-cd323fb3a639",
+      "name": "SMP 3 Wonosari",
+      "url": "https://stream.gunungkidulkab.go.id:8888/f156c1d9-9381-45f5-a20f-cd323fb3a639/index.m3u8",
+      "address": "Gunungkidul",
+      "area": "Gunungkidul",
+      "city": "Gunungkidul",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "gunungkidul-bbc05db8-09ae-44d1-a049-3d22bd18962b",
+      "name": "Ngingrong Mulo",
+      "url": "https://stream.gunungkidulkab.go.id:8888/bbc05db8-09ae-44d1-a049-3d22bd18962b/index.m3u8",
+      "address": "Gunungkidul",
+      "area": "Gunungkidul",
+      "city": "Gunungkidul",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "gunungkidul-3cdd4d3d-123f-4fdd-9600-5afce882d8e5",
+      "name": "Pertigaan Pasar Playen",
+      "url": "https://stream.gunungkidulkab.go.id:8888/3cdd4d3d-123f-4fdd-9600-5afce882d8e5/index.m3u8",
+      "address": "Gunungkidul",
+      "area": "Gunungkidul",
+      "city": "Gunungkidul",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "gunungkidul-c066fe94-69d3-487b-990a-f0bdb24fa9e9",
+      "name": "Alun-alun Wonosari Fix",
+      "url": "https://stream.gunungkidulkab.go.id:8888/c066fe94-69d3-487b-990a-f0bdb24fa9e9/index.m3u8",
+      "address": "Gunungkidul",
+      "area": "Gunungkidul",
+      "city": "Gunungkidul",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "gunungkidul-447f180a-3aa6-41af-a905-4f5567b84f1b",
+      "name": "Bunderan Siyono Fix",
+      "url": "https://stream.gunungkidulkab.go.id:8888/447f180a-3aa6-41af-a905-4f5567b84f1b/index.m3u8",
+      "address": "Gunungkidul",
+      "area": "Gunungkidul",
+      "city": "Gunungkidul",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "gunungkidul-472ac01d-84a3-40bd-b8a4-d7de2262f65b",
+      "name": "Tugu Selamat Datang Patuk Fix",
+      "url": "https://stream.gunungkidulkab.go.id:8888/472ac01d-84a3-40bd-b8a4-d7de2262f65b/index.m3u8",
+      "address": "Gunungkidul",
+      "area": "Gunungkidul",
+      "city": "Gunungkidul",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "gunungkidul-8193c0b3-0d34-43a1-9185-a534f6ffa303",
+      "name": "Puskesmas Ngawen II",
+      "url": "https://stream.gunungkidulkab.go.id:8888/8193c0b3-0d34-43a1-9185-a534f6ffa303/index.m3u8",
+      "address": "Gunungkidul",
+      "area": "Gunungkidul",
+      "city": "Gunungkidul",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "gunungkidul-18dd12e5-6f91-4ba9-8bec-3f25ddd5f68d",
+      "name": "SD Baran 2",
+      "url": "https://stream.gunungkidulkab.go.id:8888/18dd12e5-6f91-4ba9-8bec-3f25ddd5f68d/index.m3u8",
+      "address": "Gunungkidul",
+      "area": "Gunungkidul",
+      "city": "Gunungkidul",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "gunungkidul-ef7bc11d-8e05-4414-8e25-edeb78929cf0",
+      "name": "Bunderan PLN",
+      "url": "https://stream.gunungkidulkab.go.id:8888/ef7bc11d-8e05-4414-8e25-edeb78929cf0/index.m3u8",
+      "address": "Gunungkidul",
+      "area": "Gunungkidul",
+      "city": "Gunungkidul",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "gunungkidul-a8b41e1f-51ae-4f3c-b61f-3d3485714fee",
+      "name": "Kelurahan Rejosari",
+      "url": "https://stream.gunungkidulkab.go.id:8888/a8b41e1f-51ae-4f3c-b61f-3d3485714fee/index.m3u8",
+      "address": "Gunungkidul",
+      "area": "Gunungkidul",
+      "city": "Gunungkidul",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "gunungkidul-cec79cf1-852c-412a-b206-906b5daddbcc",
+      "name": "Puskeswan Putat",
+      "url": "https://stream.gunungkidulkab.go.id:8888/cec79cf1-852c-412a-b206-906b5daddbcc/index.m3u8",
+      "address": "Gunungkidul",
+      "area": "Gunungkidul",
+      "city": "Gunungkidul",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "gunungkidul-a4bed595-2ed8-46f5-a802-fc450bdf67e9",
+      "name": "Kalurahan Sambirejo",
+      "url": "https://stream.gunungkidulkab.go.id:8888/a4bed595-2ed8-46f5-a802-fc450bdf67e9/index.m3u8",
+      "address": "Gunungkidul",
+      "area": "Gunungkidul",
+      "city": "Gunungkidul",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "gunungkidul-17d519d4-ba98-446e-bfe7-369372ac834b",
+      "name": "SD Logantung 2 Semin",
+      "url": "https://stream.gunungkidulkab.go.id:8888/17d519d4-ba98-446e-bfe7-369372ac834b/index.m3u8",
+      "address": "Gunungkidul",
+      "area": "Gunungkidul",
+      "city": "Gunungkidul",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    },
+    {
+      "catalog_id": "gunungkidul-40c44e72-0ef8-42b5-9410-8c88ad2d062d",
+      "name": "BPP Playen",
+      "url": "https://stream.gunungkidulkab.go.id:8888/40c44e72-0ef8-42b5-9410-8c88ad2d062d/index.m3u8",
+      "address": "Gunungkidul",
+      "area": "Gunungkidul",
+      "city": "Gunungkidul",
+      "province": "DI Yogyakarta",
+      "country": "Indonesia"
+    }
+  ]
+}

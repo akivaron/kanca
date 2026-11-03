@@ -4,7 +4,7 @@ import staffCameraDemo from './assets/staff-camera-demo.webp';
 
 const publicCctvFeeds = {
   'CCTV Publik Gatot Subroto': 'https://dki-jkt.balitower.co.id:7028/502045_JKP_POLDA_JPO-JL.-GATOT-SUBROTO-7_CCTV-01/embed.html',
-  'CCTV Publik Gerbang Pemuda': 'https://dki-jkt.balitower.co.id:7028/502155_JKP_POLDA_JL.-GERBANG-PEMUDA-C02_CCTV-01/embed.html',
+  'CCTV Publik Gerbang Pemuda': 'https://dki-jkt.balitower.co.id:7028/502160_JKP_POLDA_JL.-GERBANG-PEMUDA-C03_CCTV-01/embed.html',
 };
 
 const LanguageContext = createContext(null);
@@ -12,6 +12,9 @@ const englishTranslations = new Map([
   ["Menu utama", "Main menu"],
   ["Dashboard", "Dashboard"],
   ["Chat baru", "New chat"],
+  ["Bersihkan riwayat", "Clear history"],
+  ["Bersihkan riwayat percakapan?", "Clear conversation history?"],
+  ["Semua percakapan akan dihapus dari daftar riwayat. Tugas yang sudah dibuat tetap berjalan dan tersedia di Tugas latar belakang.", "All conversations will be removed from history. Existing tasks will keep running and remain available under Background tasks."],
   ["Tugas", "Task"],
   ["Daftar tugas", "Tasks"],
   ["Integrasi", "Integrations"],
@@ -171,9 +174,34 @@ const englishTranslations = new Map([
   ["Nonaktif", "Inactive"],
   ["Data terakhir", "Last data received"],
   ["Belum menerima data", "No data received yet"],
+  ["Riwayat diperbarui otomatis tiap 5 detik", "History refreshes every 5 seconds"],
   ["Data terbaru", "Latest data"],
+  ["Memuat data aplikasi…", "Loading app data…"],
+  ["Memperbarui…", "Refreshing…"],
   ["Memuat data…", "Loading data…"],
+  ["Mengambil data satu kali…", "Getting data once…"],
+  ["Mengambil data…", "Fetching data…"],
+  ["Periksa data sekarang", "Check for data now"],
+  ["Get Data lagi", "Get Data again"],
+  ["Data baru diterima.", "New data received."],
+  ["Gambar baru diterima; analisis AI mungkin masih diproses.", "New image received; AI analysis may still be processing."],
+  ["Riwayat dimuat manual.", "History is refreshed manually."],
+  ["Belum menerima data baru. Periksa gateway dan feed, lalu coba Get Data lagi.", "No new data received. Check the gateway and feed, then try Get Data again."],
+  ["Permintaan data gagal.", "The data request failed."],
+  ["Frame berhasil diambil, tetapi analisis AI gagal. Cuplikannya tetap bisa dilihat; klik Get Data lagi untuk mencoba ulang.", "The frame was captured, but AI analysis failed. You can still view it; click Get Data again to retry."],
+  ["Cuplikan kamera", "Camera snapshot"],
+  ["Mengambil gambar dari kamera…", "Fetching camera image…"],
+  ["Menunggu kamera mengirim gambar. Proses ini bisa memerlukan beberapa saat.", "Waiting for the camera to send an image. This may take a moment."],
+  ["Memperbarui cuplikan…", "Refreshing snapshot…"],
+  ["Gambar belum diterima. Periksa gateway atau feed, lalu coba lagi.", "No image received. Check the gateway or feed, then try again."],
+  ["Pengambilan terbaru belum berhasil; cuplikan sebelumnya ditampilkan.", "The latest capture did not complete; showing the previous snapshot."],
+  ["Cuplikan diterima, menunggu analisis…", "Snapshot received; waiting for analysis…"],
+  ["Analisis AI gagal; cuplikan tetap tersedia.", "AI analysis failed; the snapshot is still available."],
   ["Belum ada data yang diterima dari sumber ini.", "This source has not sent any data yet."],
+  ["Permintaan data satu kali dikirim ke gateway. Feed publik tidak dibaca berkala.", "A one-time data request was sent to the gateway. Public feeds are not polled on a schedule."],
+  ["Aktifkan sumber sebelum meminta data.", "Enable the source before requesting data."],
+  ["Aktifkan Analisis gambar di Atur media sebelum meminta cuplikan kamera.", "Enable image analysis in Media settings before requesting a camera snapshot."],
+  ["Jenis sumber ini tidak mendukung permintaan data satu kali.", "This source type does not support one-time data requests."],
   ["Tutup", "Close"],
   ["Daftar sumber integrasi", "Integration source list"],
   ["Sumber perangkat", "Device sources"],
@@ -182,12 +210,13 @@ const englishTranslations = new Map([
   ["Konfigurasi tidak dapat disalin otomatis. Salin teks konfigurasi secara manual.", "The configuration could not be copied automatically. Copy it manually."],
   ["Webhook", "Webhook"],
   ["Kelola sumber data masuk dan webhook untuk event keluar.", "Manage incoming data sources and outgoing event webhooks."],
-  ["Sumber menerima event JSON. Kamera mengirim cuplikan untuk analisis sesuai pengaturannya. Beberapa feed publik memiliki player langsung; pairing otomatis belum tersedia.", "Sources accept JSON events. Cameras send snapshots for analysis according to their settings. Some public feeds include a live player; automatic pairing is not available."],
   ["Contoh: Sensor gudang", "Example: Warehouse sensor"],
   ["IoT / sensor", "IoT / sensor"],
   ["Layanan lain", "Other service"],
   ["Tambah sumber", "Add source"],
   ["Tambah sumber secara manual", "Add a source manually"],
+  ["Ubah sumber", "Edit source"],
+  ["Mengubah sumber", "Editing source"],
   ["Sumber dibuat", "Source created"],
   ["Salin token sekarang; token tidak akan ditampilkan lagi. Gunakan koneksi HTTPS saat mengirim data melalui jaringan.", "Copy the token now; it will not be shown again. Use HTTPS when sending data over a network."],
   ["Alamat penerima", "Ingest URL"],
@@ -217,9 +246,6 @@ const englishTranslations = new Map([
   ["CCTV Publik Gatot Subroto", "Public CCTV Gatot Subroto"],
   ["CCTV Publik Gerbang Pemuda", "Public CCTV Gerbang Pemuda"],
   ["Untuk mengganti kamera publik, hapus dulu sumber yang bernama sama.", "To replace public cameras, delete the sources with the same names first."],
-  ["Data sensor publik", "Public sensor data"],
-  ["Sumber data BMKG", "BMKG data sources"],
-  ["Hubungkan feed resmi BMKG untuk cuaca Kemayoran, gempa terbaru, dan gempa dirasakan. Data masuk melalui gateway sebagai event JSON.", "Connect official BMKG feeds for Kemayoran weather, the latest earthquake, and felt earthquakes. Data arrives through the gateway as JSON events."],
   ["Cuaca Kemayoran (BMKG)", "Kemayoran Weather (BMKG)"],
   ["Prakiraan cuaca, suhu, kelembapan, dan angin · diperbarui BMKG 2 kali sehari.", "Weather forecast, temperature, humidity, and wind · BMKG updates twice daily."],
   ["Gempa Terbaru (BMKG)", "Latest Earthquake (BMKG)"],
@@ -240,7 +266,6 @@ const englishTranslations = new Map([
   ["Setiap 2 menit", "Every 2 minutes"],
   ["Setiap 1 jam", "Every hour"],
   ["Menunggu data pertama dari gateway.", "Waiting for the first data from the gateway."],
-  ["Sumber menerima event JSON. Kamera mengirim cuplikan untuk analisis sesuai pengaturannya. Beberapa feed publik memiliki player langsung; pairing otomatis belum tersedia.", "Sources accept JSON events. Cameras send snapshots for analysis according to their settings. Some public feeds include a live player; automatic pairing is not available."],
   ["CCTV publik DKI Jakarta · tayangan langsung", "DKI Jakarta public CCTV · live feed"],
   ["Kamera publik mengirim cuplikan untuk analisis AI berkala; player langsung mengikuti portal sumber.", "Public cameras send periodic snapshots for AI analysis; the live player comes from the source portal."],
   ["Atur media", "Media settings"],
@@ -327,8 +352,129 @@ const englishTranslations = new Map([
   ["Menyalakan lampu simulasi", "Turn on simulated light"],
   ["Membaca data terbaru dari sumber eksternal", "Read the latest external data"],
   ["Membuat pemberitahuan untuk pemilik", "Notify the owner"],
+  ["Tren sensor", "Sensor trends"],
+  ["Tidak ada sumber publik", "No public sources"],
+  ["Sumber publik belum tersedia.", "Public sources are not available."],
+  ["Sumber publik", "Public sources"],
+  ["Jelajahi sumber publik", "Browse public sources"],
+  ["Lihat semua sumber publik", "View all public sources"],
+  ["Cari nama, penyedia, atau field", "Search name, provider, or field"],
+  ["Cari sumber publik", "Search public sources"],
+  ["Semua jenis", "All types"],
+  ["Kamera", "Camera"],
+  ["Negara", "Country"],
+  ["Semua negara", "All countries"],
+  ["Ketersediaan", "Availability"],
+  ["Belum terhubung", "Not connected"],
+  ["Sebagian terhubung", "Partially connected"],
+  ["Terhubung", "Connected"],
+  ["Tersedia", "Available"],
+  ["Feed", "Feeds"],
+  ["Penyedia", "Provider"],
+  ["Field", "Fields"],
+  ["cuaca", "weather"],
+  ["suhu", "temperature"],
+  ["kelembapan", "humidity"],
+  ["angin", "wind"],
+  ["magnitudo gempa", "earthquake magnitude"],
+  ["lokasi", "location"],
+  ["laporan gempa dirasakan", "felt earthquake reports"],
+  ["lalu lintas", "traffic"],
+  ["kondisi jalan", "road conditions"],
+  ["cuplikan kamera", "camera snapshots"],
+  ["Feed data publik BMKG", "BMKG public data feeds"],
+  ["Prakiraan cuaca dan laporan gempa dari feed resmi BMKG.", "Weather forecasts and earthquake reports from official BMKG feeds."],
+  ["Cuaca Kemayoran", "Kemayoran weather"],
+  ["Gempa terbaru", "Latest earthquake"],
+  ["Gempa dirasakan", "Felt earthquakes"],
+  ["CCTV publik DKI Jakarta", "DKI Jakarta public CCTV"],
+  ["Dua feed kamera lalu lintas publik dengan analisis gambar berkala.", "Two public traffic camera feeds with periodic image analysis."],
+  ["Gatot Subroto", "Gatot Subroto"],
+  ["Gerbang Pemuda", "Gerbang Pemuda"],
+  ["Global", "Global"],
+  ["Sumber terdaftar", "Registered sources"],
+  ["Data terbaru", "Recent data"],
+  ["Perlu perhatian", "Needs attention"],
+  ["Kamera, IoT, dan layanan", "Cameras, IoT, and services"],
+  ["feed tersedia", "feeds available"],
+  ["Memuat lokasi BMKG…", "Loading BMKG locations…"],
+  ["Tampilkan 24 lokasi berikutnya", "Show the next 24 locations"],
+  ["Sumber publik dibuat nonaktif. Aktifkan dari kartunya sebelum menjalankan gateway.", "Public sources are created disabled. Enable them on their cards before starting the gateway."],
+  ["Event keluar", "Outgoing events"],
+  ["Prakiraan cuaca global", "Global weather forecasts"],
+  ["Data prakiraan cuaca tanpa kunci API untuk beberapa kota.", "Weather forecasts for several cities, with no API key required."],
+  ["Cuaca Jakarta (Open-Meteo)", "Jakarta Weather (Open-Meteo)"],
+  ["Cuaca Singapura (Open-Meteo)", "Singapore Weather (Open-Meteo)"],
+  ["Cuaca Tokyo (Open-Meteo)", "Tokyo Weather (Open-Meteo)"],
+  ["Prakiraan cuaca", "Weather forecast"],
+  ["Singapura", "Singapore"],
+  ["Curah hujan", "Precipitation"],
+  ["Kecepatan angin", "Wind speed"],
+  ["Aktivitas gempa global", "Global earthquake activity"],
+  ["Feed gempa signifikan dan aktivitas gempa terbaru di seluruh dunia.", "Significant and recent earthquake feeds from around the world."],
+  ["Gempa Signifikan Global (USGS)", "Global Significant Earthquakes (USGS)"],
+  ["Gempa 24 Jam Global (USGS)", "Global Earthquakes in 24 Hours (USGS)"],
+  ["Gempa signifikan 30 hari", "Significant earthquakes in 30 days"],
+  ["Gempa 24 jam", "Earthquakes in 24 hours"],
+  ["Kedalaman", "Depth"],
+  ["Waktu gempa", "Earthquake time"],
+  ["Hubungkan Open-Meteo", "Connect Open-Meteo"],
+  ["Hubungkan USGS", "Connect USGS"],
+  ["Sumber publik tidak ditemukan", "No public sources found"],
+  ["Coba ubah pencarian atau filter.", "Try changing the search or filters."],
+  ["Sebagian feed sudah ada. Hapus sumber CCTV yang ada sebelum membuat paket lagi.", "Some feeds already exist. Remove existing CCTV sources before creating the pack again."],
+  ["Sumber publik siap", "Public sources are ready"],
+  ["Simpan token gateway sekarang. Token hanya ditampilkan sekali.", "Save the gateway tokens now. Tokens are shown only once."],
+  ["Konfigurasi gateway", "Gateway configuration"],
+  ["Salin konfigurasi", "Copy configuration"],
+  ["Hubungkan sumber tersisa", "Connect remaining sources"],
+  ["Hubungkan BMKG", "Connect BMKG"],
+  ["Hubungkan BaliTower / Jakarta", "Connect BaliTower / Jakarta"],
+  ["Tren muncul setelah ada sedikitnya dua observasi numerik dengan field yang sama.", "A trend appears after two numeric observations with the same field."],
+  ["Angka berasal dari payload sumber; observasi media yang tidak pasti tidak disertakan.", "Values come from source payloads; uncertain media observations are excluded."],
+  ["Ekspor CSV", "Export CSV"],
+  ["Ekspor JSON", "Export JSON"],
+  ["Ekspor batch event CSV", "Export an event batch as CSV"],
+  ["Ekspor batch event JSON", "Export an event batch as JSON"],
+  ["Status penerimaan memakai waktu event terakhir dan interval harapan; proses gateway tidak diperiksa langsung.", "Receiving status uses the last event time and expected interval; gateway process health is not checked directly."],
+  ["observasi", "observations"],
+  ["Target kirim", "Expected interval"],
+  ["Interval data harapan (detik)", "Expected data interval (seconds)"],
+  ["Data terbaru", "Recent data"],
+  ["Menunggu data", "Waiting for data"],
+  ["Terlambat", "Delayed"],
+  ["Observasi ini sudah melewati batas kesegaran sumber.", "This observation is beyond the source freshness window."],
+  ["Status tidak diketahui", "Unknown status"],
+  ["Atur jenis notifikasi", "Notification preferences"],
+  ["Simpan preferensi", "Save preferences"],
+  ["Pilih event webhook", "Choose webhook events"],
+  ["Atur event", "Configure events"],
+  ["Jenis event", "Event types"],
+  ["Ekspor tidak dapat diunduh.", "Export could not be downloaded."],
+  ["jam", "hours"],
+  ["menit", "minutes"],
+  ["detik", "seconds"],
 ]);
 function useLanguage() { return useContext(LanguageContext); }
+
+function formatRelativeTime(value, locale) {
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return '';
+  const elapsed = date.getTime() - Date.now();
+  const absolute = Math.abs(elapsed);
+  const relative = new Intl.RelativeTimeFormat(locale, {numeric:'auto'});
+  if (absolute < 45_000) return relative.format(0, 'second');
+  const units = [
+    ['minute', 60_000],
+    ['hour', 3_600_000],
+    ['day', 86_400_000],
+    ['week', 604_800_000],
+    ['month', 2_629_746_000],
+    ['year', 31_556_952_000],
+  ];
+  const [unit, duration] = units.find(([, size]) => absolute < size * 1.5) || units[units.length - 1];
+  return relative.format(Math.round(elapsed / duration), unit);
+}
 
 const labels = {awaiting_approval:'Menunggu persetujuan', scheduled:'Dipantau', paused:'Dijeda', running:'Sedang berjalan', completed:'Selesai', failed:'Gagal', cancelled:'Dibatalkan'};
 const capabilities = {'business.list_orders':'Membaca pesanan simulasi','business.check_orders':'Memeriksa pesanan dan selisih','business.remind':'Membuat pengingat simulasi','device.read_temperature':'Membaca suhu simulasi','device.turn_on_light':'Menyalakan lampu simulasi','external.latest_event':'Membaca data terbaru dari sumber eksternal','external.escalate':'Membuat pemberitahuan untuk pemilik'};
@@ -337,9 +483,11 @@ const operators = {eq:'sama dengan', ne:'tidak sama dengan', gt:'lebih dari', gt
 
 const iconPaths = {
   plus: <path d="M12 5v14M5 12h14"/>,
+  trash: <><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6M10 11v5M14 11v5"/></>,
   dashboard: <><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="5" rx="1.5"/><rect x="13" y="10" width="8" height="11" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/></>,
   chat: <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22l5.9-2Z"/>,
   clock: <><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></>,
+  check: <path d="m5 12 4 4L19 6"/>,
   plug: <path d="M12 22v-5M9 8V2M15 8V2M18 8v5a4 4 0 0 1-4 4h-4a4 4 0 0 1-4-4V8Z"/>,
   bell: <><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/><path d="M10 21h4"/></>,
   dots: <path strokeWidth="2.6" d="M12 6h.01M12 12h.01M12 18h.01"/>,
@@ -494,9 +642,16 @@ function Workers({ tasks, onAction, onEdit, onArchive, onCreate, onRerun }) {
 }
 
 const notificationLabels = {'task.approval_requested.v1':'Tugas menunggu persetujuan','task.completed.v1':'Tugas selesai','task.failed.v1':'Tugas gagal','task.escalated.v1':'Ada hal yang perlu perhatianmu','task.cancelled.v1':'Tugas dihentikan','task.paused.v1':'Tugas dijeda','task.resumed.v1':'Tugas dilanjutkan'};
-function Notifications({ items, onRead, onReadAll, unreadCount, onRerun, onClose }) {
+function Notifications({ items, onRead, onReadAll, unreadCount, onRerun, onClose, onChanged }) {
   const {t,dateLocale}=useLanguage();
+  const [preferences,setPreferences]=useState(null);
+  const [preferenceError,setPreferenceError]=useState('');
+  const [savingPreferences,setSavingPreferences]=useState(false);
+  useEffect(()=>{api('/v1/notifications/preferences').then(setPreferences).catch(error=>setPreferenceError(error.message));},[]);
+  function togglePreference(kind,checked){const next=preferences.event_types.filter(item=>item!==kind);if(checked)next.push(kind);setPreferences({...preferences,event_types:next});}
+  async function savePreferences(){setSavingPreferences(true);try{const saved=await api('/v1/notifications/preferences',{method:'PUT',body:JSON.stringify({event_types:preferences.event_types})});setPreferences(saved);setPreferenceError('');await onChanged();}catch(error){setPreferenceError(error.message);}finally{setSavingPreferences(false);}}
   return <div className="workers"><div className="workers-header"><div><div className="eyebrow">{t('AKTIVITAS')}</div><h1>{t('Notifikasi')}</h1><p>{t('Pembaruan terbaru dari tugas latar belakangmu.')}</p></div><div className="notification-header-actions">{unreadCount>0 && <button className="secondary" onClick={onReadAll}>{t('Tandai semua dibaca')}</button>}{onClose && <button className="icon-button" aria-label={t('Tutup')} title={t('Tutup')} autoFocus onClick={onClose}><Icon name="close"/></button>}</div></div>
+    <details className="notification-preferences"><summary>{t('Atur jenis notifikasi')}</summary>{preferences&&<><div className="preference-options">{preferences.available_types.map(kind=><label key={kind}><input type="checkbox" checked={preferences.event_types.includes(kind)} onChange={event=>togglePreference(kind,event.target.checked)}/>{t(notificationLabels[kind]||kind)}</label>)}</div><button className="secondary preference-save" type="button" disabled={savingPreferences} onClick={savePreferences}>{t(savingPreferences?'Menyimpan…':'Simpan preferensi')}</button></>}{preferenceError&&<p className="error">{preferenceError}</p>}</details>
     {!items.length && <div className="worker-empty"><strong>{t('Belum ada notifikasi')}</strong><p>{t('Pembaruan tugas akan muncul di sini.')}</p></div>}
     <div className="worker-list">{items.map(item=><article className={`worker-card notification ${item.is_read?'':'unread'}`} key={item.id}><div className="plan-top"><div><strong>{t(notificationLabels[item.type] || 'Pembaruan tugas')}</strong><p>{item.instruction || t('Tugas')}</p></div>{!item.is_read && <span className="unread-dot" aria-label={t('Belum dibaca')}/>}</div><div className="worker-meta">{new Date(item.occurred_at).toLocaleString(dateLocale)}</div>{item.type==='task.failed.v1' && item.task_result?.error && <p className="worker-failure">{item.task_result.error}</p>}{item.type==='task.escalated.v1' && item.data?.message && <p>{item.data.message}</p>}<div className="actions">{!item.is_read && <button className="secondary" onClick={()=>onRead(item)}>{t('Tandai dibaca')}</button>}{!item.archived && ['completed','failed','cancelled'].includes(item.task_status) && <button className="secondary" onClick={()=>onRerun({id:item.task_id})}>{t('Jalankan ulang')}</button>}</div></article>)}</div>
   </div>;
@@ -512,6 +667,12 @@ function ConfirmDialog({ config, onClose }) {
 const sourceEventLabels = {'media.vision':'Hasil analisis gambar','media.audio':'Hasil analisis audio'};
 const sourceKindLabels = {iot:'IoT / sensor',camera:'Kamera',service:'Layanan'};
 const humanFieldLabels = {summary:'Ringkasan',count:'Perkiraan jumlah',uncertain:'Kepastian',note:'Catatan',message:'Pesan',status:'Status',reason:'Alasan',action:'Tindakan'};
+const publicSourceGroups = [
+  {id:'bmkg',name:'Feed data publik BMKG',provider:'BMKG',country:'Indonesia',type:'iot',description:'Prakiraan cuaca dan laporan gempa dari feed resmi BMKG.',fields:['cuaca','suhu','kelembapan','angin','magnitudo gempa','lokasi','laporan gempa dirasakan'],sources:['Cuaca Kemayoran (BMKG)','Gempa Terbaru (BMKG)','Gempa Dirasakan (BMKG)'],feeds:['Cuaca Kemayoran','Gempa terbaru','Gempa dirasakan']},
+  {id:'dki-cctv',name:'CCTV publik DKI Jakarta',provider:'BaliTower / Jakarta',country:'Indonesia',type:'camera',description:'Dua feed kamera lalu lintas publik dengan analisis gambar berkala.',fields:['lalu lintas','kondisi jalan','cuplikan kamera'],sources:['CCTV Publik Gatot Subroto','CCTV Publik Gerbang Pemuda'],feeds:['Gatot Subroto','Gerbang Pemuda']},
+  {id:'open-meteo',name:'Prakiraan cuaca global',provider:'Open-Meteo',country:'Global',type:'iot',description:'Data prakiraan cuaca tanpa kunci API untuk beberapa kota.',fields:['suhu','kelembapan','curah hujan','kecepatan angin'],sources:['Cuaca Jakarta (Open-Meteo)','Cuaca Singapura (Open-Meteo)','Cuaca Tokyo (Open-Meteo)'],feeds:['Jakarta','Singapura','Tokyo']},
+  {id:'usgs',name:'Aktivitas gempa global',provider:'USGS',country:'Global',type:'iot',description:'Feed gempa signifikan dan aktivitas gempa terbaru di seluruh dunia.',fields:['magnitudo','lokasi','kedalaman','waktu gempa'],sources:['Gempa Signifikan Global (USGS)','Gempa 24 Jam Global (USGS)'],feeds:['Gempa signifikan 30 hari','Gempa 24 jam']},
+];
 function ChatReply({ content }) {
   const {language,t,dateLocale}=useLanguage();
   let value;
@@ -542,23 +703,107 @@ function SourceEventContent({ item }) {
   return <pre>{JSON.stringify(p,null,2)}</pre>;
 }
 
-function SourceDetailsDialog({ source, events, loading, error, onClose, mode, onRefresh }) {
+function numericFields(value, prefix='data', depth=0) {
+  if (!value || typeof value !== 'object' || Array.isArray(value) || depth > 4 || value.uncertain === true) return [];
+  return Object.entries(value).flatMap(([key, item]) => {
+    const path = `${prefix}.${key}`;
+    if (typeof item === 'number' && Number.isFinite(item)) return [{path, value:item}];
+    return numericFields(item, path, depth + 1);
+  });
+}
+
+function SourceTrend({events}) {
+  const {t}=useLanguage();
+  const valuesByField = new Map();
+  [...events].reverse().forEach(event => numericFields(event.payload).forEach(({path,value}) => {
+    if (!valuesByField.has(path)) valuesByField.set(path, []);
+    valuesByField.get(path).push({value, at:event.received_at});
+  }));
+  const series = [...valuesByField.entries()].find(([,items]) => items.length >= 2);
+  if (!series) return <p className="source-trend-empty">{t('Tren muncul setelah ada sedikitnya dua observasi numerik dengan field yang sama.')}</p>;
+  const [field,items] = series;
+  const min = Math.min(...items.map(item=>item.value)), max = Math.max(...items.map(item=>item.value));
+  const spread = max-min || 1;
+  const points = items.map((item,index)=>`${items.length===1?50:index/(items.length-1)*100},${38-(item.value-min)/spread*30}`).join(' ');
+  return <div className="source-trend"><div><strong>{t(field)}</strong><span>{items[items.length-1].value} · {items.length} {t('observasi')}</span></div><svg viewBox="0 0 100 42" role="img" aria-label={`${field}: ${items.map(item=>item.value).join(', ')}`}><polyline points={points} fill="none" stroke="currentColor" strokeWidth="2.5" vectorEffect="non-scaling-stroke"/></svg><small>{new Date(items[0].at).toLocaleString()} → {new Date(items[items.length-1].at).toLocaleString()}</small><small>{t('Angka berasal dari payload sumber; observasi media yang tidak pasti tidak disertakan.')}</small></div>;
+}
+
+async function downloadExport(path, filename) {
+  const response = await fetch(path);
+  if (!response.ok) throw new Error('Ekspor tidak dapat diunduh.');
+  const blob = await response.blob();
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a'); link.href=url; link.download=filename; link.click();
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+
+function SourceCard({source,mediaSettings,dateLocale,onView,onStream,onEditMedia,onEdit,onToggle,onAutomation,onRemove,onMediaChange,onSaveMedia,onCancelMedia}) {
+  const {t}=useLanguage();
+  const active=source.status==='active';const lastSeen=source.last_seen?new Date(source.last_seen):null;
+  const health=source.health?.state||'unknown';const healthLabel={recent:'Data terbaru',waiting:'Menunggu data',delayed:'Terlambat',disabled:'Nonaktif',unknown:'Status tidak diketahui'}[health];
+  const automated=source.automation_enabled===true;
+  return <article className="worker-card source-card" key={source.id}><div className="source-card-header"><span className="source-kind-icon"><Icon name={source.kind==='camera'?'camera':source.kind==='iot'?'thermometer':'plug'} size={19}/></span><span className={`source-status ${health==='recent'?'active':health==='delayed'?'delayed':'disabled'}`}><i/>{t(healthLabel)}</span></div><div className="source-card-title"><span>{t(sourceKindLabels[source.kind]||source.kind)}</span><h3 title={t(source.name)}>{t(source.name)}</h3></div><div className="source-card-meta"><span>{lastSeen?t('Data terakhir diterima'):t('Belum ada data')}</span>{lastSeen&&<time dateTime={lastSeen.toISOString()}>{lastSeen.toLocaleString(dateLocale)}</time>}</div><div className="source-card-meta"><span>{t('Target kirim')}</span><time>{source.expected_interval_seconds?safeIntervalLabel(source.expected_interval_seconds,t):t('Tidak diketahui')}</time></div><div className="source-card-actions"><button className="primary" onClick={()=>onView(source,'data')}>{t('Get Data')}</button>{source.kind==='camera'&&<button className="secondary" onClick={()=>onStream(source,'stream')}>{t('Live Streaming')}</button>}{['camera','iot'].includes(source.kind)&&<><label className="automation-interval">{t('Interval otomasi')}<select aria-label={t('Interval otomasi')} value={source.automation_interval_seconds||30} onChange={e=>onAutomation(source,automated,true,Number(e.target.value))}><option value={5}>5 {t('detik')}</option><option value={10}>10 {t('detik')}</option><option value={30}>30 {t('detik')}</option><option value={60}>60 {t('detik')}</option></select></label><button className={automated?'secondary':'primary'} onClick={()=>onAutomation(source,!automated,false,source.automation_interval_seconds||30)}>{t(automated?'Matikan otomasi':'Aktifkan otomasi')}</button></>}<button className="secondary" onClick={()=>onEditMedia(source)}>{t('Atur media')}</button><button className="secondary" onClick={()=>onEdit(source)}>{t('Ubah')}</button><button className="secondary" onClick={()=>onToggle(source)}>{t(active?'Nonaktifkan':'Aktifkan')}</button><button className="text-button" onClick={()=>onRemove(source)}>{t('Hapus')}</button></div>{mediaSettings?.id===source.id&&<form className="media-settings" onSubmit={onSaveMedia}><p>{t('Media yang diaktifkan akan dikirim ke Baseten untuk dianalisis. Aktifkan hanya sesuai kebutuhan.')}</p><label><input type="checkbox" checked={mediaSettings.vision_enabled} onChange={e=>onMediaChange({...mediaSettings,vision_enabled:e.target.checked})}/> {t('Analisis gambar')}</label><textarea aria-label={t('Pertanyaan tentang gambar')} maxLength={500} required value={mediaSettings.vision_prompt} onChange={e=>onMediaChange({...mediaSettings,vision_prompt:e.target.value})}/><label><input type="checkbox" checked={mediaSettings.audio_enabled} onChange={e=>onMediaChange({...mediaSettings,audio_enabled:e.target.checked})}/> {t('Analisis audio')}</label><textarea aria-label={t('Pertanyaan tentang audio')} maxLength={500} required value={mediaSettings.audio_prompt} onChange={e=>onMediaChange({...mediaSettings,audio_prompt:e.target.value})}/><div className="actions"><button className="primary">{t('Simpan perubahan')}</button><button type="button" className="secondary" onClick={onCancelMedia}>{t('Batal')}</button></div></form>}</article>;
+}
+
+function PublicSourcesCatalog({sources,bmkgLocations=[],cctvSources=[],locationsLoading=false,compact=false,onConnect,connecting,credential,onDismissCredential,onBrowse,onView,onEditMedia,onEdit,onToggle,onAutomation,onRemove,mediaSettings,onMediaChange,onSaveMedia,onCancelMedia}) {
+  const {t}=useLanguage();
+  const [copyStatus,setCopyStatus]=useState('');
+  const [search,setSearch]=useState('');
+  const [typeFilter,setTypeFilter]=useState('all');
+  const [countryFilter,setCountryFilter]=useState('all');
+  const [availabilityFilter,setAvailabilityFilter]=useState('all');
+  const [showCount,setShowCount]=useState(24);
+  useEffect(()=>setShowCount(24),[search,typeFilter,countryFilter,availabilityFilter]);
+  const bmkgGroups=bmkgLocations.map(location=>({id:`bmkg-${location.adm4_code}`,adm4_code:location.adm4_code,name:`Cuaca ${location.name}, ${location.regency}`,provider:'BMKG',country:location.country,type:'iot',description:`Prakiraan cuaca kelurahan/desa di ${location.district}, ${location.regency}, ${location.province}.`,fields:['suhu','kelembapan','curah hujan','kondisi cuaca','kecepatan angin'],sources:[location.source_name],feeds:[location.district,location.regency,location.province]}));
+  const cctvGroups=cctvSources.map(camera=>({id:`public-cctv-${camera.catalog_id}`,cctv_catalog_id:camera.catalog_id,name:camera.name,provider:camera.provider,country:camera.country,type:'camera',description:`Kamera publik ${camera.address||camera.city}, ${camera.province}.`,fields:['tayangan kamera','kondisi jalan','cuplikan kamera'],sources:[camera.source_name],feeds:[camera.address,camera.area,camera.city,camera.province].filter(Boolean)}));
+  const catalogGroups=[...publicSourceGroups,...bmkgGroups,...cctvGroups];
+  const countries=[...new Set(catalogGroups.map(group=>group.country))].sort();
+  const visible=catalogGroups.filter(group=>{
+    const found=group.sources.filter(name=>sources.some(source=>source.name===name));
+    const availability=found.length===group.sources.length?'connected':found.length?'partial':'available';
+    const text=[group.name,group.provider,group.country,group.description,group.adm4_code,...group.fields,...group.feeds].join(' ').toLocaleLowerCase();
+    return (!search||text.includes(search.trim().toLocaleLowerCase()))
+      && (typeFilter==='all'||group.type===typeFilter)
+      && (countryFilter==='all'||group.country===countryFilter)
+      && (availabilityFilter==='all'||availability===availabilityFilter);
+  });
+  const groupState=group=>{const count=group.sources.filter(name=>sources.some(source=>source.name===name)).length;return {count,state:count===group.sources.length?'connected':count?'partial':'available'};};
+  async function copyConfig(){try{await navigator.clipboard.writeText(credential.config);setCopyStatus(t('Konfigurasi tersalin.'));}catch{setCopyStatus(t('Salin konfigurasi secara manual.'));}}
+  return <section className={`public-catalog ${compact?'compact':''}`}>
+    {!compact&&<div className="public-catalog-filters"><label className="source-search"><Icon name="search" size={17}/><input type="search" value={search} onChange={event=>setSearch(event.target.value)} placeholder={t('Cari nama, penyedia, atau field')} aria-label={t('Cari sumber publik')}/></label><label><span>{t('Jenis')}</span><select value={typeFilter} onChange={event=>setTypeFilter(event.target.value)}><option value="all">{t('Semua jenis')}</option><option value="iot">IoT</option><option value="camera">{t('Kamera')}</option></select></label><label><span>{t('Negara')}</span><select value={countryFilter} onChange={event=>setCountryFilter(event.target.value)}><option value="all">{t('Semua negara')}</option>{countries.map(country=><option key={country}>{country}</option>)}</select></label><label><span>{t('Ketersediaan')}</span><select value={availabilityFilter} onChange={event=>setAvailabilityFilter(event.target.value)}><option value="all">{t('Semua')}</option><option value="available">{t('Belum terhubung')}</option><option value="partial">{t('Sebagian terhubung')}</option><option value="connected">{t('Terhubung')}</option></select></label></div>}
+    {locationsLoading&&<div className="worker-empty"><strong>{t('Memuat lokasi BMKG…')}</strong></div>}
+    {!locationsLoading&&!visible.length?<div className="worker-empty"><strong>{t('Sumber publik tidak ditemukan')}</strong><p>{t('Coba ubah pencarian atau filter.')}</p></div>:!locationsLoading&&<><div className="public-catalog-grid source-card-grid">{(compact?visible.slice(0,2):visible.slice(0,showCount)).map(group=>{const {state}=groupState(group);const canConnect=group.id==='dki-cctv'?state==='available':state!=='connected';const connected=sources.filter(source=>group.sources.includes(source.name));return <div className="public-source-group" key={group.id}>{connected.map(source=><SourceCard key={source.id} source={source} mediaSettings={mediaSettings} onView={onView} onStream={onView} onEditMedia={onEditMedia} onEdit={onEdit} onToggle={onToggle} onAutomation={onAutomation} onRemove={onRemove} onMediaChange={onMediaChange} onSaveMedia={onSaveMedia} onCancelMedia={onCancelMedia}/>)}{state!=='connected'&&<article className="worker-card source-card public-source-card"><div className="source-card-header"><span className="source-kind-icon"><Icon name={group.type==='iot'?'thermometer':'camera'} size={19}/></span><span className={`source-status ${state==='partial'?'delayed':'disabled'}`}><i/>{t(state==='partial'?'Sebagian terhubung':'Tersedia')}</span></div><div className="source-card-title"><span>{t(group.type==='iot'?'IoT / sensor':'Kamera')} · {t(group.country)}</span><h3 title={t(group.name)}>{t(group.name)}</h3></div><p>{t(group.description)}</p><div className="source-card-meta"><span>{t('Penyedia')}</span><time>{t(group.provider)}</time></div><div className="public-source-feeds"><strong>{t('Feed')}</strong>{group.feeds.map(feed=><span key={feed}>{t(feed)}</span>)}</div><div className="public-source-fields"><strong>{t('Field')}</strong><span>{group.fields.map(field=>t(field)).join(' · ')}</span></div><div className="source-card-actions public-source-card-actions"><button className={canConnect?'primary':'secondary'} type="button" disabled={!canConnect||connecting===group.id} onClick={()=>onConnect(group)}>{t(connecting===group.id?'Menyambungkan…':state==='partial'?'Hubungkan sumber tersisa':`Hubungkan ${group.provider}`)}</button>{group.id==='dki-cctv'&&state==='partial'&&<small>{t('Sebagian feed sudah ada. Hapus sumber CCTV yang ada sebelum membuat paket lagi.')}</small>}</div></article>}</div>;})}</div>{visible.length>showCount&&!compact&&<button className="secondary public-load-more" type="button" onClick={()=>setShowCount(count=>Math.min(count+24,visible.length))}>{t('Tampilkan 24 lokasi berikutnya')} · {visible.length-showCount}</button>}</>}
+    {credential&&<section className="credential public-source-credential"><strong>{t('Sumber publik siap')}</strong><p>{t('Simpan token gateway sekarang. Token hanya ditampilkan sekali.')}</p><p>{t('Sumber publik dibuat nonaktif. Aktifkan dari kartunya sebelum menjalankan gateway.')}</p><label>{t('Konfigurasi gateway')}<textarea readOnly rows={Math.min(10,credential.config.split('\n').length)} value={credential.config} onFocus={event=>event.target.select()}/></label><div className="actions"><button className="secondary" type="button" onClick={copyConfig}>{t('Salin konfigurasi')}</button><button className="text-button" type="button" onClick={onDismissCredential}>{t('Saya sudah menyimpan token')}</button></div>{copyStatus&&<p role="status">{copyStatus}</p>}</section>}
+  </section>;
+}
+
+function safeIntervalLabel(seconds,t){
+  if(seconds%3600===0)return `${seconds/3600} ${t('jam')}`;
+  if(seconds%60===0)return `${seconds/60} ${t('menit')}`;
+  return `${seconds} ${t('detik')}`;
+}
+
+function SourceDetailsDialog({ source, events, loading, error, requestMessage, requestState, previewUrl, previewStatus, onRequestData, onClose, mode, onRefresh }) {
   const {t,dateLocale}=useLanguage();
   const dialog = useRef(null);
   useEffect(() => { dialog.current?.showModal(); return () => { if (dialog.current?.open) dialog.current.close(); }; }, []);
-  useEffect(() => { const timer=setInterval(onRefresh,5000); return () => clearInterval(timer); }, [onRefresh]);
   const preview = source.name === 'Kamera Gudang' ? warehouseDemo : source.name === 'Kamera Area Staf' ? staffCameraDemo : null;
   const publicStream = publicCctvFeeds[source.name];
+  const staleAfter=Math.max(300,(source.expected_interval_seconds||300)*2);
   return <dialog className="source-details-dialog" ref={dialog} onCancel={event=>{event.preventDefault();onClose();}} aria-labelledby="source-details-title">
     <div className="source-dialog-header"><div><span className="source-card-kind">{t(sourceKindLabels[source.kind] || source.kind)}</span><h2 id="source-details-title">{mode==='stream'?t('Live Streaming'):t('Get Data')} · {t(source.name)}</h2></div><button className="icon-button" type="button" onClick={onClose} aria-label={t('Tutup detail sumber')}>×</button></div>
     <div className="source-dialog-meta"><span className={`source-status ${source.status==='active'?'active':'disabled'}`}><i/>{t(source.status==='active'?'Aktif':'Nonaktif')}</span><span>{source.last_seen?`${t('Data terakhir')} ${new Date(source.last_seen).toLocaleString(dateLocale)}`:t('Belum menerima data')}</span></div>
-    <div className="source-live-status"><span className="source-live-pulse"/>{t('Pembaruan otomatis tiap 5 detik')}<button className="text-button" type="button" onClick={onRefresh}>{t('Perbarui sekarang')}</button></div>
+    <div className="source-live-status"><span className="source-live-pulse"/>{t('Riwayat dimuat manual.')}<button className="text-button" type="button" onClick={onRefresh}>{t('Perbarui sekarang')}</button></div>
     {mode==='stream' && source.kind==='camera' && <section className="source-live-preview" aria-label={t('Live Streaming')}>
       {publicStream ? <div className="public-cctv-inline-player"><iframe src={publicStream} title={t(source.name)} allow="autoplay; fullscreen; picture-in-picture" allowFullScreen referrerPolicy="no-referrer"/><span className="source-live-badge">{t('CCTV Publik DKI Jakarta · tayangan langsung')}</span></div> : preview ? <><div className="source-live-image-wrap"><img src={preview} alt={t(source.name)} /><span className="source-live-badge">{t('Simulasi')}</span></div><p>{t('Gambar demo; data perangkat diperbarui berkala.')}</p></> : <p>{t('Streaming video langsung belum tersedia untuk sumber ini. Event terbaru tetap diperbarui berkala.')}</p>}
       <small>{publicStream?t('Kamera publik mengirim cuplikan untuk analisis AI berkala; player langsung mengikuti portal sumber.'):t('Sumber mengirim cuplikan berkala, bukan video langsung.')}</small>
     </section>}
-    <section className="source-event-list" aria-label={t('Riwayat data sumber')}><h3>{t('Data terbaru')}</h3>{loading ? <p className="source-dialog-empty">{t('Memuat data…')}</p> : error ? <p className="source-dialog-empty error">{error}</p> : !events.length ? <p className="source-dialog-empty">{t('Belum ada data yang diterima dari sumber ini.')}</p> : events.map(item=><article className="source-event-card" key={item.id}><div className="source-event-heading"><strong>{t(sourceEventLabels[item.event_type] || item.event_type)}</strong><time dateTime={item.received_at}>{new Date(item.received_at).toLocaleString(dateLocale)}</time></div><SourceEventContent item={item}/></article>)}</section>
-    <div className="source-dialog-actions"><button className="secondary" type="button" onClick={onClose}>{t('Tutup')}</button></div>
+    {requestMessage&&<p className="source-request-notice" role="status">{t(requestMessage)}</p>}
+    {mode==='data'&&source.kind==='camera'&&requestState==='requesting'&&!previewUrl&&<section className="source-capture-loading" role="status" aria-live="polite"><span className="loading-spinner" aria-hidden="true"/><div><strong>{t('Mengambil gambar dari kamera…')}</strong><span>{t('Menunggu kamera mengirim gambar. Proses ini bisa memerlukan beberapa saat.')}</span></div></section>}
+    {mode==='data'&&source.kind==='camera'&&previewUrl&&<section className={`source-capture-preview ${previewStatus==='fetching'?'is-fetching':''}`} aria-label={t('Cuplikan kamera')} aria-busy={previewStatus==='fetching'}><div className="source-capture-image"><img src={previewUrl} alt={`${t('Cuplikan kamera')} · ${t(source.name)}`}/>{previewStatus==='fetching'&&<div className="source-capture-overlay" role="status"><span className="loading-spinner" aria-hidden="true"/>{t('Memperbarui cuplikan…')}</div>}</div><div><strong>{t('Cuplikan kamera')}</strong><span>{t(previewStatus==='fetching'?'Memperbarui cuplikan…':previewStatus==='failed'?'Analisis AI gagal; cuplikan tetap tersedia.':previewStatus==='analyzing'?'Cuplikan diterima, menunggu analisis…':previewStatus==='stale'?'Pengambilan terbaru belum berhasil; cuplikan sebelumnya ditampilkan.':'Data terbaru')}</span></div></section>}
+    {mode==='data'&&source.kind==='camera'&&!previewUrl&&requestState!=='requesting'&&previewStatus==='unavailable'&&<section className="source-capture-unavailable" role="status"><strong>{t('Gambar belum diterima. Periksa gateway atau feed, lalu coba lagi.')}</strong></section>}
+    <section className="source-event-list" aria-label={t('Riwayat data sumber')}><div className="source-trend-heading"><h3>{t('Tren sensor')}</h3><div className="actions"><button className="text-button" type="button" onClick={()=>downloadExport(`/v1/sources/${encodeURIComponent(source.id)}/events/export?format=csv`,`kanca-${source.id}-events.csv`).catch(error=>window.alert(error.message))}>{t('Ekspor CSV')}</button><button className="text-button" type="button" onClick={()=>downloadExport(`/v1/sources/${encodeURIComponent(source.id)}/events/export?format=json`,`kanca-${source.id}-events.json`).catch(error=>window.alert(error.message))}>{t('Ekspor JSON')}</button></div></div><SourceTrend events={events}/><h3>{t('Data terbaru')}</h3>{requestState==='requesting'&&!events.length?<p className="source-dialog-empty" role="status">{t('Mengambil data satu kali…')}</p>:loading ? <p className="source-dialog-empty">{t('Memuat data…')}</p> : error ? <p className="source-dialog-empty error">{error}</p> : !events.length&&requestState==='timeout' ? <p className="source-dialog-empty error">{t('Belum menerima data baru. Periksa gateway dan feed, lalu coba Get Data lagi.')}</p> : !events.length ? <p className="source-dialog-empty">{t('Belum ada data yang diterima dari sumber ini.')}</p> : events.map(item=>{const observedAt=new Date(item.received_at);const stale=Date.now()-observedAt.getTime()>staleAfter*1000;return <article className="source-event-card" key={item.id}><div className="source-event-heading"><strong>{t(sourceEventLabels[item.event_type] || item.event_type)}</strong><time dateTime={item.received_at}>{observedAt.toLocaleString(dateLocale)}</time></div>{stale&&<p className="event-caveat">{t('Observasi ini sudah melewati batas kesegaran sumber.')}</p>}<SourceEventContent item={item}/></article>;})}</section>
+    <div className="source-dialog-actions">{mode==='data'&&['camera','iot'].includes(source.kind)&&<button className="primary" type="button" onClick={()=>onRequestData(source)} disabled={requestState==='requesting'} aria-busy={requestState==='requesting'}>{requestState==='requesting'&&<span className="loading-spinner" aria-hidden="true"/>}{t(requestState==='requesting'?'Mengambil data…':events.length||previewUrl?'Get Data lagi':'Get Data')}</button>}<button className="secondary" type="button" onClick={onClose}>{t('Tutup')}</button></div>
   </dialog>;
 }
 
@@ -572,6 +817,9 @@ function WebhookPanel({ requestConfirm, credential, onCreated }) {
   const [error, setError] = useState('');
   const [copyMessage, setCopyMessage] = useState('');
   const [creating, setCreating] = useState(false);
+  const webhookTypes=['task.created.v1','task.approval_requested.v1','task.approved.v1','task.started.v1','task.checked.v1','task.completed.v1','task.failed.v1','task.escalated.v1','task.cancelled.v1','task.paused.v1','task.resumed.v1','task.archived.v1','task.action_taken.v1','source.event.v1'];
+  const [selectedTypes,setSelectedTypes]=useState(webhookTypes);
+  const [editingTypes,setEditingTypes]=useState(null);
   const creatingRef = useRef(false);
   const refresh = useCallback(async () => {
     setLoading(true);
@@ -585,7 +833,7 @@ function WebhookPanel({ requestConfirm, credential, onCreated }) {
   async function create(event) {
     event.preventDefault(); if (creatingRef.current) return; creatingRef.current = true; setCreating(true); setError('');
     try {
-      const result = await api('/v1/webhook-subscriptions', {method:'POST', body:JSON.stringify({url:url.trim()})});
+      const result = await api('/v1/webhook-subscriptions', {method:'POST', body:JSON.stringify({url:url.trim(),event_types:selectedTypes})});
       onCreated(result); setUrl(''); await refresh();
     } catch (err) { setError(err.message); } finally { creatingRef.current = false; setCreating(false); }
   }
@@ -601,11 +849,11 @@ function WebhookPanel({ requestConfirm, credential, onCreated }) {
   const format = (template, values) => Object.entries(values).reduce((text,[key,value])=>text.replace(`{${key}}`,value),t(template));
   return <div className="webhook-panel">
     <div className="webhook-intro"><div><div className="eyebrow">{t('KELUAR')}</div><h2>Webhook</h2><p>{t('Kirim event Kanca ke endpoint HTTPS milikmu. Secret hanya ditampilkan saat webhook dibuat.')}</p></div></div>
-    <form className="webhook-form" onSubmit={create}><label htmlFor="webhook-url">{t('URL endpoint')}</label><div className="webhook-form-row"><input id="webhook-url" type="url" required maxLength={2048} value={url} onChange={event=>setUrl(event.target.value)} placeholder="https://example.com/webhook"/><button className="primary" disabled={creating}>{t(creating?'Menambahkan…':'Tambah webhook')}</button></div><p>{t('Endpoint harus menggunakan HTTPS, port 443, dan alamat IP publik.')}</p></form>
+    <form className="webhook-form" onSubmit={create}><label htmlFor="webhook-url">{t('URL endpoint')}</label><div className="webhook-form-row"><input id="webhook-url" type="url" required maxLength={2048} value={url} onChange={event=>setUrl(event.target.value)} placeholder="https://example.com/webhook"/><button className="primary" disabled={creating}>{t(creating?'Menambahkan…':'Tambah webhook')}</button></div><p>{t('Endpoint harus menggunakan HTTPS, port 443, dan alamat IP publik.')}</p><details className="notification-preferences"><summary>{t('Pilih event webhook')}</summary><div className="preference-options">{webhookTypes.map(kind=><label key={kind}><input type="checkbox" checked={selectedTypes.includes(kind)} onChange={event=>setSelectedTypes(current=>event.target.checked?[...current,kind]:current.filter(item=>item!==kind))}/>{kind}</label>)}</div></details></form>
     {credential && <section className="webhook-secret" aria-live="polite"><div><strong>{t('Webhook berhasil dibuat')}</strong><p>{t('Simpan secret ini sekarang. Kanca tidak dapat menampilkannya lagi setelah bagian ini ditutup.')}</p></div><label>{t('Signing secret')}<input readOnly value={credential.secret} onFocus={event=>event.target.select()}/></label><div className="webhook-secret-actions"><button className="secondary" type="button" onClick={()=>copy(credential.secret,'Secret')}>{t('Salin secret')}</button><button className="text-button" type="button" onClick={()=>{onCreated(null);setCopyMessage('');}}>{t('Saya sudah menyimpan')}</button></div>{copyMessage && <p className="webhook-copy-message" role="status">{t(copyMessage)}</p>}</section>}
     {error && <p className="error" role="alert">{error}</p>}
     <section className="webhook-subscriptions"><div className="webhook-section-heading"><div><h3>{t('Endpoint terdaftar')}</h3><p>{subscriptions.filter(item=>item.active).length} {t('aktif')} · {subscriptions.length} {t('total')}</p></div><button className="secondary" type="button" onClick={refresh} disabled={loading}>{t('Muat ulang')}</button></div>
-      {loading && !subscriptions.length ? <p className="webhook-empty">{t('Memuat endpoint…')}</p> : !subscriptions.length ? <p className="webhook-empty">{t('Belum ada webhook. Tambahkan URL endpoint di atas untuk menerima event.')}</p> : <div className="webhook-subscription-list">{subscriptions.map(subscription=><article className="webhook-subscription" key={subscription.id}><div className="webhook-subscription-copy"><span className={`source-status ${subscription.active?'active':'disabled'}`}><i/>{t(subscription.active?'Aktif':'Nonaktif')}</span><strong title={subscription.url}>{subscription.url}</strong><span>{t('Dibuat')} {new Date(subscription.created_at).toLocaleString(dateLocale)}</span></div>{subscription.active && <button className="secondary" type="button" onClick={()=>disable(subscription)}>{t('Nonaktifkan')}</button>}</article>)}</div>}
+      {loading && !subscriptions.length ? <p className="webhook-empty">{t('Memuat endpoint…')}</p> : !subscriptions.length ? <p className="webhook-empty">{t('Belum ada webhook. Tambahkan URL endpoint di atas untuk menerima event.')}</p> : <div className="webhook-subscription-list">{subscriptions.map(subscription=><article className="webhook-subscription" key={subscription.id}><div className="webhook-subscription-copy"><span className={`source-status ${subscription.active?'active':'disabled'}`}><i/>{t(subscription.active?'Aktif':'Nonaktif')}</span><strong title={subscription.url}>{subscription.url}</strong><span>{t('Dibuat')} {new Date(subscription.created_at).toLocaleString(dateLocale)}</span><span>{t('Jenis event')}: {(subscription.event_types||['*']).join(', ')}</span>{editingTypes?.id===subscription.id&&<div className="preference-options">{webhookTypes.map(kind=><label key={kind}><input type="checkbox" checked={editingTypes.types.includes(kind)} onChange={event=>setEditingTypes({...editingTypes,types:event.target.checked?[...editingTypes.types,kind]:editingTypes.types.filter(item=>item!==kind)})}/>{kind}</label>)}<button className="secondary" type="button" onClick={async()=>{try{await api(`/v1/webhook-subscriptions/${encodeURIComponent(subscription.id)}/event-types`,{method:'PUT',body:JSON.stringify({event_types:editingTypes.types})});setEditingTypes(null);await refresh();}catch(err){setError(err.message);}}}>{t('Simpan perubahan')}</button></div>}</div>{subscription.active && <div className="actions"><button className="secondary" type="button" onClick={()=>setEditingTypes({id:subscription.id,types:subscription.event_types?.includes('*')?webhookTypes:[...(subscription.event_types||[])]})}>{t('Atur event')}</button><button className="secondary" type="button" onClick={()=>disable(subscription)}>{t('Nonaktifkan')}</button></div>}</article>)}</div>}
     </section>
     <section className="webhook-deliveries"><div className="webhook-section-heading"><div><h3>{t('Riwayat pengiriman')}</h3><p>{t('Maksimal 100 pengiriman terbaru')}</p></div><label className="webhook-status-filter"><span>{t('Status')}</span><select value={statusFilter} onChange={event=>setStatusFilter(event.target.value)} aria-label={t('Filter status pengiriman')}><option value="all">{t('Semua')}</option><option value="pending">{t('Menunggu')}</option><option value="sending">{t('Mengirim')}</option><option value="delivered">{t('Terkirim')}</option><option value="failed">{t('Gagal')}</option></select></label></div>
       {!visibleDeliveries.length ? <p className="webhook-empty">{t(deliveries.length?'Tidak ada pengiriman dengan status ini.':'Belum ada event untuk dikirim.')}</p> : <div className="webhook-delivery-list">{visibleDeliveries.slice(0,30).map(item=>{const endpoint=subscriptions.find(subscription=>subscription.id===item.subscription_id)?.url || t('Endpoint webhook');return <article className="webhook-delivery" key={item.id}><span className={`delivery-state ${item.status}`}><i/>{t(statusLabels[item.status] || item.status)}</span><div className="webhook-delivery-copy"><strong title={endpoint}>{endpoint}</strong><span>{format('{attempts} percobaan',{attempts:item.attempts})} · {item.last_status?`HTTP ${item.last_status}`:t('belum ada respons HTTP')}</span></div></article>;})}</div>}
@@ -617,14 +865,21 @@ function Sources({ sources, onChanged, requestConfirm }) {
   const {t,dateLocale}=useLanguage();
   const [name, setName] = useState('');
   const [kind, setKind] = useState('iot');
+  const [expectedInterval,setExpectedInterval]=useState(300);
   const [editing, setEditing] = useState(null);
   const [credential, setCredential] = useState(null);
-  const [bmkgCredentials, setBmkgCredentials] = useState(null);
-  const [connectingBmkg, setConnectingBmkg] = useState(false);
-  const [bmkgConfigCopied, setBmkgConfigCopied] = useState(false);
   const [selected, setSelected] = useState(null);
   const [events, setEvents] = useState([]);
   const [eventsError, setEventsError] = useState('');
+  const [requestMessage,setRequestMessage]=useState('');
+  const [requestState,setRequestState]=useState('idle');
+  const [previewUrl,setPreviewUrl]=useState('');
+  const [previewStatus,setPreviewStatus]=useState('');
+  const [publicCredential,setPublicCredential]=useState(null);
+  const [bmkgLocations,setBmkgLocations]=useState([]);
+  const [cctvSources,setCctvSources]=useState([]);
+  const [bmkgLocationsLoading,setBmkgLocationsLoading]=useState(true);
+  const [connectingPublic,setConnectingPublic]=useState('');
   const [mediaSettings, setMediaSettings] = useState(null);
   const [error, setError] = useState('');
   const [sourceQuery, setSourceQuery] = useState('');
@@ -634,72 +889,173 @@ function Sources({ sources, onChanged, requestConfirm }) {
   const [webhookCredential, setWebhookCredential] = useState(null);
   const [eventsLoading, setEventsLoading] = useState(false);
   const [dialogMode, setDialogMode] = useState('data');
+  const manualSetupRef = useRef(null);
+  const nameInputRef = useRef(null);
   const eventsRequest = useRef(0);
+  const dataRequest = useRef(0);
+  const previewUrlRef = useRef('');
+  const previewRequestAtRef = useRef('');
   const [submitting, setSubmitting] = useState(false);
   const submittingRef = useRef(false);
-  async function connectBmkg() { if(connectingBmkg)return;setConnectingBmkg(true);setError('');setBmkgConfigCopied(false);try{const result=await api('/v1/sources/public-bmkg',{method:'POST'});setBmkgCredentials(result.sources?.length?result.sources:null);await onChanged();}catch(e){setError(e.message);}finally{setConnectingBmkg(false);} }
-  const bmkgGatewayConfig = bmkgCredentials ? JSON.stringify(bmkgCredentials.map(source=>({type:'http_json',name:source.name,source_id:source.id,source_token:source.token,http_url:source.http_url,interval_seconds:source.interval_seconds,event_type:source.event_type})),null,2) : '';
-  async function copyBmkgConfig() {try{await navigator.clipboard.writeText(bmkgGatewayConfig);setBmkgConfigCopied(true);}catch{setError(t('Konfigurasi tidak dapat disalin otomatis. Salin teks konfigurasi secara manual.'));}}
+  useEffect(()=>{let cancelled=false;Promise.allSettled([api('/v1/public-sources/bmkg-weather'),api('/v1/public-sources/cctv')]).then(([locations,cameras])=>{if(cancelled)return;if(locations.status==='fulfilled')setBmkgLocations(locations.value);else setError(locations.reason.message);if(cameras.status==='fulfilled')setCctvSources(cameras.value);else setError(cameras.reason.message);}).finally(()=>{if(!cancelled)setBmkgLocationsLoading(false);});return()=>{cancelled=true;}},[]);
+  useEffect(()=>{if(!editing||integrationSection!=='sources'||!manualSetupRef.current)return;manualSetupRef.current.open=true;requestAnimationFrame(()=>{manualSetupRef.current?.scrollIntoView({behavior:'smooth',block:'center'});nameInputRef.current?.focus({preventScroll:true});});},[editing,integrationSection]);
+  async function connectPublic(group) {
+    if(connectingPublic)return;
+    setConnectingPublic(group.id);setError('');setPublicCredential(null);
+    try {
+      const endpoint=group.cctv_catalog_id?'/v1/sources/public-cctv':group.adm4_code?'/v1/sources/public-bmkg-location':group.id==='bmkg'?'/v1/sources/public-bmkg':group.id==='dki-cctv'?'/v1/sources/public-cctv-pack':'/v1/sources/public-global-pack';
+      const result=await api(endpoint,{method:'POST',...((group.adm4_code||group.cctv_catalog_id)?{body:JSON.stringify(group.cctv_catalog_id?{catalog_id:group.cctv_catalog_id}:{adm4_code:group.adm4_code})}:{})});
+      const configured=(result.sources||[]).map(source=>group.type==='iot'
+        ? {type:'http_json',name:source.name,source_id:source.id,source_token:source.token,http_url:source.http_url,interval_seconds:source.interval_seconds,event_type:source.event_type,on_demand:true}
+        : {type:'camera',name:source.name,source_id:source.id,source_token:source.token,camera_url:source.camera_url,interval_seconds:source.interval_seconds,audio_enabled:false,on_demand:true});
+      if(configured.length)setPublicCredential({config:JSON.stringify({server_url:window.location.origin,sources:configured},null,2)});
+      await onChanged();
+    } catch(e) {setError(e.message);}
+    finally {setConnectingPublic('');}
+  }
+  function beginEdit(source) {
+    setIntegrationSection('sources');
+    setEditing(source);
+    setName(source.name);
+    setKind(source.kind);
+    setExpectedInterval(source.expected_interval_seconds||300);
+    setError('');
+  }
+  function cancelSourceEdit() {
+    setEditing(null);setName('');setKind('iot');setExpectedInterval(300);setError('');
+    if(manualSetupRef.current)manualSetupRef.current.open=false;
+  }
   async function submit(e) { e.preventDefault(); if (submittingRef.current) return; submittingRef.current = true; setSubmitting(true); setError(''); try {
-    if (editing) await api(`/v1/sources/${encodeURIComponent(editing.id)}`, {method:'PUT',body:JSON.stringify({name,kind,status:editing.status})});
-    else { const result=await api('/v1/sources',{method:'POST',body:JSON.stringify({name,kind})}); setCredential(result); }
-    setName('');setKind('iot');setEditing(null);await onChanged();
+    if (editing) await api(`/v1/sources/${encodeURIComponent(editing.id)}`, {method:'PUT',body:JSON.stringify({name,kind,status:editing.status,expected_interval_seconds:Number(expectedInterval)})});
+    else { const result=await api('/v1/sources',{method:'POST',body:JSON.stringify({name,kind,expected_interval_seconds:Number(expectedInterval)})}); setCredential(result); }
+    setName('');setKind('iot');setExpectedInterval(300);setEditing(null);if(manualSetupRef.current)manualSetupRef.current.open=false;await onChanged();
   } catch(e) {setError(e.message);} finally {submittingRef.current = false; setSubmitting(false);} }
   async function toggle(source) {try {await api(`/v1/sources/${encodeURIComponent(source.id)}`,{method:'PUT',body:JSON.stringify({name:source.name,kind:source.kind,status:source.status==='active'?'disabled':'active'})});await onChanged();}catch(e){setError(e.message);}}
+  async function toggleAutomation(source,enabled,intervalOnly=false,intervalSeconds=source.automation_interval_seconds||30) {try {await api(`/v1/sources/${encodeURIComponent(source.id)}/automation`,{method:'PUT',body:JSON.stringify({enabled,interval_seconds:intervalSeconds})});if(!intervalOnly)setError('');await onChanged();}catch(e){setError(e.message);}}
   function remove(source) {requestConfirm({title:t('Hapus sumber?'),description:t('{name} tidak dapat mengirim data lagi. Riwayatnya tetap tersimpan.').replace('{name}',source.name),onConfirm:async()=>{try{await api(`/v1/sources/${encodeURIComponent(source.id)}`,{method:'DELETE'});if(selected===source.id)closeEvents();await onChanged();}catch(e){setError(e.message);}}});}
   const refreshEvents = useCallback(async (sourceId=selected, initial=false) => {if(!sourceId)return;const request=++eventsRequest.current;if(initial)setEventsLoading(true);try {const result=await api(`/v1/sources/${encodeURIComponent(sourceId)}/events`);if(request===eventsRequest.current){setEvents(result);setEventsError('');}}catch(e){if(request===eventsRequest.current)setEventsError(e.message);}finally{if(request===eventsRequest.current&&initial)setEventsLoading(false);}},[selected]);
-  async function viewEvents(source, mode='data') {setSelected(source.id);setDialogMode(mode);setEvents([]);setEventsError('');setEventsLoading(true);await refreshEvents(source.id,true);}
-  function closeEvents() {eventsRequest.current++;setSelected(null);setEvents([]);setEventsError('');setEventsLoading(false);}
+  async function requestSourceData(source) {
+    const requestNumber=++dataRequest.current;
+    if(source.kind==='camera')setPreviewStatus('fetching');
+    setRequestState('requesting');setRequestMessage('Permintaan data satu kali dikirim ke gateway. Feed publik tidak dibaca berkala.');setEventsError('');
+    try {
+      const queued=await api(`/v1/sources/${encodeURIComponent(source.id)}/request-data`,{method:'POST'});
+      const requestedAt=Date.parse(queued.requested_at);
+      if(requestNumber!==dataRequest.current)return;
+      let capturedThisRequest=false;
+      let captureStatus='';
+      if(source.kind==='camera') {
+        try {
+          const previewResponse=await fetch(`/v1/sources/${encodeURIComponent(source.id)}/preview`,{cache:'no-store'});
+          if(requestNumber!==dataRequest.current)return;
+          if(previewResponse.ok) {
+            const requestedAtHeader=previewResponse.headers.get('X-Kanca-Request-At')||'';
+            const previewAt=Date.parse(requestedAtHeader);
+            if(Number.isFinite(previewAt)&&previewAt>=requestedAt) {
+              const status=previewResponse.headers.get('X-Kanca-Preview-Status')||'';
+              captureStatus=status;
+              const objectUrl=URL.createObjectURL(await previewResponse.blob());
+              if(requestNumber!==dataRequest.current){URL.revokeObjectURL(objectUrl);return;}
+              if(previewUrlRef.current)URL.revokeObjectURL(previewUrlRef.current);
+              previewUrlRef.current=objectUrl;
+              previewRequestAtRef.current=requestedAtHeader;
+              capturedThisRequest=true;
+              setPreviewUrl(objectUrl);
+              setPreviewStatus(status);
+            }
+          }
+        } catch {
+          // The event result may still be available even if an image preview cannot be read.
+        }
+      }
+      const rows=await api(`/v1/sources/${encodeURIComponent(source.id)}/events`);
+      if(requestNumber!==dataRequest.current)return;
+      setEvents(rows);
+      setEventsLoading(false);
+      const fresh=rows.some(item=>Date.parse(item.received_at)>=requestedAt&&(source.kind!=='camera'||item.event_type==='media.vision'));
+      if(source.kind==='camera'&&!capturedThisRequest)setPreviewStatus(previewUrlRef.current?'stale':'unavailable');
+      if(fresh||queued.status==='received'||capturedThisRequest) {
+        setRequestState('complete');
+        setRequestMessage(capturedThisRequest&&captureStatus==='failed'?'Frame berhasil diambil, tetapi analisis AI gagal. Cuplikannya tetap bisa dilihat; klik Get Data lagi untuk mencoba ulang.':capturedThisRequest&&!fresh?'Gambar baru diterima; analisis AI mungkin masih diproses.':'Data baru diterima.');
+        return;
+      }
+      setRequestState('timeout');
+      setRequestMessage('Belum menerima data baru. Periksa gateway dan feed, lalu coba Get Data lagi.');
+      if(source.kind==='camera')setPreviewStatus(previewUrlRef.current?'stale':'unavailable');
+    } catch(e) {
+      if(requestNumber===dataRequest.current){setEventsLoading(false);setRequestState('error');setRequestMessage(e.message||'Permintaan data gagal.');if(source.kind==='camera'&&!previewUrlRef.current)setPreviewStatus('unavailable');}
+    }
+  }
+  async function refreshSourceDetails(source) {
+    await refreshEvents(source.id);
+    if(source.kind!=='camera')return;
+    try {
+      const response=await fetch(`/v1/sources/${encodeURIComponent(source.id)}/preview`,{cache:'no-store'});
+      if(!response.ok)return;
+      const requestedAt=response.headers.get('X-Kanca-Request-At')||'';
+      const status=response.headers.get('X-Kanca-Preview-Status')||'';
+      if(requestedAt!==previewRequestAtRef.current) {
+        const objectUrl=URL.createObjectURL(await response.blob());
+        if(previewUrlRef.current)URL.revokeObjectURL(previewUrlRef.current);
+        previewUrlRef.current=objectUrl;
+        previewRequestAtRef.current=requestedAt;
+        setPreviewUrl(objectUrl);
+      }
+      setPreviewStatus(status);
+      if(status==='failed')setRequestMessage('Frame berhasil diambil, tetapi analisis AI gagal. Cuplikannya tetap bisa dilihat; klik Get Data lagi untuk mencoba ulang.');
+    } catch {}
+  }
+  function viewEvents(source, mode='data') {const canRequest=mode==='data'&&['camera','iot'].includes(source.kind);dataRequest.current++;if(previewUrlRef.current)URL.revokeObjectURL(previewUrlRef.current);previewUrlRef.current='';previewRequestAtRef.current='';setPreviewUrl('');setPreviewStatus('');setSelected(source.id);setDialogMode(mode);setEvents([]);setEventsError('');setRequestMessage('');setRequestState('idle');setEventsLoading(!canRequest);if(canRequest)requestSourceData(source);else refreshEvents(source.id,true);}
+  function closeEvents() {dataRequest.current++;eventsRequest.current++;if(previewUrlRef.current)URL.revokeObjectURL(previewUrlRef.current);previewUrlRef.current='';previewRequestAtRef.current='';setPreviewUrl('');setPreviewStatus('');setSelected(null);setEvents([]);setEventsError('');setRequestMessage('');setRequestState('idle');setEventsLoading(false);}
   async function editMedia(source) {try{setMediaSettings({id:source.id,...await api(`/v1/sources/${encodeURIComponent(source.id)}/media-settings`)});setError('');}catch(e){setError(e.message);}}
   async function saveMedia(e) {e.preventDefault();try {const {id,...settings}=mediaSettings;await api(`/v1/sources/${encodeURIComponent(id)}/media-settings`,{method:'PUT',body:JSON.stringify(settings)});setMediaSettings(null);setError('');}catch(e){setError(e.message);}}
   const filteredSources = sources.filter(source => {
     const matchesQuery = `${source.name} ${source.kind} ${sourceKindLabels[source.kind] || ''}`.toLowerCase().includes(sourceQuery.trim().toLowerCase());
     return matchesQuery && (sourceTypeFilter === 'all' || source.kind === sourceTypeFilter) && (sourceStatusFilter === 'all' || source.status === sourceStatusFilter);
   });
-  const bmkgSourceNames = ['Cuaca Kemayoran (BMKG)','Gempa Terbaru (BMKG)','Gempa Dirasakan (BMKG)'];
-  const hasBmkgSources = bmkgSourceNames.every(name=>sources.some(source=>source.name===name));
+  const recentSources=sources.filter(source=>source.health?.state==='recent').length;
+  const attentionSources=sources.filter(source=>['waiting','delayed','unknown'].includes(source.health?.state)).length;
   const selectedSource = sources.find(source=>source.id===selected);
-  return <div className="workers"><div className="workers-header"><div><div className="eyebrow">{t('INTEGRASI')}</div><h1>{t('Integrasi')}</h1><p>{t('Kelola sumber data masuk dan webhook untuk event keluar.')}</p></div></div>
-    <div className="integration-tabs" role="tablist" aria-label={t('Jenis integrasi')}><button type="button" role="tab" id="sources-tab" aria-controls="sources-panel" aria-selected={integrationSection==='sources'} className={integrationSection==='sources'?'active':''} onClick={()=>setIntegrationSection('sources')}><Icon name="plug" size={17}/>{t('Sumber perangkat')}</button><button type="button" role="tab" id="webhooks-tab" aria-controls="webhooks-panel" aria-selected={integrationSection==='webhooks'} className={integrationSection==='webhooks'?'active':''} onClick={()=>setIntegrationSection('webhooks')}><Icon name="up" size={17}/>{t('Webhook')}</button></div>
-    {integrationSection==='webhooks' ? <div id="webhooks-panel" role="tabpanel" aria-labelledby="webhooks-tab"><WebhookPanel requestConfirm={requestConfirm} credential={webhookCredential} onCreated={setWebhookCredential}/></div> : <div className="source-panel-content" id="sources-panel" role="tabpanel" aria-labelledby="sources-tab"><>
+  const publicSourcesPanel = <div className="source-panel-content public-sources-panel">
+    <div className="error source-panel-error" role="alert">{error}</div>
+    <PublicSourcesCatalog sources={sources} bmkgLocations={bmkgLocations} cctvSources={cctvSources} locationsLoading={bmkgLocationsLoading} onConnect={connectPublic} connecting={connectingPublic} credential={publicCredential} onDismissCredential={()=>setPublicCredential(null)} onView={viewEvents} onEditMedia={editMedia} onEdit={beginEdit} onToggle={toggle} onAutomation={toggleAutomation} onRemove={remove} mediaSettings={mediaSettings} onMediaChange={setMediaSettings} onSaveMedia={saveMedia} onCancelMedia={()=>setMediaSettings(null)}/>
+  </div>;
+  return <div className="workers integration-page"><div className="workers-header integration-page-heading"><div><div className="eyebrow">{t('INTEGRASI')}</div><h1>{t('Integrasi')}</h1><p>{t('Kelola sumber data masuk dan webhook untuk event keluar.')}</p></div></div>
+    <div className="integration-overview" aria-label={t('Ringkasan integrasi')}>
+      <article><span className="integration-overview-icon"><Icon name="plug" size={17}/></span><div><strong>{sources.length}</strong><span>{t('Sumber terdaftar')}</span></div></article>
+      <article><span className="integration-overview-icon is-live"><Icon name="check" size={17}/></span><div><strong>{recentSources}</strong><span>{t('Data terbaru')}</span></div></article>
+      <article><span className="integration-overview-icon is-attention"><Icon name="clock" size={17}/></span><div><strong>{attentionSources}</strong><span>{t('Perlu perhatian')}</span></div></article>
+    </div>
+    <div className="integration-tabs" role="tablist" aria-label={t('Jenis integrasi')}>
+      <button type="button" role="tab" id="sources-tab" aria-controls="sources-panel" aria-selected={integrationSection==='sources'} className={integrationSection==='sources'?'active':''} onClick={()=>setIntegrationSection('sources')}><span className="integration-tab-icon"><Icon name="plug" size={18}/></span><span className="integration-tab-copy"><strong>{t('Sumber perangkat')}</strong><small>{t('Kamera, IoT, dan layanan')}</small></span><span className="integration-tab-count">{sources.length}</span></button>
+      <button type="button" role="tab" id="public-sources-tab" aria-controls="public-sources-panel" aria-selected={integrationSection==='public'} className={integrationSection==='public'?'active':''} onClick={()=>setIntegrationSection('public')}><span className="integration-tab-icon"><Icon name="sun" size={18}/></span><span className="integration-tab-copy"><strong>{t('Public Sources')}</strong><small>{publicSourceGroups.reduce((total,group)=>total+group.sources.length,0)+bmkgLocations.length+cctvSources.length} {t('feed tersedia')}</small></span></button>
+      <button type="button" role="tab" id="webhooks-tab" aria-controls="webhooks-panel" aria-selected={integrationSection==='webhooks'} className={integrationSection==='webhooks'?'active':''} onClick={()=>setIntegrationSection('webhooks')}><span className="integration-tab-icon"><Icon name="up" size={18}/></span><span className="integration-tab-copy"><strong>{t('Webhook')}</strong><small>{t('Event keluar')}</small></span></button>
+    </div>
+    {integrationSection==='webhooks' ? <div id="webhooks-panel" role="tabpanel" aria-labelledby="webhooks-tab"><WebhookPanel requestConfirm={requestConfirm} credential={webhookCredential} onCreated={setWebhookCredential}/></div> : integrationSection==='public' ? <div id="public-sources-panel" role="tabpanel" aria-labelledby="public-sources-tab">{publicSourcesPanel}</div> : <div className="source-panel-content" id="sources-panel" role="tabpanel" aria-labelledby="sources-tab"><>
     <div className="error source-panel-error" role="alert">{error}</div>
     <section className="source-browser" aria-label={t('Daftar sumber integrasi')}>
-      <div className="source-browser-heading"><div><h2>{t('Sumber terhubung')}</h2><p>{sources.length} {t('sumber terdaftar')}</p></div></div>
+      <div className="source-browser-heading"><div><h2>{t('Sumber terhubung')}</h2><p>{sources.length} {t('sumber terdaftar')}</p><p className="source-health-note">{t('Status penerimaan memakai waktu event terakhir dan interval harapan; proses gateway tidak diperiksa langsung.')}</p></div><div className="actions"><button className="secondary" type="button" onClick={()=>downloadExport('/v1/events/export?format=csv','kanca-events.csv').catch(error=>window.alert(error.message))}>{t('Ekspor batch event CSV')}</button><button className="secondary" type="button" onClick={()=>downloadExport('/v1/events/export?format=json','kanca-events.json').catch(error=>window.alert(error.message))}>{t('Ekspor batch event JSON')}</button></div></div>
       <div className="source-controls">
         <label className="source-search"><Icon name="search" size={17}/><input type="search" value={sourceQuery} onChange={event=>setSourceQuery(event.target.value)} placeholder={t('Cari nama sumber')} aria-label={t('Cari sumber integrasi')}/></label>
         <div className="source-filter-row"><div className="source-type-filters" role="group" aria-label={t('Filter jenis sumber')}>{[['all','Semua'],['iot','IoT / sensor'],['camera','Kamera'],['service','Layanan']].map(([value,label])=><button type="button" key={value} className={sourceTypeFilter===value?'active':''} aria-pressed={sourceTypeFilter===value} onClick={()=>setSourceTypeFilter(value)}>{t(label)}</button>)}</div><label className="source-status-filter"><span>{t('Status')}</span><select value={sourceStatusFilter} onChange={event=>setSourceStatusFilter(event.target.value)} aria-label={t('Filter status sumber')}><option value="all">{t('Semua')}</option><option value="active">{t('Aktif')}</option><option value="disabled">{t('Nonaktif')}</option></select></label></div>
       </div>
-      {!sources.length ? <div className="worker-empty source-empty"><strong>{t('Belum ada sumber')}</strong><p>{t('Tambahkan kamera, sensor, atau layanan untuk mulai menerima data.')}</p></div> : !filteredSources.length ? <div className="worker-empty source-empty"><strong>{t('Sumber tidak ditemukan')}</strong><p>{t('Coba ubah kata pencarian atau filter yang dipilih.')}</p></div> : <div className="source-card-grid">{filteredSources.map(source=>{
-        const active=source.status==='active';const lastSeen=source.last_seen?new Date(source.last_seen):null;
-        return <article className="worker-card source-card" key={source.id}><div className="source-card-header"><span className="source-kind-icon"><Icon name={source.kind==='camera'?'camera':source.kind==='iot'?'thermometer':'plug'} size={19}/></span><span className={`source-status ${active?'active':'disabled'}`}><i/>{t(active?'Aktif':'Nonaktif')}</span></div><div className="source-card-title"><span>{t(sourceKindLabels[source.kind]||source.kind)}</span><h3 title={t(source.name)}>{t(source.name)}</h3></div><div className="source-card-meta"><span>{lastSeen?t('Data terakhir diterima'):t('Belum ada data')}</span>{lastSeen&&<time dateTime={lastSeen.toISOString()}>{lastSeen.toLocaleString(dateLocale)}</time>}</div><div className="source-card-actions"><button className="primary" onClick={()=>viewEvents(source,'data')}>{t('Get Data')}</button>{source.kind==='camera'&&<button className="secondary" onClick={()=>viewEvents(source,'stream')}>{t('Live Streaming')}</button>}<button className="secondary" onClick={()=>editMedia(source)}>{t('Atur media')}</button><button className="secondary" onClick={()=>{setEditing(source);setName(source.name);setKind(source.kind);}}>{t('Ubah')}</button><button className="secondary" onClick={()=>toggle(source)}>{t(active?'Nonaktifkan':'Aktifkan')}</button><button className="text-button" onClick={()=>remove(source)}>{t('Hapus')}</button></div>{mediaSettings?.id===source.id&&<form className="media-settings" onSubmit={saveMedia}><p>{t('Media yang diaktifkan akan dikirim ke Baseten untuk dianalisis. Aktifkan hanya sesuai kebutuhan.')}</p><label><input type="checkbox" checked={mediaSettings.vision_enabled} onChange={e=>setMediaSettings({...mediaSettings,vision_enabled:e.target.checked})}/> {t('Analisis gambar')}</label><textarea aria-label={t('Pertanyaan tentang gambar')} maxLength={500} required value={mediaSettings.vision_prompt} onChange={e=>setMediaSettings({...mediaSettings,vision_prompt:e.target.value})}/><label><input type="checkbox" checked={mediaSettings.audio_enabled} onChange={e=>setMediaSettings({...mediaSettings,audio_enabled:e.target.checked})}/> {t('Analisis audio')}</label><textarea aria-label={t('Pertanyaan tentang audio')} maxLength={500} required value={mediaSettings.audio_prompt} onChange={e=>setMediaSettings({...mediaSettings,audio_prompt:e.target.value})}/><div className="actions"><button className="primary">{t('Simpan perubahan')}</button><button type="button" className="secondary" onClick={()=>setMediaSettings(null)}>{t('Batal')}</button></div></form>}</article>;
-      })}</div>}
+      {!sources.length ? <div className="worker-empty source-empty"><strong>{t('Belum ada sumber')}</strong><p>{t('Tambahkan kamera, sensor, atau layanan untuk mulai menerima data.')}</p></div> : !filteredSources.length ? <div className="worker-empty source-empty"><strong>{t('Sumber tidak ditemukan')}</strong><p>{t('Coba ubah kata pencarian atau filter yang dipilih.')}</p></div> : <div className="source-card-grid">{filteredSources.map(source=><SourceCard key={source.id} source={source} mediaSettings={mediaSettings} onView={viewEvents} onStream={viewEvents} onEditMedia={editMedia} onEdit={beginEdit} onToggle={toggle} onAutomation={toggleAutomation} onRemove={remove} onMediaChange={setMediaSettings} onSaveMedia={saveMedia} onCancelMedia={()=>setMediaSettings(null)}/>)}</div>}
     </section>
-    <section className="source-public-data">
-      <div className="source-public-data-header"><div><div className="eyebrow">{t('Data sensor publik')}</div><h2>{t('Sumber data BMKG')}</h2><p>{t('Hubungkan feed resmi BMKG untuk cuaca Kemayoran, gempa terbaru, dan gempa dirasakan. Data masuk melalui gateway sebagai event JSON.')}</p></div><span className={`source-status ${hasBmkgSources?'active':'disabled'}`}><i/>{t(hasBmkgSources?'Sumber BMKG terdaftar':'Sumber publik siap dihubungkan')}</span></div>
-      <div className="public-sensor-grid">
-        <article className="public-sensor-tile"><span className="source-kind-icon"><Icon name="thermometer" size={18}/></span><strong>{t('Cuaca Kemayoran (BMKG)')}</strong><small>{t('Prakiraan cuaca, suhu, kelembapan, dan angin · diperbarui BMKG 2 kali sehari.')}</small><span>{t('Setiap 1 jam')}</span></article>
-        <article className="public-sensor-tile"><span className="source-kind-icon"><Icon name="sun" size={18}/></span><strong>{t('Gempa Terbaru (BMKG)')}</strong><small>{t('Parameter kejadian gempa terbaru di Indonesia.')}</small><span>{t('Setiap 2 menit')}</span></article>
-        <article className="public-sensor-tile"><span className="source-kind-icon"><Icon name="sun" size={18}/></span><strong>{t('Gempa Dirasakan (BMKG)')}</strong><small>{t('Daftar hingga 15 kejadian gempa yang dirasakan.')}</small><span>{t('Setiap 2 menit')}</span></article>
-      </div>
-      <p className="source-attribution">{t('Atribusi wajib: BMKG (Badan Meteorologi, Klimatologi, dan Geofisika). Cuaca diprakirakan, bukan pembacaan sensor langsung.')}</p>
-      <button className="primary source-public-connect" type="button" onClick={connectBmkg} disabled={connectingBmkg||hasBmkgSources}>{t(connectingBmkg?'Menyambungkan…':hasBmkgSources?'Semua sumber BMKG sudah terhubung.':'Hubungkan sumber BMKG')}</button>
-      {hasBmkgSources&&bmkgSourceNames.some(name=>{const source=sources.find(item=>item.name===name);return !source?.last_seen;})&&<small className="source-waiting-note">{t('Menunggu data pertama dari gateway.')}</small>}
-    </section>
-    {bmkgCredentials&&<details className="source-bmkg-config" open><summary>{t('Konfigurasi gateway BMKG')}</summary><div><p>{t('Tambahkan objek ini ke array sources pada config.json gateway yang sudah ada. Jangan hapus sumber yang lain. Token hanya tampil sekarang.')}</p><button className="secondary" type="button" onClick={copyBmkgConfig}>{t(bmkgConfigCopied?'Konfigurasi tersalin.':'Simpan konfigurasi BMKG')}</button><pre>{bmkgGatewayConfig}</pre><button className="text-button" type="button" onClick={()=>setBmkgCredentials(null)}>{t('Saya sudah menyimpan token')}</button></div></details>}
-    <p className="source-note">{t('Sumber menerima event JSON. Kamera mengirim cuplikan untuk analisis sesuai pengaturannya. Beberapa feed publik memiliki player langsung; pairing otomatis belum tersedia.')}</p>
-    <details className="source-manual-setup"><summary>{t('Tambah sumber secara manual')}</summary><form className="source-form" onSubmit={submit}><label>{t('Nama sumber')}<input value={name} required maxLength={100} onChange={e=>setName(e.target.value)} placeholder={t('Contoh: Sensor gudang')}/></label><label>{t('Jenis')}<select value={kind} onChange={e=>setKind(e.target.value)}><option value="iot">{t('IoT / sensor')}</option><option value="camera">{t('Kamera')}</option><option value="service">{t('Layanan lain')}</option></select></label><button className="primary" disabled={submitting}>{t(submitting?'Menyimpan…':editing?'Simpan perubahan':'Tambah sumber')}</button>{editing && <button type="button" className="secondary" onClick={()=>{setEditing(null);setName('');setKind('iot');}}>{t('Batal')}</button>}</form></details>
+    <details className="source-manual-setup" ref={manualSetupRef}><summary>{t(editing?'Ubah sumber':'Tambah sumber secara manual')}</summary>{editing&&<p className="source-editing-note">{t('Mengubah sumber')}: <strong>{editing.name}</strong></p>}<form className="source-form" onSubmit={submit}><label>{t('Nama sumber')}<input ref={nameInputRef} value={name} required maxLength={100} onChange={e=>setName(e.target.value)} placeholder={t('Contoh: Sensor gudang')}/></label><label>{t('Jenis')}<select value={kind} onChange={e=>setKind(e.target.value)}><option value="iot">{t('IoT / sensor')}</option><option value="camera">{t('Kamera')}</option><option value="service">{t('Layanan lain')}</option></select></label><label>{t('Interval data harapan (detik)')}<input type="number" min="10" max="86400" required value={expectedInterval} onChange={e=>setExpectedInterval(e.target.value)}/></label><button className="primary" disabled={submitting}>{t(submitting?'Menyimpan…':editing?'Simpan perubahan':'Tambah sumber')}</button>{editing && <button type="button" className="secondary" onClick={cancelSourceEdit}>{t('Batal')}</button>}</form></details>
     {credential && <div className="credential"><strong>{t('Sumber dibuat')}</strong><p>{t('Salin token sekarang; token tidak akan ditampilkan lagi. Gunakan koneksi HTTPS saat mengirim data melalui jaringan.')}</p><label>{t('Alamat penerima')}<input readOnly value={window.location.origin+credential.ingest_path} onFocus={e=>e.target.select()}/></label><label>{t('Token')}<input readOnly value={credential.token} onFocus={e=>e.target.select()}/></label><p>{t('Alamat localhost hanya dapat diakses dari mesin ini. Perangkat lain memerlukan gateway yang aman.')}</p><button className="secondary" onClick={()=>setCredential(null)}>{t('Saya sudah menyimpan token')}</button></div>}
 
-    {selectedSource && <SourceDetailsDialog source={selectedSource} events={events} loading={eventsLoading} error={eventsError} mode={dialogMode} onRefresh={()=>refreshEvents(selectedSource.id)} onClose={closeEvents}/>}
+    {selectedSource && <SourceDetailsDialog source={selectedSource} events={events} loading={eventsLoading} error={eventsError} requestMessage={requestMessage} requestState={requestState} previewUrl={previewUrl} previewStatus={previewStatus} onRequestData={requestSourceData} mode={dialogMode} onRefresh={()=>refreshSourceDetails(selectedSource)} onClose={closeEvents}/>}
     </></div>}
   </div>;
 }
 
 export default function App() {
-  const [language, setLanguage] = useState(() => localStorage.getItem('kanca-language') === 'en' ? 'en' : 'id');
+  const [language, setLanguage] = useState(() => localStorage.getItem('kanca-language') === 'id' ? 'id' : 'en');
   const t = text => language === 'en' ? englishTranslations.get(text) || text : text;
   const dateLocale = language === 'en' ? 'en-US' : 'id-ID';
   const [connected, setConnected] = useState(false);
+  const [initialLoading, setInitialLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
   const [busy, setBusy] = useState(false);
   const [feedback, setFeedback] = useState('');
   const [instruction, setInstruction] = useState('');
@@ -718,6 +1074,8 @@ export default function App() {
   const [pendingChat, setPendingChat] = useState(null);
   const [confirmation, setConfirmation] = useState(null);
   const currentRef = useRef(current);
+  const refreshInFlight = useRef(null);
+  const refreshAgain = useRef(false);
   const scrollRef = useRef(null);
   const inputRef = useRef(null);
   const rerunPending = useRef(false);
@@ -734,22 +1092,42 @@ export default function App() {
   useEffect(()=>{document.documentElement.lang=language;localStorage.setItem('kanca-language',language);},[language]);
 
   const selectChat = useCallback(id => { currentRef.current = id; setCurrent(id); if (id) sessionStorage.setItem('kanca-conversation', id); else sessionStorage.removeItem('kanca-conversation'); }, []);
-  const refresh = useCallback(async () => {
-    const [conversations, allTasks, external, notices, unread] = await Promise.all([api('/v1/conversations'), api('/v1/tasks'), api('/v1/sources'), api('/v1/notifications'), api('/v1/notifications/unread-count')]);
-    let selected = currentRef.current;
-    if (selected && !conversations.some(chat => chat.id === selected)) { selected = null; selectChat(null); }
-    if (!selected && conversations.length) { selected = conversations[0].id; selectChat(selected); }
-    const fresh = selected ? await api(`/v1/conversations/${encodeURIComponent(selected)}/messages`) : [];
-    if (selected !== currentRef.current) return;
-    setChats(conversations); setMessages(fresh); setTasks(allTasks); setExternalSources(external); setNotifications(notices); setUnreadCount(unread.count); setConnected(true);
+  const refresh = useCallback(() => {
+    if (refreshInFlight.current) {
+      refreshAgain.current = true;
+      return refreshInFlight.current;
+    }
+    const run = async () => {
+      do {
+        refreshAgain.current = false;
+        const [conversations, allTasks, external, notices, unread] = await Promise.all([api('/v1/conversations'), api('/v1/tasks'), api('/v1/sources'), api('/v1/notifications'), api('/v1/notifications/unread-count')]);
+        let selected = currentRef.current;
+        if (selected && !conversations.some(chat => chat.id === selected)) { selected = null; selectChat(null); }
+        if (!selected && conversations.length) { selected = conversations[0].id; selectChat(selected); }
+        const fresh = selected ? await api(`/v1/conversations/${encodeURIComponent(selected)}/messages`) : [];
+        if (selected !== currentRef.current) { refreshAgain.current = true; continue; }
+        setChats(conversations); setMessages(fresh); setTasks(allTasks); setExternalSources(external); setNotifications(notices); setUnreadCount(unread.count); setConnected(true);
+      } while (refreshAgain.current);
+    };
+    setRefreshing(true);
+    const request = run().finally(() => { if (refreshInFlight.current === request) { refreshInFlight.current = null; setRefreshing(false); } });
+    refreshInFlight.current = request;
+    return request;
   }, [selectChat]);
 
   useEffect(() => {
     let active = true;
-    const poll = async () => { try { await refresh(); } catch (error) { if(active) { setConnected(false); setFeedback(error.message); } } };
-    api('/v1/session').then(poll).catch(error => { if(active) setFeedback(error.message); });
-    const timer = setInterval(poll, 5000);
-    return () => { active = false; clearInterval(timer); };
+    const sync = async () => {
+      if (document.visibilityState === 'hidden') return;
+      try { await refresh(); }
+      catch (error) { if(active) { setConnected(false); setFeedback(error.message); } }
+      finally { if(active) setInitialLoading(false); }
+    };
+    api('/v1/session').then(sync).catch(error => { if(active) { setFeedback(error.message); setInitialLoading(false); } });
+    const onVisible = () => { if(document.visibilityState === 'visible') sync(); };
+    window.addEventListener('focus', onVisible);
+    document.addEventListener('visibilitychange', onVisible);
+    return () => { active = false; window.removeEventListener('focus', onVisible); document.removeEventListener('visibilitychange', onVisible); };
   }, [refresh]);
 
   useEffect(() => { document.querySelectorAll('.main .scroll').forEach(el => { el.scrollTop = 0; }); }, [view]);
@@ -790,10 +1168,15 @@ export default function App() {
   function archive(task) { setConfirmation({title:t('Hapus tugas dari daftar?'),description:t('Tugas yang aktif akan dihentikan. Riwayatnya tetap disimpan.'),onConfirm:async()=>{try { setFeedback(''); await api(`/v1/tasks/${encodeURIComponent(task.id)}`,{method:'DELETE'}); await refresh(); } catch(error) { setFeedback(error.message); }}}); }
   async function moveChat(chat) {try{await api(`/v1/conversations/${encodeURIComponent(chat.id)}`,{method:'PATCH',body:JSON.stringify({status:chat.status==='draft'?'active':'draft'})});await refresh();}catch(error){setFeedback(error.message);}}
   function deleteChat(chat) {setConfirmation({title:t('Hapus percakapan?'),description:t('Percakapan akan dihapus dari daftar. Tugas yang sudah dibuat tetap berjalan dan tersedia di Tugas latar belakang.'),onConfirm:async()=>{try{await api(`/v1/conversations/${encodeURIComponent(chat.id)}`,{method:'DELETE'});if(currentRef.current===chat.id){selectChat(null);setMessages([]);}await refresh();}catch(error){setFeedback(error.message);}}});}
+  function clearHistory() {if(!chats.length||busy)return;setConfirmation({title:t('Bersihkan riwayat percakapan?'),description:t('Semua percakapan akan dihapus dari daftar riwayat. Tugas yang sudah dibuat tetap berjalan dan tersedia di Tugas latar belakang.'),onConfirm:async()=>{try{setFeedback('');await api('/v1/conversations',{method:'DELETE'});selectChat(null);setMessages([]);setInstruction('');setPendingChat(null);await refresh();}catch(error){setFeedback(error.message);}}});}
   async function send(event) {
     event?.preventDefault(); const text = instruction.trim();
     if (!connected || !text || busy) return;
-    setBusy(true); setFeedback('');
+    const optimisticId = `optimistic-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+    const optimisticMessage = {id:optimisticId,role:'user',content:text,created_at:new Date().toISOString()};
+    setBusy(true); setFeedback(''); setMessages(previous=>[...previous,optimisticMessage]);
+    setPendingChat(currentRef.current || '__new__');
+    requestAnimationFrame(()=>scrollRef.current?.scrollTo({top:scrollRef.current.scrollHeight,behavior:'smooth'}));
     try {
       let target = currentRef.current;
       if (!target) { const chat = await api('/v1/conversations', {method:'POST', body:JSON.stringify({})}); target = chat.id; selectChat(target); }
@@ -802,21 +1185,21 @@ export default function App() {
       await api(`/v1/conversations/${encodeURIComponent(target)}/messages`, {method:'POST', body:JSON.stringify({content:text})});
       setFeedback(''); await refresh();
       if (target === currentRef.current) scrollRef.current?.scrollTo({top:scrollRef.current.scrollHeight, behavior:'smooth'});
-    } catch(error) { setFeedback(error.message); setInstruction(text); } finally { setBusy(false); setPendingChat(null); }
+    } catch(error) { setMessages(previous=>previous.filter(item=>item.id!==optimisticId)); setFeedback(error.message); setInstruction(text); } finally { setBusy(false); setPendingChat(null); }
   }
 
   return <LanguageContext.Provider value={{language,t,dateLocale,setLanguage}}><div className={`app ${['dashboard','chat'].includes(view)?'has-iot-sidebar':''}`}><aside className="sidebar">
     <Brand/>
     <div className="sidebar-content">
     <section className="sidebar-nav"><p className="side-label">{t('Menu utama')}</p><button className="side-button nav-row" aria-current={view==='dashboard'?'page':undefined} onClick={()=>setView('dashboard')}><span className="nav-icon"><Icon name="dashboard"/></span><span className="nav-label">{t('Dashboard')}</span></button><button className="side-button nav-row" aria-current={view==='workers'?'page':undefined} onClick={()=>setView('workers')}><span className="nav-icon"><Icon name="clock"/></span><span className="nav-label">{t('Daftar tugas')}</span><span className="task-count" aria-label={`${tasks.filter(t=>t.status==='scheduled'||t.status==='running').length} ${t('tugas aktif')}`}>{tasks.filter(t=>t.status==='scheduled'||t.status==='running').length}</span></button><button className="side-button nav-row" aria-current={view==='sources'?'page':undefined} onClick={()=>setView('sources')}><span className="nav-icon"><Icon name="plug"/></span><span className="nav-label">{t('Integrasi')}</span></button></section>
-    <section className="history-section"><p className="side-label">{t('Riwayat percakapan')}</p>{!chats.length && <p className="meta">{t('Belum ada percakapan')}</p>}{['active','draft'].map(status=>{const group=chats.filter(chat=>chat.status===status);return (group.length>0 || status==='active') && <div className="history-group" key={status}><div className="history-group-heading"><p className="history-label">{t(status==='draft'?'Draft':'Percakapan')}</p>{status==='active' && <button className="history-new-chat" type="button" onClick={newChat} disabled={!connected} aria-label={t('Chat baru')} title={t('Chat baru')}><Icon name="plus" size={16}/></button>}</div>{group.map(chat=><div className={`chat-row ${chat.id===current && (view==='chat'||view==='dashboard')?'selected':''}`} key={chat.id}><button className="chat-select" aria-current={chat.id===current && (view==='chat'||view==='dashboard')?'page':undefined} onClick={()=>select(chat.id)} title={chat.title}>{chat.title}</button><details className="chat-menu"><summary aria-label={t('Opsi untuk {title}').replace('{title}',chat.title)}><Icon name="dots" size={16}/></summary><div className="chat-menu-items"><button onClick={e=>{e.currentTarget.closest('details').open=false;moveChat(chat);}}>{t(status==='draft'?'Kembalikan':'Pindah ke draft')}</button><button className="menu-danger" onClick={e=>{e.currentTarget.closest('details').open=false;deleteChat(chat);}}>{t('Hapus')}</button></div></details></div>)}</div>})}</section>
+    <section className="history-section"><p className="side-label">{t('Riwayat percakapan')}</p>{!chats.length && <p className="meta">{t('Belum ada percakapan')}</p>}{['active','draft'].map(status=>{const group=chats.filter(chat=>chat.status===status);return (group.length>0 || status==='active') && <div className="history-group" key={status}><div className="history-group-heading"><p className="history-label">{t(status==='draft'?'Draft':'Percakapan')}</p>{status==='active' && <div className="history-heading-actions">{chats.length>0&&<button className="history-clear" type="button" onClick={clearHistory} disabled={!connected||busy} aria-label={t('Bersihkan riwayat')} title={t('Bersihkan riwayat')}><Icon name="trash" size={15}/></button>}<button className="history-new-chat" type="button" onClick={newChat} disabled={!connected} aria-label={t('Chat baru')} title={t('Chat baru')}><Icon name="plus" size={16}/></button></div>}</div>{group.map(chat=><div className={`chat-row ${chat.id===current && (view==='chat'||view==='dashboard')?'selected':''}`} key={chat.id}><button className="chat-select" aria-current={chat.id===current && (view==='chat'||view==='dashboard')?'page':undefined} onClick={()=>select(chat.id)} title={chat.title}>{chat.title}</button><details className="chat-menu"><summary aria-label={t('Opsi untuk {title}').replace('{title}',chat.title)}><Icon name="dots" size={16}/></summary><div className="chat-menu-items"><button onClick={e=>{e.currentTarget.closest('details').open=false;moveChat(chat);}}>{t(status==='draft'?'Kembalikan':'Pindah ke draft')}</button><button className="menu-danger" onClick={e=>{e.currentTarget.closest('details').open=false;deleteChat(chat);}}>{t('Hapus')}</button></div></details></div>)}</div>})}</section>
     <div className="side-note"><a href="/docs" target="_blank" rel="noreferrer">{t('Dokumentasi API ↗')}</a></div>
     </div>
-    </aside><main className="main"><header className="topbar"><Brand className="brand brand-topbar"/><div className="topbar-title"><strong>{t(view==='dashboard'?'Dashboard':view==='workers'?'Tugas latar belakang':view==='notifications'?'Notifikasi':view==='sources'?'Sumber eksternal':'Ruang percakapan')}</strong><p>{t(view==='dashboard'?'Pantau perangkat dan lanjutkan percakapan':view==='workers'?'Kelola pemantauanmu di satu tempat':view==='notifications'?'Pembaruan tugasmu':view==='sources'?'Kelola perangkat dan layanan':'Tempat untuk mendelegasikan tugasmu')}</p></div><div className="topbar-actions">{(view==='chat'||view==='dashboard') && <ChatTopics chats={chats} current={current} onSelect={select} onNew={newChat}/>}<span className="badge">{t(connected?'Terhubung':'Belum terhubung')}</span><button className="icon-button theme-toggle" type="button" onClick={toggleTheme} aria-label={t(theme==='dark'?'Aktifkan mode terang':'Aktifkan mode gelap')} title={t(theme==='dark'?'Mode terang':'Mode gelap')}><Icon name={theme==='dark'?'sun':'moon'}/></button><button className="language-toggle" type="button" onClick={()=>setLanguage(language==='id'?'en':'id')} aria-label={t(language==='id'?'Beralih ke bahasa Inggris':'Beralih ke bahasa Indonesia')} title={t(language==='id'?'Beralih ke bahasa Inggris':'Beralih ke bahasa Indonesia')}>{language==='id'?'EN':'ID'}</button><button className="notification-button" onClick={event=>{notificationTrigger.current=event.currentTarget;setNotificationsOpen(true);}} aria-label={`${t('Notifikasi')}, ${unreadCount} ${t('belum dibaca')}`} aria-current={notificationsOpen?'page':undefined} title={t('Notifikasi')}><Icon name="bell"/>{unreadCount>0 && <span className="notification-count" aria-hidden="true">{unreadCount>99?'99+':unreadCount}</span>}</button></div></header>
-    {view==='workers' ? <div className="scroll"><Workers tasks={tasks} onAction={action} onEdit={edit} onArchive={archive} onCreate={newChat} onRerun={rerun}/><div className="workers-error" role="status">{notice}</div><div className="workers-error error" role="alert">{feedback}</div></div> : view==='sources' ? <div className="scroll"><Sources sources={externalSources} onChanged={refresh} requestConfirm={setConfirmation}/></div> : <>
+    </aside><main className="main"><header className="topbar"><Brand className="brand brand-topbar"/><div className="topbar-title"><strong>{t(view==='dashboard'?'Dashboard':view==='workers'?'Tugas latar belakang':view==='notifications'?'Notifikasi':view==='sources'?'Sumber eksternal':'Ruang percakapan')}</strong><p>{t(view==='dashboard'?'Pantau perangkat dan lanjutkan percakapan':view==='workers'?'Kelola pemantauanmu di satu tempat':view==='notifications'?'Pembaruan tugasmu':view==='sources'?'Kelola perangkat dan layanan':'Tempat untuk mendelegasikan tugasmu')}</p></div><div className="topbar-actions">{(view==='chat'||view==='dashboard') && <ChatTopics chats={chats} current={current} onSelect={select} onNew={newChat}/>}<span className={`badge ${refreshing?'is-refreshing':''}`} aria-live="polite">{refreshing&&<span className="loading-spinner" aria-hidden="true"/>}{t(refreshing?'Memperbarui…':connected?'Terhubung':'Belum terhubung')}</span><button className="icon-button theme-toggle" type="button" onClick={toggleTheme} aria-label={t(theme==='dark'?'Aktifkan mode terang':'Aktifkan mode gelap')} title={t(theme==='dark'?'Mode terang':'Mode gelap')}><Icon name={theme==='dark'?'sun':'moon'}/></button><button className="language-toggle" type="button" onClick={()=>setLanguage(language==='id'?'en':'id')} aria-label={t(language==='id'?'Beralih ke bahasa Inggris':'Beralih ke bahasa Indonesia')} title={t(language==='id'?'Beralih ke bahasa Inggris':'Beralih ke bahasa Indonesia')}>{language==='id'?'EN':'ID'}</button><button className="notification-button" onClick={event=>{notificationTrigger.current=event.currentTarget;setNotificationsOpen(true);}} aria-label={`${t('Notifikasi')}, ${unreadCount} ${t('belum dibaca')}`} aria-current={notificationsOpen?'page':undefined} title={t('Notifikasi')}><Icon name="bell"/>{unreadCount>0 && <span className="notification-count" aria-hidden="true">{unreadCount>99?'99+':unreadCount}</span>}</button></div></header>
+    {initialLoading ? <div className="app-initial-loading" role="status"><span className="loading-spinner" aria-hidden="true"/>{t('Memuat data aplikasi…')}</div> : view==='workers' ? <div className="scroll"><Workers tasks={tasks} onAction={action} onEdit={edit} onArchive={archive} onCreate={newChat} onRerun={rerun}/><div className="workers-error" role="status">{notice}</div><div className="workers-error error" role="alert">{feedback}</div></div> : view==='sources' ? <div className="scroll"><Sources sources={externalSources} onChanged={refresh} requestConfirm={setConfirmation}/></div> : <>
     <div className="scroll" ref={scrollRef}><div className="chat-workspace"><div className="content"><div className="welcome"><div className="eyebrow">{t(view==='dashboard'?'RUANG KENDALI':'Selamat datang di Kanca ✳')}</div><h1>{t(view==='dashboard'?'Pantau aktivitas. Jaga semuanya bergerak.':'What would you like to keep an eye on?')}</h1><p>{t(view==='dashboard'?'Perangkat, pemeriksaan, dan aktivitas Kanca dalam satu ruang kendali. Mulai pemeriksaan dari instruksi di bawah.':'Beritahu apa yang ingin kamu pantau. Pemeriksaan dan tindakan aman langsung berjalan; tindakan berisiko menunggu persetujuanmu.')}</p></div>
       <div className="separator"/>
-      <div aria-live="polite">{!messages.length && !busy && <p className="meta">{t('Belum ada aktivitas di percakapan ini. Mulai pemeriksaan dari instruksi di bawah.')}</p>}{messages.map(item => <div className="message" key={item.id}><div className={`avatar ${item.role === 'user' ? 'user' : ''}`}>{item.role === 'user' ? (language==='id'?'K':'Y') : 'k.'}</div><div className="message-body"><div className="message-head">{t(item.role === 'user' ? 'Kamu' : 'Kanca')} <span>{new Date(item.created_at).toLocaleString(dateLocale)}</span></div><div className="bubble">{item.role === 'assistant' ? <ChatReply content={item.content}/> : item.content}</div>{item.task && <TaskCard task={item.task} onAction={action} onRerun={rerun}/>}</div></div>)}{busy && pendingChat===current && <div className="message" role="status" aria-label={t('Kanca sedang mengetik')}><div className="avatar">k.</div><div className="message-body"><div className="message-head">Kanca</div><div className="typing"><span/><span/><span/></div></div></div>}</div><div className="error" role="alert">{feedback}</div>
+      <div className="message-list" aria-live="polite">{!messages.length && !busy && <p className="meta">{t('Belum ada aktivitas di percakapan ini. Mulai pemeriksaan dari instruksi di bawah.')}</p>}{messages.map(item => <div className={`message ${item.role==='user'?'user-message':'assistant-message'}`} key={item.id}><div className={`avatar ${item.role === 'user' ? 'user' : ''}`}>{item.role === 'user' ? (language==='id'?'K':'Y') : 'k.'}</div><div className="message-body"><div className="message-head">{t(item.role === 'user' ? 'Kamu' : 'Kanca')} <time dateTime={item.created_at} title={new Date(item.created_at).toLocaleString(dateLocale)}>{formatRelativeTime(item.created_at,dateLocale)}</time></div><div className="bubble">{item.role === 'assistant' ? <ChatReply content={item.content}/> : item.content}</div>{item.task && <TaskCard task={item.task} onAction={action} onRerun={rerun}/>}</div></div>)}{busy && (pendingChat===current || (!current&&pendingChat==='__new__')) && <div className="message assistant-message" role="status" aria-label={t('Kanca sedang mengetik')}><div className="avatar">k.</div><div className="message-body"><div className="message-head">Kanca</div><div className="typing"><span/><span/><span/></div></div></div>}</div><div className="error" role="alert">{feedback}</div>
     </div><aside className="iot-inline"><IoTPanel/></aside></div></div><div className="composer-wrap"><div className="suggestions" aria-label={t('Instruksi cepat')}>{promptOptions.map(({icon,label,prompt}) => <button type="button" key={label} onClick={() => {setInstruction(prompt);inputRef.current?.focus();}}><Icon name={icon} size={17}/>{t(label)}</button>)}</div><form className="composer" onSubmit={send}><textarea ref={inputRef} value={instruction} onChange={e=>setInstruction(e.target.value)} onKeyDown={e=>{if(e.key==='Enter'&&!e.shiftKey&&!e.nativeEvent.isComposing){e.preventDefault();send();}}} placeholder={t('Ceritakan apa yang ingin kamu lakukan...')} aria-label={t('Instruksi untuk Kanca')} maxLength={4000}/><div className="composer-bottom"><span>{t('Enter untuk kirim · Shift + Enter untuk baris baru')}</span><button className="send" aria-label={t('Kirim instruksi')} disabled={!connected || busy}><Icon name="up"/></button></div></form><p className="footer">{t('Kanca dapat membuat kesalahan. Periksa rencana sebelum menyetujui.')}</p></div>
-  </>}</main>{(view==='dashboard'||view==='chat') && <aside className="iot-sidebar" aria-label={t('Perangkat IoT')}><IoTPanel/></aside>}<nav className="mobile-bottom-nav" aria-label={t('Navigasi utama')}>{[['dashboard','Dashboard'],['chat','Chat'],['workers','Tugas'],['sources','Integrasi']].map(([tab,label]) => <button key={tab} className="tab-button" onClick={()=>setView(tab)} aria-current={view===tab?'page':undefined}><Icon name={{dashboard:'dashboard',chat:'chat',workers:'clock',sources:'plug'}[tab]}/><span className="nav-label">{t(label)}</span>{tab==='workers'&&tasks.some(t=>t.status==='scheduled'||t.status==='running') && <span className="tab-dot" aria-hidden="true"/>}</button>)}</nav>{notificationsOpen && <div className="notification-overlay" role="presentation" onMouseDown={event=>{if(event.target===event.currentTarget)setNotificationsOpen(false);}}><aside className="notification-drawer" role="dialog" aria-modal="true" aria-label={t('Notifikasi')}><Notifications items={notifications} onRead={markRead} onReadAll={markAllRead} unreadCount={unreadCount} onRerun={rerun} onClose={()=>setNotificationsOpen(false)}/><div className="workers-error error" role="alert">{feedback}</div></aside></div>}{confirmation && <ConfirmDialog config={confirmation} onClose={()=>setConfirmation(null)}/>}</div></LanguageContext.Provider>;
+  </>}</main>{(view==='dashboard'||view==='chat') && <aside className="iot-sidebar" aria-label={t('Perangkat IoT')}><IoTPanel/></aside>}<nav className="mobile-bottom-nav" aria-label={t('Navigasi utama')}>{[['dashboard','Dashboard'],['chat','Chat'],['workers','Tugas'],['sources','Integrasi']].map(([tab,label]) => <button key={tab} className="tab-button" onClick={()=>setView(tab)} aria-current={view===tab?'page':undefined}><Icon name={{dashboard:'dashboard',chat:'chat',workers:'clock',sources:'plug'}[tab]}/><span className="nav-label">{t(label)}</span>{tab==='workers'&&tasks.some(t=>t.status==='scheduled'||t.status==='running') && <span className="tab-dot" aria-hidden="true"/>}</button>)}</nav>{notificationsOpen && <div className="notification-overlay" role="presentation" onMouseDown={event=>{if(event.target===event.currentTarget)setNotificationsOpen(false);}}><aside className="notification-drawer" role="dialog" aria-modal="true" aria-label={t('Notifikasi')}><Notifications items={notifications} onRead={markRead} onReadAll={markAllRead} unreadCount={unreadCount} onRerun={rerun} onClose={()=>setNotificationsOpen(false)} onChanged={refresh}/><div className="workers-error error" role="alert">{feedback}</div></aside></div>}{confirmation && <ConfirmDialog config={confirmation} onClose={()=>setConfirmation(null)}/>}</div></LanguageContext.Provider>;
 }

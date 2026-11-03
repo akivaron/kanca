@@ -58,7 +58,7 @@ def connect():
     url = os.getenv('DATABASE_URL', '')
     if url:
         if not url.startswith(('postgresql://', 'postgres://')):
-            raise ValueError('DATABASE_URL harus berupa URL PostgreSQL')
+            raise ValueError('DATABASE_URL must be URL PostgreSQL')
         return PostgresConnection(url)
     path = os.getenv("KANCA_DB_PATH", "data/kanca.db")
     if path != ":memory:":
@@ -84,10 +84,11 @@ def initialize():
         CREATE TABLE IF NOT EXISTS deliveries (id TEXT PRIMARY KEY, subscription_id TEXT NOT NULL, event_id TEXT NOT NULL, status TEXT NOT NULL, attempts INTEGER NOT NULL DEFAULT 0, next_attempt TEXT NOT NULL, last_status INTEGER, UNIQUE(subscription_id,event_id), FOREIGN KEY(subscription_id) REFERENCES subscriptions(id), FOREIGN KEY(event_id) REFERENCES events(id));
         CREATE TABLE IF NOT EXISTS conversations (id TEXT PRIMARY KEY, tenant TEXT NOT NULL, title TEXT NOT NULL, created_at TEXT NOT NULL, updated_at TEXT NOT NULL);
         CREATE TABLE IF NOT EXISTS messages (id TEXT PRIMARY KEY, conversation_id TEXT NOT NULL, role TEXT NOT NULL, content TEXT NOT NULL, task_id TEXT, created_at TEXT NOT NULL, FOREIGN KEY(conversation_id) REFERENCES conversations(id));
-        CREATE TABLE IF NOT EXISTS sources (id TEXT PRIMARY KEY, tenant TEXT NOT NULL, name TEXT NOT NULL, kind TEXT NOT NULL, token_hash TEXT NOT NULL, status TEXT NOT NULL, created_at TEXT NOT NULL, last_seen TEXT);
+        CREATE TABLE IF NOT EXISTS sources (id TEXT PRIMARY KEY, tenant TEXT NOT NULL, name TEXT NOT NULL, kind TEXT NOT NULL, token_hash TEXT NOT NULL, status TEXT NOT NULL, created_at TEXT NOT NULL, last_seen TEXT, expected_interval_seconds INTEGER NOT NULL DEFAULT 300, automation_enabled INTEGER NOT NULL DEFAULT 0, automation_interval_seconds INTEGER NOT NULL DEFAULT 30);
         CREATE TABLE IF NOT EXISTS source_events (id TEXT PRIMARY KEY, source_id TEXT NOT NULL, event_type TEXT NOT NULL, payload TEXT NOT NULL, received_at TEXT NOT NULL, FOREIGN KEY(source_id) REFERENCES sources(id));
         CREATE TABLE IF NOT EXISTS notification_reads (tenant TEXT NOT NULL, event_id TEXT NOT NULL, read_at TEXT NOT NULL, PRIMARY KEY(tenant,event_id), FOREIGN KEY(event_id) REFERENCES events(id));
         CREATE TABLE IF NOT EXISTS source_media_settings (source_id TEXT PRIMARY KEY, vision_enabled INTEGER NOT NULL DEFAULT 0, audio_enabled INTEGER NOT NULL DEFAULT 0, vision_prompt TEXT NOT NULL, audio_prompt TEXT NOT NULL, FOREIGN KEY(source_id) REFERENCES sources(id));
+        CREATE TABLE IF NOT EXISTS notification_preferences (tenant TEXT PRIMARY KEY, event_types TEXT NOT NULL);
         """
         if getattr(db, 'is_postgres', False):
             db.execute('SELECT pg_advisory_xact_lock(76413101)')
@@ -99,12 +100,24 @@ def initialize():
                     db.execute(f'ALTER TABLE {table} ADD COLUMN seq BIGSERIAL UNIQUE')
             db.execute('ALTER TABLE tasks ADD COLUMN IF NOT EXISTS archived INTEGER NOT NULL DEFAULT 0')
             db.execute("ALTER TABLE conversations ADD COLUMN IF NOT EXISTS status TEXT NOT NULL DEFAULT 'active'")
+            db.execute("ALTER TABLE subscriptions ADD COLUMN IF NOT EXISTS event_types TEXT NOT NULL DEFAULT '[\"*\"]'")
+            db.execute('ALTER TABLE sources ADD COLUMN IF NOT EXISTS expected_interval_seconds INTEGER NOT NULL DEFAULT 300')
+            db.execute('ALTER TABLE sources ADD COLUMN IF NOT EXISTS automation_enabled INTEGER NOT NULL DEFAULT 0')
+            db.execute('ALTER TABLE sources ADD COLUMN IF NOT EXISTS automation_interval_seconds INTEGER NOT NULL DEFAULT 30')
         else:
             db.executescript(schema)
             if "archived" not in {row[1] for row in db.execute("PRAGMA table_info(tasks)")}:
                 db.execute("ALTER TABLE tasks ADD COLUMN archived INTEGER NOT NULL DEFAULT 0")
             if "status" not in {row[1] for row in db.execute("PRAGMA table_info(conversations)")}:
                 db.execute("ALTER TABLE conversations ADD COLUMN status TEXT NOT NULL DEFAULT 'active'")
+            if "event_types" not in {row[1] for row in db.execute("PRAGMA table_info(subscriptions)")}:
+                db.execute("ALTER TABLE subscriptions ADD COLUMN event_types TEXT NOT NULL DEFAULT '[\"*\"]'")
+            if "expected_interval_seconds" not in {row[1] for row in db.execute("PRAGMA table_info(sources)")}:
+                db.execute('ALTER TABLE sources ADD COLUMN expected_interval_seconds INTEGER NOT NULL DEFAULT 300')
+            if "automation_enabled" not in {row[1] for row in db.execute("PRAGMA table_info(sources)")}:
+                db.execute('ALTER TABLE sources ADD COLUMN automation_enabled INTEGER NOT NULL DEFAULT 0')
+            if "automation_interval_seconds" not in {row[1] for row in db.execute("PRAGMA table_info(sources)")}:
+                db.execute('ALTER TABLE sources ADD COLUMN automation_interval_seconds INTEGER NOT NULL DEFAULT 30')
         db.execute("INSERT OR IGNORE INTO schedules (task_id,interval_seconds,max_runs,next_run) SELECT id,1,1,created_at FROM tasks")
 
 
@@ -113,7 +126,10 @@ def event(db, tenant: str, task_id: str, kind: str, data: dict):
     if getattr(db, 'is_postgres', False):
         db.execute('SELECT pg_advisory_xact_lock(76413103)')
     db.execute("INSERT INTO events (id,tenant,task_id,type,occurred_at,data) VALUES (?,?,?,?,?,?)", (event_id, tenant, task_id, kind, ts, json.dumps(data, ensure_ascii=False)))
-    for sub in db.execute("SELECT id FROM subscriptions WHERE tenant=? AND active=1", (tenant,)).fetchall():
+    for sub in db.execute("SELECT id,event_types FROM subscriptions WHERE tenant=? AND active=1", (tenant,)).fetchall():
+        event_types = json.loads(sub["event_types"])
+        if "*" not in event_types and kind not in event_types:
+            continue
         db.execute("INSERT INTO deliveries (id,subscription_id,event_id,status,next_attempt) VALUES (?,?,?,?,?)", (uid("delivery"), sub[0], event_id, "pending", ts))
 
 

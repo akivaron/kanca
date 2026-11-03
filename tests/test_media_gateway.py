@@ -146,6 +146,9 @@ def test_gateway_iot_normalization_and_forwarding(monkeypatch):
     gateway = importlib.util.module_from_spec(spec); spec.loader.exec_module(gateway)
     assert gateway.normalize_ha('sensor.temp', {'state':'29.5','attributes':{'unit_of_measurement':'°C'}})['value'] == 29.5
     with pytest.raises(ValueError): gateway.normalize_ha('sensor.temp', {'state':'unavailable'})
+    with pytest.raises(ValueError): gateway.normalize_ha('sensor.temp', {'state':'29.5','attributes':None})
+    with pytest.raises(ValueError): gateway.normalize_ha('sensor.temp', {'state':'29.5','attributes':[]})
+    with pytest.raises(ValueError): gateway.normalize_ha('sensor.temp', [])
     assert gateway.mqtt_payload(SimpleNamespace(retain=True, payload=b'{}', topic='room')) is None
     data = gateway.mqtt_payload(SimpleNamespace(retain=False, payload=b'{"temperature":29}', topic='room'))
     assert data['payload']['temperature'] == 29

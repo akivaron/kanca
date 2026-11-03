@@ -76,6 +76,67 @@ def test_api_docs_are_available(client):
     assert response.status_code == 200
 
 
+def test_source_health_and_event_exports(client):
+    source = client.post('/v1/sources', json={'name':'Fast sensor','kind':'iot','expected_interval_seconds':30}).json()
+    listed = client.get('/v1/sources').json()[0]
+    assert listed['health']['state'] == 'waiting'
+    assert listed['health']['stale_after_seconds'] == 60
+    headers = {'Authorization':'Bearer '+source['token']}
+    client.post(f"/v1/ingest/{source['id']}", headers=headers, json={'type':'reading','data':{'temperature':24.5}})
+    listed = client.get('/v1/sources').json()[0]
+    assert listed['health']['state'] == 'recent'
+    export = client.get(f"/v1/sources/{source['id']}/events/export?format=csv")
+    assert export.status_code == 200 and 'temperature' in export.text
+    first_batch = client.get(f"/v1/sources/{source['id']}/events/export?format=json&limit=1").json()
+    cursor = first_batch[0]['cursor']
+    client.post(f"/v1/ingest/{source['id']}", headers=headers, json={'type':'=SUM(1,1)','data':{'temperature':25}})
+    next_batch = client.get(f'/v1/sources/{source["id"]}/events/export?format=json&limit=1&after={cursor}').json()
+    assert len(next_batch) == 1 and next_batch[0]['event_type'] == '=SUM(1,1)'
+    assert "'=SUM(1,1)" in client.get(f"/v1/sources/{source['id']}/events/export?format=csv").text
+    events = client.get('/v1/events/export?format=json').json()
+    assert events[0]['type'] == 'source.event.v1'
+    assert client.get(f"/v1/sources/{source['id']}/events/export?format=xml").status_code == 422
+
+
+def test_notification_preferences_and_webhook_event_filters(client):
+    from app.storage import connect as db_connect, event
+    assert len(client.get('/v1/notifications/preferences').json()['event_types']) > 0
+    prefs = client.put('/v1/notifications/preferences', json={'event_types':['task.failed.v1']})
+    assert prefs.status_code == 200
+    assert client.get('/v1/notifications/preferences').json()['event_types'] == ['task.failed.v1']
+    sub = client.post('/v1/webhook-subscriptions', json={'url':'https://example.com/hook','event_types':['task.failed.v1']})
+    assert sub.status_code == 201
+    with db_connect() as db:
+        event(db, 'default', '', 'task.completed.v1', {})
+        event(db, 'default', '', 'task.failed.v1', {})
+        assert db.execute('SELECT COUNT(*) FROM deliveries WHERE subscription_id=?', (sub.json()['id'],)).fetchone()[0] == 1
+    assert client.put('/v1/webhook-subscriptions/'+sub.json()['id']+'/event-types', json={'event_types':['task.completed.v1']}).status_code == 200
+    visible = client.get('/v1/notifications').json()
+    assert len(visible) == 1 and visible[0]['type'] == 'task.failed.v1'
+    assert client.get('/v1/notifications/unread-count').json()['count'] == 1
+    assert client.put('/v1/notifications/preferences', json={'event_types':['unknown']}).status_code == 422
+    assert client.post('/v1/webhook-subscriptions', json={'url':'https://example.com/hook','event_types':['*','task.failed.v1']}).status_code == 422
+
+
+def test_threshold_rule_plan_uses_fresh_source_data_and_approval(client):
+    source = client.post('/v1/sources', json={'name':'Temperature','kind':'iot','expected_interval_seconds':3600}).json()
+    headers = {'Authorization':'Bearer '+source['token']}
+    client.post(f"/v1/ingest/{source['id']}", headers=headers, json={'type':'reading','data':{'temperature':29}})
+    task = client.post('/v1/tasks', json={
+        'instruction':'Alert when temperature is above 28',
+        'schedule':{'interval_seconds':60,'max_runs':1},
+        'explicit_steps':[
+            {'capability':'external.latest_event','arguments':{'source_id':source['id'],'event_type':'reading'}},
+            {'capability':'external.escalate','arguments':{'message':'High temperature'},'condition':{'step':0,'field':'data.temperature','operator':'gt','value':28}},
+        ],
+    }).json()
+    assert task['status'] == 'awaiting_approval'
+    client.post(f"/v1/tasks/{task['id']}/approve", json={'version':1})
+    assert run_one()
+    events = client.get('/v1/events').json()
+    assert any(item['type']=='task.escalated.v1' and item['data']['message']=='High temperature' for item in events)
+
+
 def test_local_ui_session(monkeypatch, tmp_path):
     monkeypatch.delenv("DATABASE_URL", raising=False)
     monkeypatch.setenv("KANCA_DB_PATH", str(tmp_path / "ui.db"))
@@ -395,7 +456,7 @@ def test_external_data_missing_stale_or_revoked_is_not_verified(client):
     task = client.post('/v1/tasks', json=body).json()
     client.post(f"/v1/tasks/{task['id']}/approve", json={'version':1})
     assert run_one()
-    assert 'lebih dari 5 menit' in client.get(f"/v1/tasks/{task['id']}").json()['result']['error']
+    assert 'melewati batas kesegaran' in client.get(f"/v1/tasks/{task['id']}").json()['result']['error']
     client.delete(f'/v1/sources/{sid}')
     assert client.post('/v1/tasks', json=body).status_code == 422
 
@@ -433,6 +494,8 @@ def test_nonstandard_json_values_rejected(client):
     headers = {'Authorization':'Bearer '+source['token'], 'Content-Type':'application/json'}
     response = client.post(f"/v1/ingest/{source['id']}", headers=headers, content='{"type":"reading","data":{"value":NaN}}')
     assert response.status_code == 422
+    overflow = client.post(f"/v1/ingest/{source['id']}", headers=headers, content='{"type":"reading","data":{"value":1e999}}')
+    assert overflow.status_code == 422
     assert client.get(f"/v1/sources/{source['id']}/events").json() == []
 
 

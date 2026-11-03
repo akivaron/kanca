@@ -87,9 +87,9 @@ textarea {
 }
 
 @media (max-width: 820px) {
-  .integration-tabs { width: 100%; overflow-x: auto; scrollbar-width: none; }
+  .integration-tabs { width: 100%; grid-template-columns: repeat(3,minmax(200px,1fr)); overflow-x: auto; scrollbar-width: none; }
   .integration-tabs::-webkit-scrollbar { display: none; }
-  .integration-tabs button { flex: 1 0 auto; min-height: 44px; }
+  .integration-tabs button { min-height: 58px; }
   .public-sensor-grid { grid-template-columns: 1fr; }
   .source-form { grid-template-columns: minmax(0,1fr) minmax(130px,.45fr); }
   .source-form > button { width: 100%; }
@@ -105,9 +105,23 @@ textarea {
   .source-details-dialog { width: calc(100vw - 20px); max-height: calc(100dvh - 24px); border-radius: 16px; }
   .source-public-data-header { flex-direction: column; }
   .source-public-connect { width: 100%; }
+  .public-catalog-filters { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .public-catalog-filters .source-search { grid-column: 1/-1; }
+  .public-catalog-heading { align-items: flex-start; flex-direction: column; }
 }
 
 @media (max-width: 480px) {
+  .integration-overview { gap:6px; }
+  .integration-overview article { align-items:flex-start; flex-direction:column; gap:7px; padding:9px; border-radius:12px; }
+  .integration-overview-icon { width:30px; height:30px; border-radius:9px; }
+  .integration-overview-icon svg { width:15px; height:15px; }
+  .integration-overview article strong { font-size:18px; }
+  .integration-overview article span:not(.integration-overview-icon) { font-size:9px; line-height:1.2; }
+  .integration-tabs { grid-template-columns:repeat(3,minmax(190px,1fr)); margin-bottom:16px; }
+  .integration-tabs button { min-height:56px; padding:8px; gap:7px; }
+  .integration-tab-icon { width:32px; height:32px; border-radius:10px; }
+  .integration-tab-copy strong { font-size:12px; }
+  .integration-tab-copy small { font-size:9px; }
   .source-filter-row { align-items: flex-start; flex-direction: column; }
   .source-type-filters { width: 100%; flex-wrap: nowrap; overflow-x: auto; padding-bottom: 3px; scrollbar-width: none; }
   .source-type-filters::-webkit-scrollbar { display: none; }
@@ -118,6 +132,11 @@ textarea {
   .source-controls { padding: 10px; }
   .public-sensor-tile small { min-height: 0; }
   .source-card-actions button { min-height: 44px; }
+  .integration-page .source-card-actions .text-button { min-height: 44px; }
+  .integration-page .source-dialog-actions button { min-width: 0; flex: 1; }
+  .public-catalog-filters { grid-template-columns: minmax(0,1fr); }
+  .public-catalog-filters .source-search { grid-column: auto; }
+  .public-catalog.compact { padding: 13px; }
   .source-card-actions .text-button { min-height: 40px; }
   .webhook-delivery { align-items: flex-start; flex-direction: column; gap: 8px; }
   .webhook-status-filter { width: 100%; justify-content: space-between; }
@@ -264,8 +283,17 @@ textarea {
   .iot-device-option { min-height: 48px; }
 
   .message {
-    gap: 10px;
-    margin: 22px 0;
+    gap: 8px;
+  }
+
+  .message-list {
+    gap: 16px;
+    padding: 4px 0 16px;
+  }
+
+  .user-message .message-body {
+    max-width: min(86%, 680px);
+    padding: 10px 13px;
   }
 
   .plan,

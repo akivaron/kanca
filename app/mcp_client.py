@@ -9,7 +9,7 @@ class KancaClient:
         self.base_url = (base_url or os.getenv('KANCA_URL', 'http://127.0.0.1:8765')).rstrip('/')
         self.api_key = api_key if api_key is not None else os.getenv('KANCA_API_KEY', '')
         if not self.api_key:
-            raise ValueError('KANCA_API_KEY belum dikonfigurasi')
+            raise ValueError('KANCA_API_KEY not configured')
         self.transport = transport
 
     def request(self, method, path, *, params=None, body=None):
@@ -20,13 +20,13 @@ class KancaClient:
                 return response.json()
         except httpx.HTTPStatusError as exc:
             try:
-                detail = exc.response.json().get('detail', 'Permintaan ditolak')
+                detail = exc.response.json().get('detail', 'Request rejected')
             except ValueError:
-                detail = 'Permintaan ditolak'
-            raise ValueError(f'Kanca menolak permintaan ({exc.response.status_code}): {detail}') from None
+                detail = 'Request rejected'
+            raise ValueError(f'Kanca rejected the request ({exc.response.status_code}): {detail}') from None
         except (httpx.RequestError, ValueError) as exc:
             if isinstance(exc, httpx.RequestError):
-                raise ValueError('Tidak dapat terhubung ke API Kanca') from None
+                raise ValueError('Could not connect to the Kanca API') from None
             raise
 
     def list_sources(self):

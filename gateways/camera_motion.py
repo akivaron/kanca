@@ -16,7 +16,7 @@ def main():
         while True:
             ok, frame = capture.read()
             if not ok:
-                print('Kamera tidak tersedia; hentikan gateway dan periksa sumber', flush=True)
+                print('Camera unavailable; stop the gateway and check the source', flush=True)
                 break
             gray = cv2.GaussianBlur(cv2.cvtColor(cv2.resize(frame, (320, 180)), cv2.COLOR_BGR2GRAY), (21, 21), 0)
             if previous is not None:
@@ -27,7 +27,7 @@ def main():
                         emit('camera.motion', {'changed_fraction': round(changed, 3), 'method': 'frame_difference'})
                         last_sent = time.monotonic()
                     except httpx.HTTPError:
-                        print('Gagal mengirim event kamera', flush=True)
+                        print('Failed mengirim event kamera', flush=True)
             previous = gray
     finally:
         capture.release()

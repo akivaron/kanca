@@ -1,0 +1,1002 @@
+[
+  {
+    "code": "11.12.05.2001",
+    "name": "Kota Bahagia",
+    "district": "Kuala Batee",
+    "regency": "Kabupaten Aceh Barat Daya",
+    "province": "Aceh",
+    "country": "Indonesia",
+    "latitude": 3.889081922914394,
+    "longitude": 96.81021753249814
+  },
+  {
+    "code": "12.17.05.2001",
+    "name": "Sosor Dolok",
+    "district": "Harian",
+    "regency": "Kabupaten Samosir",
+    "province": "Sumatera Utara",
+    "country": "Indonesia",
+    "latitude": 2.544580098506936,
+    "longitude": 98.64147398408515
+  },
+  {
+    "code": "13.10.06.2001",
+    "name": "Timpeh",
+    "district": "Timpeh",
+    "regency": "Kabupaten Dharmasraya",
+    "province": "Sumatera Barat",
+    "country": "Indonesia",
+    "latitude": -0.8690230074858797,
+    "longitude": 101.56237914355475
+  },
+  {
+    "code": "14.07.10.1001",
+    "name": "Bangko Kanan",
+    "district": "Bangko Pusako",
+    "regency": "Kabupaten Rokan Hilir",
+    "province": "Riau",
+    "country": "Indonesia",
+    "latitude": 1.7436337770257495,
+    "longitude": 100.90670825000991
+  },
+  {
+    "code": "15.06.07.1001",
+    "name": "Dusun Kebun",
+    "district": "Batang Asam",
+    "regency": "Kabupaten Tanjung Jabung Barat",
+    "province": "Jambi",
+    "country": "Indonesia",
+    "latitude": -1.0676316665052332,
+    "longitude": 102.95551846335424
+  },
+  {
+    "code": "16.09.10.2001",
+    "name": "Balayan",
+    "district": "Kisam Tinggi",
+    "regency": "Kabupaten Ogan Komering Ulu Selatan",
+    "province": "Sumatera Selatan",
+    "country": "Indonesia",
+    "latitude": -4.389204716762019,
+    "longitude": 103.82425843759972
+  },
+  {
+    "code": "17.06.08.2001",
+    "name": "Pasar Bantal",
+    "district": "Teramang Jaya",
+    "regency": "Kabupaten Mukomuko",
+    "province": "Bengkulu",
+    "country": "Indonesia",
+    "latitude": -2.7323189728529824,
+    "longitude": 101.3184792309616
+  },
+  {
+    "code": "18.08.08.2001",
+    "name": "Way Tuba",
+    "district": "Way Tuba",
+    "regency": "Kabupaten Way Kanan",
+    "province": "Lampung",
+    "country": "Indonesia",
+    "latitude": -4.372204164879321,
+    "longitude": 104.41072517057805
+  },
+  {
+    "code": "19.04.04.2001",
+    "name": "Simpang Katis",
+    "district": "Simpang Katis",
+    "regency": "Kabupaten Bangka Tengah",
+    "province": "Kepulauan Bangka Belitung",
+    "country": "Indonesia",
+    "latitude": -2.2781772198315045,
+    "longitude": 106.05990309244712
+  },
+  {
+    "code": "21.04.07.2001",
+    "name": "Bukitlangkap",
+    "district": "Lingga Timur",
+    "regency": "Kabupaten Lingga",
+    "province": "Kepulauan Riau",
+    "country": "Indonesia",
+    "latitude": -0.18809681733981556,
+    "longitude": 104.71864164386173
+  },
+  {
+    "code": "31.73.05.1001",
+    "name": "Kebon Jeruk",
+    "district": "Kebon Jeruk",
+    "regency": "Kota Administrasi Jakarta Barat",
+    "province": "Daerah Khusus Ibukota Jakarta",
+    "country": "Indonesia",
+    "latitude": -6.195003584375161,
+    "longitude": 106.77213489761992
+  },
+  {
+    "code": "32.14.09.2001",
+    "name": "Wanayasa",
+    "district": "Wanayasa",
+    "regency": "Kabupaten Purwakarta",
+    "province": "Jawa Barat",
+    "country": "Indonesia",
+    "latitude": -6.7030217343005,
+    "longitude": 107.5678937198441
+  },
+  {
+    "code": "33.18.11.2001",
+    "name": "Wuwur",
+    "district": "Gabus",
+    "regency": "Kabupaten Pati",
+    "province": "Jawa Tengah",
+    "country": "Indonesia",
+    "latitude": -6.836989008706083,
+    "longitude": 110.98815522015214
+  },
+  {
+    "code": "34.03.10.2001",
+    "name": "Umbulrejo",
+    "district": "Ponjong",
+    "regency": "Kabupaten Gunungkidul",
+    "province": "Daerah Istimewa Yogyakarta",
+    "country": "Indonesia",
+    "latitude": -7.928304709600824,
+    "longitude": 110.72190231160468
+  },
+  {
+    "code": "35.20.10.1012",
+    "name": "Bendo",
+    "district": "Bendo",
+    "regency": "Kabupaten Magetan",
+    "province": "Jawa Timur",
+    "country": "Indonesia",
+    "latitude": -7.64049895932429,
+    "longitude": 111.42278143260711
+  },
+  {
+    "code": "36.71.07.1001",
+    "name": "Karawaci",
+    "district": "Karawaci",
+    "regency": "Kota Tangerang",
+    "province": "Banten",
+    "country": "Indonesia",
+    "latitude": -6.189938684202671,
+    "longitude": 106.62482735572877
+  },
+  {
+    "code": "51.05.03.1008",
+    "name": "Semarapura Kaja",
+    "district": "Klungkung",
+    "regency": "Kabupaten Klungkung",
+    "province": "Bali",
+    "country": "Indonesia",
+    "latitude": -8.523780668162402,
+    "longitude": 115.39708591970842
+  },
+  {
+    "code": "52.06.10.2001",
+    "name": "Nipa",
+    "district": "Ambalawi",
+    "regency": "Kabupaten Bima",
+    "province": "Nusa Tenggara Barat",
+    "country": "Indonesia",
+    "latitude": -8.337933268461347,
+    "longitude": 118.76329274520651
+  },
+  {
+    "code": "53.12.12.2004",
+    "name": "Patiala Bawa",
+    "district": "Lamboya",
+    "regency": "Kabupaten Sumba Barat",
+    "province": "Nusa Tenggara Timur",
+    "country": "Indonesia",
+    "latitude": -9.754105748035443,
+    "longitude": 119.32919669222737
+  },
+  {
+    "code": "61.08.07.2001",
+    "name": "Pahauman",
+    "district": "Sengah Temila",
+    "regency": "Kabupaten Landak",
+    "province": "Kalimantan Barat",
+    "country": "Indonesia",
+    "latitude": 0.31031567441752467,
+    "longitude": 109.75725989395596
+  },
+  {
+    "code": "62.08.03.2001",
+    "name": "Jihing",
+    "district": "Balai Riam",
+    "regency": "Kabupaten Sukamara",
+    "province": "Kalimantan Tengah",
+    "country": "Indonesia",
+    "latitude": -2.415629991441573,
+    "longitude": 111.14138880436764
+  },
+  {
+    "code": "63.07.06.1001",
+    "name": "Barabai Darat",
+    "district": "Barabai",
+    "regency": "Kabupaten Hulu Sungai Tengah",
+    "province": "Kalimantan Selatan",
+    "country": "Indonesia",
+    "latitude": -2.5920907340299957,
+    "longitude": 115.38514909680917
+  },
+  {
+    "code": "64.09.03.2001",
+    "name": "Babulu Darat",
+    "district": "Babulu",
+    "regency": "Kabupaten Penajam Paser Utara",
+    "province": "Kalimantan Timur",
+    "country": "Indonesia",
+    "latitude": -1.4546592602549744,
+    "longitude": 116.42329434195582
+  },
+  {
+    "code": "65.03.11.2001",
+    "name": "Sungai Pancang",
+    "district": "Sebatik Utara",
+    "regency": "Kabupaten Nunukan",
+    "province": "Kalimantan Utara",
+    "country": "Indonesia",
+    "latitude": 4.155370493293865,
+    "longitude": 117.90016966242081
+  },
+  {
+    "code": "71.08.04.2001",
+    "name": "Paku",
+    "district": "Bolangitang Barat",
+    "regency": "Kabupaten Bolaang Mongondow Utara",
+    "province": "Sulawesi Utara",
+    "country": "Indonesia",
+    "latitude": 0.8590692005019698,
+    "longitude": 123.31632852095095
+  },
+  {
+    "code": "72.07.11.2001",
+    "name": "Tobing",
+    "district": "Tinangkung Selatan",
+    "regency": "Kabupaten Banggai Kepulauan",
+    "province": "Sulawesi Tengah",
+    "country": "Indonesia",
+    "latitude": -1.4921737053076192,
+    "longitude": 123.42404726712952
+  },
+  {
+    "code": "73.13.08.1001",
+    "name": "Tancung",
+    "district": "Tanasitolo",
+    "regency": "Kabupaten Wajo",
+    "province": "Sulawesi Selatan",
+    "country": "Indonesia",
+    "latitude": -4.053237088690866,
+    "longitude": 120.01479013809575
+  },
+  {
+    "code": "74.09.07.1002",
+    "name": "Sawa",
+    "district": "Sawa",
+    "regency": "Kabupaten Konawe Utara",
+    "province": "Sulawesi Tenggara",
+    "country": "Indonesia",
+    "latitude": -3.763975444002469,
+    "longitude": 122.4239788105055
+  },
+  {
+    "code": "75.04.07.2001",
+    "name": "Pancakarsa I",
+    "district": "Taluditi",
+    "regency": "Kabupaten Pohuwato",
+    "province": "Gorontalo",
+    "country": "Indonesia",
+    "latitude": 0.5985452175951069,
+    "longitude": 121.80401679316363
+  },
+  {
+    "code": "76.04.09.1001",
+    "name": "Matangnga",
+    "district": "Matangnga",
+    "regency": "Kabupaten Polewali Mandar",
+    "province": "Sulawesi Barat",
+    "country": "Indonesia",
+    "latitude": -3.101940186621004,
+    "longitude": 119.24038008252731
+  },
+  {
+    "code": "81.06.06.2001",
+    "name": "Manusa",
+    "district": "Inamosol",
+    "regency": "Kabupaten Seram Bagian Barat",
+    "province": "Maluku",
+    "country": "Indonesia",
+    "latitude": -3.0956317565861635,
+    "longitude": 128.51277572037398
+  },
+  {
+    "code": "82.06.06.2001",
+    "name": "Labi-Labi",
+    "district": "Wasile Utara",
+    "regency": "Kabupaten Halmahera Timur",
+    "province": "Maluku Utara",
+    "country": "Indonesia",
+    "latitude": 1.4246526896644753,
+    "longitude": 128.35965619241082
+  },
+  {
+    "code": "91.11.06.2005",
+    "name": "Yetti",
+    "district": "Arso Timur",
+    "regency": "Kabupaten Keerom",
+    "province": "Papua",
+    "country": "Indonesia",
+    "latitude": -3.0027619300732122,
+    "longitude": 140.90706489101387
+  },
+  {
+    "code": "92.07.07.2001",
+    "name": "Wosimi",
+    "district": "Naikere",
+    "regency": "Kabupaten Teluk Wondama",
+    "province": "Papua Barat",
+    "country": "Indonesia",
+    "latitude": -3.0091769255482497,
+    "longitude": 134.5313268381223
+  },
+  {
+    "code": "93.03.08.2001",
+    "name": "Sepoh",
+    "district": "Passue",
+    "regency": "Kabupaten Mappi",
+    "province": "Papua Selatan",
+    "country": "Indonesia",
+    "latitude": -6.209543315211029,
+    "longitude": 139.66141356856758
+  },
+  {
+    "code": "32.73.16.1001",
+    "name": "Sukapura",
+    "district": "Kiaracondong",
+    "regency": "Kota Bandung",
+    "province": "Jawa Barat",
+    "country": "Indonesia",
+    "latitude": -6.9348291669,
+    "longitude": 107.6514031295
+  },
+  {
+    "code": "95.05.03.2001",
+    "name": "Winima",
+    "district": "Eragayam",
+    "regency": "Kabupaten Mamberamo Tengah",
+    "province": "Papua Pegunungan",
+    "country": "Indonesia",
+    "latitude": -3.625881388051386,
+    "longitude": 138.9087092794221
+  },
+  {
+    "code": "96.04.15.2001",
+    "name": "Ases",
+    "district": "Ases",
+    "regency": "Kabupaten Tambrauw",
+    "province": "Papua Barat Daya",
+    "country": "Indonesia",
+    "latitude": -0.9097950889991573,
+    "longitude": 132.34703058447442
+  },
+  {
+    "code": "11.01.10.2001",
+    "name": "Ladang Teungoh",
+    "district": "Pasie Raja",
+    "regency": "Kabupaten Aceh Selatan",
+    "province": "Aceh",
+    "country": "Indonesia",
+    "latitude": 3.2178680736224736,
+    "longitude": 97.28737159096953
+  },
+  {
+    "code": "12.01.11.1001",
+    "name": "Bajamas",
+    "district": "Sirandorung",
+    "regency": "Kabupaten Tapanuli Tengah",
+    "province": "Sumatera Utara",
+    "country": "Indonesia",
+    "latitude": 2.087311502802181,
+    "longitude": 98.3032831957038
+  },
+  {
+    "code": "13.01.08.2001",
+    "name": "Taratak",
+    "district": "Sutera",
+    "regency": "Kabupaten Pesisir Selatan",
+    "province": "Sumatera Barat",
+    "country": "Indonesia",
+    "latitude": -1.5436910686587164,
+    "longitude": 100.64279642553747
+  },
+  {
+    "code": "14.01.11.2001",
+    "name": "Koto Garo",
+    "district": "Tapung Hilir",
+    "regency": "Kabupaten Kampar",
+    "province": "Riau",
+    "country": "Indonesia",
+    "latitude": 0.7211032373030214,
+    "longitude": 101.274817350735
+  },
+  {
+    "code": "15.01.15.2001",
+    "name": "Sungairumpun",
+    "district": "Gunung Tujuh",
+    "regency": "Kabupaten Kerinci",
+    "province": "Jambi",
+    "country": "Indonesia",
+    "latitude": -1.7638295201526335,
+    "longitude": 101.32514798979815
+  },
+  {
+    "code": "16.01.21.2001",
+    "name": "Tanjung Kurung",
+    "district": "Semidang Aji",
+    "regency": "Kabupaten Ogan Komering Ulu",
+    "province": "Sumatera Selatan",
+    "country": "Indonesia",
+    "latitude": -3.997904929492987,
+    "longitude": 103.90226459952494
+  },
+  {
+    "code": "17.01.06.2001",
+    "name": "Selali",
+    "district": "Pino Raya",
+    "regency": "Kabupaten Bengkulu Selatan",
+    "province": "Bengkulu",
+    "country": "Indonesia",
+    "latitude": -4.367441105714639,
+    "longitude": 102.8157181351179
+  },
+  {
+    "code": "18.01.14.2001",
+    "name": "Bangunrejo",
+    "district": "Ketapang",
+    "regency": "Kabupaten Lampung Selatan",
+    "province": "Lampung",
+    "country": "Indonesia",
+    "latitude": -5.73736296450992,
+    "longitude": 105.76620653729545
+  },
+  {
+    "code": "19.01.05.2001",
+    "name": "Air Ruai",
+    "district": "Pemali",
+    "regency": "Kabupaten Bangka",
+    "province": "Kepulauan Bangka Belitung",
+    "country": "Indonesia",
+    "latitude": -1.8824495053838475,
+    "longitude": 106.0769839369246
+  },
+  {
+    "code": "21.01.10.1007",
+    "name": "Kota Baru",
+    "district": "Teluk Sebong",
+    "regency": "Kabupaten Bintan",
+    "province": "Kepulauan Riau",
+    "country": "Indonesia",
+    "latitude": 1.135377435174078,
+    "longitude": 104.36021590145737
+  },
+  {
+    "code": "31.01.02.1001",
+    "name": "Pulau Untung Jawa",
+    "district": "Kepulauan Seribu Selatan",
+    "regency": "Kabupaten Administrasi Kepulauan Seribu",
+    "province": "Daerah Khusus Ibukota Jakarta",
+    "country": "Indonesia",
+    "latitude": -5.981778580909652,
+    "longitude": 106.73864406656043
+  },
+  {
+    "code": "32.01.21.2001",
+    "name": "Malasari",
+    "district": "Nanggung",
+    "regency": "Kabupaten Bogor",
+    "province": "Jawa Barat",
+    "country": "Indonesia",
+    "latitude": -6.71747512638517,
+    "longitude": 106.51661021548472
+  },
+  {
+    "code": "33.01.13.2001",
+    "name": "Panimbang",
+    "district": "Cimanggu",
+    "regency": "Kabupaten Cilacap",
+    "province": "Jawa Tengah",
+    "country": "Indonesia",
+    "latitude": -7.361670189418143,
+    "longitude": 108.8697404015091
+  },
+  {
+    "code": "34.01.07.2001",
+    "name": "Tawangsari",
+    "district": "Pengasih",
+    "regency": "Kabupaten Kulon Progo",
+    "province": "Daerah Istimewa Yogyakarta",
+    "country": "Indonesia",
+    "latitude": -7.883496962062782,
+    "longitude": 110.11725162315656
+  },
+  {
+    "code": "35.01.07.2001",
+    "name": "Gondang",
+    "district": "Nawangan",
+    "regency": "Kabupaten Pacitan",
+    "province": "Jawa Timur",
+    "country": "Indonesia",
+    "latitude": -8.042224024933416,
+    "longitude": 111.1886175801741
+  },
+  {
+    "code": "36.01.18.2001",
+    "name": "Cimanuk",
+    "district": "Cimanuk",
+    "regency": "Kabupaten Pandeglang",
+    "province": "Banten",
+    "country": "Indonesia",
+    "latitude": -6.352587740765157,
+    "longitude": 106.0332634019007
+  },
+  {
+    "code": "51.01.03.2001",
+    "name": "Medewi",
+    "district": "Pekutatan",
+    "regency": "Kabupaten Jembrana",
+    "province": "Bali",
+    "country": "Indonesia",
+    "latitude": -8.37177934577725,
+    "longitude": 114.82731174985828
+  },
+  {
+    "code": "52.01.09.2001",
+    "name": "Gunungsari",
+    "district": "Gunungsari",
+    "regency": "Kabupaten Lombok Barat",
+    "province": "Nusa Tenggara Barat",
+    "country": "Indonesia",
+    "latitude": -8.540395652268586,
+    "longitude": 116.102365407168
+  },
+  {
+    "code": "53.01.18.1001",
+    "name": "Buraen",
+    "district": "Amarasi Selatan",
+    "regency": "Kabupaten Kupang",
+    "province": "Nusa Tenggara Timur",
+    "country": "Indonesia",
+    "latitude": -10.284345275773113,
+    "longitude": 123.90677006258116
+  },
+  {
+    "code": "61.01.10.2001",
+    "name": "Balai Gemuruh",
+    "district": "Subah",
+    "regency": "Kabupaten Sambas",
+    "province": "Kalimantan Barat",
+    "country": "Indonesia",
+    "latitude": 1.1455477617592755,
+    "longitude": 109.42691115034546
+  },
+  {
+    "code": "62.01.04.1002",
+    "name": "Pangkut",
+    "district": "Arut Utara",
+    "regency": "Kabupaten Kotawaringin Barat",
+    "province": "Kalimantan Tengah",
+    "country": "Indonesia",
+    "latitude": -2.250879485190346,
+    "longitude": 111.90442843534859
+  },
+  {
+    "code": "63.01.06.2001",
+    "name": "Batu Tungku",
+    "district": "Panyipatan",
+    "regency": "Kabupaten Tanah Laut",
+    "province": "Kalimantan Selatan",
+    "country": "Indonesia",
+    "latitude": -4.01235106741956,
+    "longitude": 114.6882153253473
+  },
+  {
+    "code": "64.01.06.1001",
+    "name": "Long Ikis",
+    "district": "Long Ikis",
+    "regency": "Kabupaten Paser",
+    "province": "Kalimantan Timur",
+    "country": "Indonesia",
+    "latitude": -1.6015358348072821,
+    "longitude": 116.20386753419072
+  },
+  {
+    "code": "65.01.06.2001",
+    "name": "Salimbatu",
+    "district": "Tanjung Palas Tengah",
+    "regency": "Kabupaten Bulungan",
+    "province": "Kalimantan Utara",
+    "country": "Indonesia",
+    "latitude": 3.041173422913161,
+    "longitude": 117.4181810002263
+  },
+  {
+    "code": "71.01.19.2001",
+    "name": "Muntoi",
+    "district": "Passi Barat",
+    "regency": "Kabupaten Bolaang Mongondow",
+    "province": "Sulawesi Utara",
+    "country": "Indonesia",
+    "latitude": 0.7956021848377615,
+    "longitude": 124.23398080422382
+  },
+  {
+    "code": "72.01.13.2001",
+    "name": "Bangketa",
+    "district": "Nuhon",
+    "regency": "Kabupaten Banggai",
+    "province": "Sulawesi Tengah",
+    "country": "Indonesia",
+    "latitude": -1.0762026484087188,
+    "longitude": 122.04966054707737
+  },
+  {
+    "code": "73.01.06.2001",
+    "name": "Kembang Ragi",
+    "district": "Pasimasunggu",
+    "regency": "Kabupaten Kepulauan Selayar",
+    "province": "Sulawesi Selatan",
+    "country": "Indonesia",
+    "latitude": -7.067081482975103,
+    "longitude": 120.63443268808724
+  },
+  {
+    "code": "74.01.14.1001",
+    "name": "Mangolo",
+    "district": "Latambaga",
+    "regency": "Kabupaten Kolaka",
+    "province": "Sulawesi Tenggara",
+    "country": "Indonesia",
+    "latitude": -4.015663565432394,
+    "longitude": 121.5486719658509
+  },
+  {
+    "code": "75.01.14.2001",
+    "name": "Paris",
+    "district": "Mootilango",
+    "regency": "Kabupaten Gorontalo",
+    "province": "Gorontalo",
+    "country": "Indonesia",
+    "latitude": 0.6960331182925074,
+    "longitude": 122.63680770989127
+  },
+  {
+    "code": "76.01.07.2001",
+    "name": "Lilimori",
+    "district": "Bulu Taba",
+    "regency": "Kabupaten Pasangkayu",
+    "province": "Sulawesi Barat",
+    "country": "Indonesia",
+    "latitude": -1.4660272055540766,
+    "longitude": 119.42571749351124
+  },
+  {
+    "code": "81.01.16.2001",
+    "name": "Ameth",
+    "district": "Nusa Laut",
+    "regency": "Kabupaten Maluku Tengah",
+    "province": "Maluku",
+    "country": "Indonesia",
+    "latitude": -3.65460910970154,
+    "longitude": 128.79679081247184
+  },
+  {
+    "code": "82.01.05.2001",
+    "name": "Sidangoli Gam",
+    "district": "Jailolo Selatan",
+    "regency": "Kabupaten Halmahera Barat",
+    "province": "Maluku Utara",
+    "country": "Indonesia",
+    "latitude": 0.8971137475536992,
+    "longitude": 127.50039080778575
+  },
+  {
+    "code": "91.03.10.2001",
+    "name": "Demta",
+    "district": "Demta",
+    "regency": "Kabupaten Jayapura",
+    "province": "Papua",
+    "country": "Indonesia",
+    "latitude": -2.40734621522836,
+    "longitude": 140.14002398226873
+  },
+  {
+    "code": "92.02.17.2001",
+    "name": "Warkapi",
+    "district": "Tanah Rubuh",
+    "regency": "Kabupaten Manokwari",
+    "province": "Papua Barat",
+    "country": "Indonesia",
+    "latitude": -1.1542834262034773,
+    "longitude": 134.08899088509435
+  },
+  {
+    "code": "93.01.12.2001",
+    "name": "Kuler",
+    "district": "Naukenjerai",
+    "regency": "Kabupaten Merauke",
+    "province": "Papua Selatan",
+    "country": "Indonesia",
+    "latitude": -8.630069751575713,
+    "longitude": 140.61205990941116
+  },
+  {
+    "code": "94.01.08.2001",
+    "name": "Napan Yaur",
+    "district": "Teluk Umar",
+    "regency": "Kabupaten Nabire",
+    "province": "Papua Tengah",
+    "country": "Indonesia",
+    "latitude": -2.9507944948490494,
+    "longitude": 134.81526389686064
+  },
+  {
+    "code": "95.01.21.2001",
+    "name": "Usilimo",
+    "district": "Usilimo",
+    "regency": "Kabupaten Jayawijaya",
+    "province": "Papua Pegunungan",
+    "country": "Indonesia",
+    "latitude": -3.9279245274166206,
+    "longitude": 138.86356243262816
+  },
+  {
+    "code": "35.78.16.1001",
+    "name": "Ampel",
+    "district": "Semampir",
+    "regency": "Kota Surabaya",
+    "province": "Jawa Timur",
+    "country": "Indonesia",
+    "latitude": -7.2291701639,
+    "longitude": 112.7431703387
+  },
+  {
+    "code": "11.02.09.2001",
+    "name": "Kute Lengat Pangan",
+    "district": "Bukit Tusam",
+    "regency": "Kabupaten Aceh Tenggara",
+    "province": "Aceh",
+    "country": "Indonesia",
+    "latitude": 3.415447785844297,
+    "longitude": 97.8528828319312
+  },
+  {
+    "code": "12.02.08.2001",
+    "name": "Sidua Bahal",
+    "district": "Purbatua",
+    "regency": "Kabupaten Tapanuli Utara",
+    "province": "Sumatera Utara",
+    "country": "Indonesia",
+    "latitude": 1.667143323027107,
+    "longitude": 99.13434703025302
+  },
+  {
+    "code": "13.02.10.2001",
+    "name": "Koto Baru",
+    "district": "Kubung",
+    "regency": "Kabupaten Solok",
+    "province": "Sumatera Barat",
+    "country": "Indonesia",
+    "latitude": -0.8358907744703736,
+    "longitude": 100.65686071232126
+  },
+  {
+    "code": "14.02.08.2001",
+    "name": "Siambul",
+    "district": "Batang Gansal",
+    "regency": "Kabupaten Indragiri Hulu",
+    "province": "Riau",
+    "country": "Indonesia",
+    "latitude": -0.7322089799453773,
+    "longitude": 102.40043681772039
+  },
+  {
+    "code": "15.02.13.2001",
+    "name": "Tanjung Lamin",
+    "district": "Pamenang Barat",
+    "regency": "Kabupaten  Merangin",
+    "province": "Jambi",
+    "country": "Indonesia",
+    "latitude": -2.058354966219846,
+    "longitude": 102.36737707877597
+  },
+  {
+    "code": "16.02.15.2001",
+    "name": "Sungai Menang",
+    "district": "Sungai Menang",
+    "regency": "Kabupaten Ogan Komering",
+    "province": "Sumatera Selatan",
+    "country": "Indonesia",
+    "latitude": -3.68757396353203,
+    "longitude": 105.37297577503718
+  },
+  {
+    "code": "17.02.17.1001",
+    "name": "Sukaraja",
+    "district": "Curup Timur",
+    "regency": "Kabupaten Rejang Lebong",
+    "province": "Bengkulu",
+    "country": "Indonesia",
+    "latitude": -3.462314889998535,
+    "longitude": 102.53745270919585
+  },
+  {
+    "code": "18.02.15.2001",
+    "name": "Rengas",
+    "district": "Bekri",
+    "regency": "Kabupaten Lampung Tengah",
+    "province": "Lampung",
+    "country": "Indonesia",
+    "latitude": -5.125375814220169,
+    "longitude": 105.15931663543692
+  },
+  {
+    "code": "19.02.03.2001",
+    "name": "Selat Nasik",
+    "district": "Selat Nasik",
+    "regency": "Kabupaten Belitung",
+    "province": "Kepulauan Bangka Belitung",
+    "country": "Indonesia",
+    "latitude": -2.8400159372242664,
+    "longitude": 107.42189221725393
+  },
+  {
+    "code": "21.02.08.1001",
+    "name": "Sawang",
+    "district": "Kundur Barat",
+    "regency": "Kabupaten Karimun",
+    "province": "Kepulauan Riau",
+    "country": "Indonesia",
+    "latitude": 0.747593035103781,
+    "longitude": 103.37895318493996
+  },
+  {
+    "code": "31.71.05.1001",
+    "name": "Cempaka Putih Timur",
+    "district": "Cempaka Putih",
+    "regency": "Kota Administrasi Jakarta Pusat",
+    "province": "Daerah Khusus Ibukota Jakarta",
+    "country": "Indonesia",
+    "latitude": -6.176000217310941,
+    "longitude": 106.87174915332302
+  },
+  {
+    "code": "32.02.24.1013",
+    "name": "Surade",
+    "district": "Surade",
+    "regency": "Kabupaten Sukabumi",
+    "province": "Jawa Barat",
+    "country": "Indonesia",
+    "latitude": -7.336622622859037,
+    "longitude": 106.55850827918738
+  },
+  {
+    "code": "33.02.14.2001",
+    "name": "Darmakradenan",
+    "district": "Ajibarang",
+    "regency": "Kabupaten Banyumas",
+    "province": "Jawa Tengah",
+    "country": "Indonesia",
+    "latitude": -7.421246680942831,
+    "longitude": 109.032905142702
+  },
+  {
+    "code": "34.02.09.2001",
+    "name": "Patalan",
+    "district": "Jetis",
+    "regency": "Kabupaten Bantul",
+    "province": "Daerah Istimewa Yogyakarta",
+    "country": "Indonesia",
+    "latitude": -7.925472850308044,
+    "longitude": 110.34730536051684
+  },
+  {
+    "code": "35.02.11.2001",
+    "name": "Pandak",
+    "district": "Balong",
+    "regency": "Kabupaten Ponorogo",
+    "province": "Jawa Timur",
+    "country": "Indonesia",
+    "latitude": -7.980153361244792,
+    "longitude": 111.37071915775502
+  },
+  {
+    "code": "36.02.15.2001",
+    "name": "Sukarendah",
+    "district": "Warunggunung",
+    "regency": "Kabupaten Lebak",
+    "province": "Banten",
+    "country": "Indonesia",
+    "latitude": -6.351905623038583,
+    "longitude": 106.17416007402232
+  },
+  {
+    "code": "51.02.06.2001",
+    "name": "Bengkel",
+    "district": "Kediri",
+    "regency": "Kabupaten Tabanan",
+    "province": "Bali",
+    "country": "Indonesia",
+    "latitude": -8.586624894396975,
+    "longitude": 115.08881946276382
+  },
+  {
+    "code": "52.02.07.2001",
+    "name": "Lekor",
+    "district": "Janapria",
+    "regency": "Kabupaten Lombok Tengah",
+    "province": "Nusa Tenggara Barat",
+    "country": "Indonesia",
+    "latitude": -8.736467940933313,
+    "longitude": 116.43312049681762
+  },
+  {
+    "code": "53.02.17.2001",
+    "name": "OP",
+    "district": "Nunkolo",
+    "regency": "Kabupaten Timor Tengah Selatan",
+    "province": "Nusa Tenggara Timur",
+    "country": "Indonesia",
+    "latitude": -9.923831671129456,
+    "longitude": 124.65052722580039
+  },
+  {
+    "code": "61.02.12.2001",
+    "name": "Sungai Duri I",
+    "district": "Sungai Kunyit",
+    "regency": "Kabupaten Mempawah",
+    "province": "Kalimantan Barat",
+    "country": "Indonesia",
+    "latitude": 0.5494184839119002,
+    "longitude": 108.92764901655303
+  },
+  {
+    "code": "62.02.09.2001",
+    "name": "Bapinang Hulu",
+    "district": "Pulau Hanaut",
+    "regency": "Kabupaten Kotawaringin Timur",
+    "province": "Kalimantan Tengah",
+    "country": "Indonesia",
+    "latitude": -2.7805986660101265,
+    "longitude": 113.02527386729213
+  },
+  {
+    "code": "63.02.12.2001",
+    "name": "Sepapah",
+    "district": "Sampanahan",
+    "regency": "Kabupaten Kotabaru",
+    "province": "Kalimantan Selatan",
+    "country": "Indonesia",
+    "latitude": -2.733412506287473,
+    "longitude": 116.24054916585429
+  },
+  {
+    "code": "64.02.11.2001",
+    "name": "Muara Kaman Ilir",
+    "district": "Muara Kaman",
+    "regency": "Kabupaten Kutai Kartanegara",
+    "province": "Kalimantan Timur",
+    "country": "Indonesia",
+    "latitude": -0.18299485275783392,
+    "longitude": 116.75566383903973
+  },
+  {
+    "code": "65.02.08.2001",
+    "name": "Long Bila",
+    "district": "Malinau Barat",
+    "regency": "Kabupaten Malinau",
+    "province": "Kalimantan Utara",
+    "country": "Indonesia",
+    "latitude": 3.4785575339601413,
+    "longitude": 116.48388038196164
+  }
+]

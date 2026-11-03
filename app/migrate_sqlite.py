@@ -11,10 +11,10 @@ SEQUENCED = {'events','messages','conversations','source_events','deliveries'}
 
 def migrate(path):
     if not os.getenv('DATABASE_URL', '').startswith(('postgresql://','postgres://')):
-        raise ValueError('DATABASE_URL PostgreSQL harus dikonfigurasi')
+        raise ValueError('DATABASE_URL PostgreSQL must be configured')
     source_path = Path(path).resolve()
     if not source_path.is_file():
-        raise ValueError('File SQLite tidak ditemukan')
+        raise ValueError('SQLite file not found')
     source = sqlite3.connect(source_path.as_uri() + '?mode=ro', uri=True)
     source.row_factory = sqlite3.Row
     try:
@@ -24,7 +24,7 @@ def migrate(path):
             db.execute('BEGIN IMMEDIATE')
             for table in TABLES:
                 if db.execute(f'SELECT 1 FROM {table} LIMIT 1').fetchone():
-                    raise ValueError('Database PostgreSQL harus kosong; migrasi tidak menimpa data')
+                    raise ValueError('PostgreSQL database must be empty; migrasi does not overwrite data')
             existing = {row[0] for row in source.execute("SELECT name FROM sqlite_master WHERE type='table'")}
             counts = {}
             for table in TABLES:
@@ -52,7 +52,7 @@ def migrate(path):
 
 if __name__ == '__main__':
     if len(sys.argv) != 2:
-        raise SystemExit('Gunakan: python -m app.migrate_sqlite /path/database.sqlite')
+        raise SystemExit('Usage: python -m app.migrate_sqlite /path/database.sqlite')
     try:
         counts = migrate(sys.argv[1])
     except (ValueError, sqlite3.Error) as exc:

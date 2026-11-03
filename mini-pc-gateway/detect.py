@@ -47,16 +47,16 @@ def detect(sys_usb=Path('/sys/bus/usb/devices'), serial_root=Path('/dev/serial/b
 def main():
     result = detect()
     print('OS:', result['os'], '· arsitektur:', result['architecture'])
-    print('Bluetooth controller:', 'terdeteksi' if result['bluetooth_controller']=='available' else 'belum dapat dipastikan')
+    print('Bluetooth controller:', 'detected' if result['bluetooth_controller']=='available' else 'cannot be confirmed')
     if not result['usb_devices']:
-        print('Radio USB belum dapat diidentifikasi otomatis.')
+        print('USB radio could not be identified automatically.')
     for device in result['usb_devices']:
-        label = ' '.join(x for x in (device['manufacturer'],device['product']) if x) or 'Nama tidak tersedia'
-        hints = ', '.join(device['protocol_candidates']) or 'protokol belum diketahui'
+        label = ' '.join(x for x in (device['manufacturer'],device['product']) if x) or 'Name unavailable'
+        hints = ', '.join(device['protocol_candidates']) or 'protocol unknown'
         print(f"USB {device['vendor_id']}:{device['product_id']} · {label} · kandidat: {hints}")
     for path in result['serial_devices']:
         print('Port serial:', path)
-    print('Hasil kandidat belum memastikan kompatibilitas, pairing, atau dukungan driver.')
+    print('Candidate results do not confirm compatibility, pairing, or driver support.')
 
 
 if __name__ == '__main__':
