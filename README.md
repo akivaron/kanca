@@ -1,5 +1,7 @@
 # Kanca
 
+<img width="3340" height="1666" alt="image" src="https://github.com/user-attachments/assets/61376d0a-d2bd-4795-9a9d-b1e358eb22de" />
+
 Kanca is an API-first platform for AI-assisted monitoring and task automation across business systems and connected devices. It uses Baseten for natural-language planning, validates every generated plan on the server, and records task activity and escalations in a shared event stream.
 
 The project includes simulated business, device, ERP, and warehouse-gateway integrations for demos, plus a built-in Odoo connector for inventory and purchase orders.
