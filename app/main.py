@@ -23,9 +23,12 @@ from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
 from app.connectors.registry import CAPABILITIES, describe
+from app.connectors.odoo import OdooClient, OdooError, validate_base_url
+from app.connectors import erp_demo
+from app.credentials import encrypt_credentials, decrypt_credentials
 from app.planner import PlanningError, answer_source_question, propose, route_source_data_request
 from app.service import validate_steps
-from app.storage import connect, event, event_dict, initialize, now, task_dict, uid
+from app.storage import acquire_task_source_automation, connect, event, event_dict, initialize, now, release_task_source_automation, task_dict, uid
 from app.webhooks import validate_url
 from app import media
 
@@ -165,6 +168,13 @@ class ConnectionRequest(BaseModel):
     type: str
 
 
+class OdooConnectionRequest(BaseModel):
+    name: str = Field(min_length=1, max_length=100)
+    base_url: str = Field(min_length=8, max_length=500)
+    database: str | None = Field(default=None, max_length=100)
+    api_key: str = Field(min_length=1, max_length=500)
+
+
 class PublicBmkgLocationInput(BaseModel):
     adm4_code: str = Field(min_length=13, max_length=13, pattern=r"^\d{2}\.\d{2}\.\d{2}\.\d{4}$")
 
@@ -235,6 +245,10 @@ class SourceAutomationUpdate(BaseModel):
     interval_seconds: int = Field(default=30, ge=5, le=3600)
 
 
+class DemoGatewayControl(BaseModel):
+    enabled: bool
+
+
 class MediaSettings(BaseModel):
     vision_enabled: bool = False
     audio_enabled: bool = False
@@ -293,7 +307,7 @@ def ui_session():
 
 @app.get("/v1/connector-types")
 def connector_types(tenant: str = Depends(tenant_auth)):
-    return [{"type": "business_demo", "mode": "simulated"}, {"type": "device_demo", "mode": "simulated"}]
+    return [{"type": "business_demo", "mode": "simulated"}, {"type": "device_demo", "mode": "simulated"}, {"type": "erp_demo", "mode": "simulated"}]
 
 
 @app.post("/v1/sources", status_code=201)
@@ -305,6 +319,16 @@ def create_source(body: SourceInput, tenant: str = Depends(tenant_auth)):
     with connect() as db:
         db.execute("INSERT INTO sources (id,tenant,name,kind,token_hash,status,created_at,last_seen,expected_interval_seconds) VALUES (?,?,?,?,?,?,?,?,?)", (sid, tenant, name, kind, hashlib.sha256(token.encode()).hexdigest(), "active", ts, None, body.expected_interval_seconds))
     return {"id": sid, "name": name, "kind": kind, "status": "active", "created_at": ts, "token": token, "ingest_path": f"/v1/ingest/{sid}"}
+
+
+@app.post("/v1/sources/{sid}/demo-gateway")
+def control_demo_gateway(sid: str, body: DemoGatewayControl, tenant: str = Depends(tenant_auth)):
+    status = "active" if body.enabled else "paused"
+    with connect() as db:
+        cur = db.execute("UPDATE sources SET status=? WHERE id=? AND tenant=? AND name='Gateway Penerimaan Gudang Demo' AND kind='iot'", (status, sid, tenant))
+        if not cur.rowcount:
+            raise HTTPException(404, "Demo warehouse gateway not found")
+    return {"id": sid, "status": status, "simulated": True}
 
 
 @app.post("/v1/sources/simulator-pack", status_code=201)
@@ -827,20 +851,72 @@ def create_connection(body: ConnectionRequest, tenant: str = Depends(tenant_auth
         raise HTTPException(400, "Connector unavailable")
     item = {"id": uid("conn"), "type": body.type, "status": "connected", "created_at": now()}
     with connect() as db:
-        db.execute("INSERT INTO connections VALUES (?,?,?,?,?)", (item["id"], tenant, item["type"], item["status"], item["created_at"]))
+        db.execute("INSERT INTO connections (id,tenant,type,status,created_at,name,config,credentials_enc) VALUES (?,?,?,?,?,?,?,?)", (item["id"], tenant, item["type"], item["status"], item["created_at"], None, '{}', None))
     return item
+
+
+@app.post("/v1/erp-connections/odoo", status_code=201)
+def create_odoo_connection(body: OdooConnectionRequest, tenant: str = Depends(tenant_auth)):
+    try:
+        base_url = validate_base_url(body.base_url)
+        credentials_enc = encrypt_credentials({"api_key": body.api_key})
+    except ValueError as exc:
+        raise HTTPException(400, str(exc)) from exc
+    item = {"id": uid("conn"), "type": "erp_odoo", "status": "pending", "name": body.name.strip(), "created_at": now()}
+    if not item["name"]:
+        raise HTTPException(422, "Connection name is required")
+    config = {"base_url": base_url, "database": body.database}
+    with connect() as db:
+        db.execute("INSERT INTO connections (id,tenant,type,status,created_at,name,config,credentials_enc) VALUES (?,?,?,?,?,?,?,?)", (item["id"], tenant, item["type"], item["status"], item["created_at"], item["name"], json.dumps(config), credentials_enc))
+    return item
+
+
+@app.post("/v1/erp-connections/demo", status_code=201)
+def create_demo_erp_connection(tenant: str = Depends(tenant_auth)):
+    item = {"id": uid("conn"), "type": "erp_demo", "status": "connected", "name": "ERP Demo Gudang", "created_at": now()}
+    with connect() as db:
+        db.execute("INSERT INTO connections (id,tenant,type,status,created_at,name,config,credentials_enc) VALUES (?,?,?,?,?,?,?,?)", (item["id"], tenant, item["type"], item["status"], item["created_at"], item["name"], json.dumps(erp_demo.default_state(), ensure_ascii=False), None))
+    return {**item, "simulated": True}
+
+
+@app.post("/v1/erp-connections/{connection_id}/reset-demo")
+def reset_demo_erp_connection(connection_id: str, tenant: str = Depends(tenant_auth)):
+    with connect() as db:
+        cur = db.execute("UPDATE connections SET config=? WHERE id=? AND tenant=? AND type='erp_demo' AND status='connected'", (json.dumps(erp_demo.default_state(), ensure_ascii=False), connection_id, tenant))
+        if not cur.rowcount:
+            raise HTTPException(404, "Active demo ERP connection not found")
+    return {"status": "reset", "simulated": True}
+
+
+@app.post("/v1/erp-connections/{connection_id}/test")
+def test_erp_connection(connection_id: str, tenant: str = Depends(tenant_auth)):
+    with connect() as db:
+        row = db.execute("SELECT type,status,config,credentials_enc FROM connections WHERE id=? AND tenant=?", (connection_id, tenant)).fetchone()
+    if not row:
+        raise HTTPException(404, "Connection not found")
+    if row["type"] != "erp_odoo" or row["status"] not in {"pending", "connected"}:
+        raise HTTPException(409, "Odoo connection is not available for testing")
+    try:
+        config = json.loads(row["config"] or '{}')
+        credentials = decrypt_credentials(row["credentials_enc"] or '')
+        result = OdooClient(config["base_url"], credentials["api_key"], config.get("database")).test()
+        with connect() as db:
+            db.execute("UPDATE connections SET status='connected' WHERE id=? AND tenant=?", (connection_id, tenant))
+        return result
+    except (ValueError, KeyError, OdooError) as exc:
+        raise HTTPException(502, f"Odoo connection check failed: {exc}") from exc
 
 
 @app.get("/v1/connections")
 def connections(tenant: str = Depends(tenant_auth)):
     with connect() as db:
-        return [dict(r) for r in db.execute("SELECT id,type,status,created_at FROM connections WHERE tenant=?", (tenant,))]
+        return [dict(r) for r in db.execute("SELECT id,type,status,created_at,name FROM connections WHERE tenant=?", (tenant,))]
 
 
 @app.delete("/v1/connections/{connection_id}")
 def revoke(connection_id: str, tenant: str = Depends(tenant_auth)):
     with connect() as db:
-        cur = db.execute("UPDATE connections SET status='revoked' WHERE id=? AND tenant=?", (connection_id, tenant))
+        cur = db.execute("UPDATE connections SET status='revoked',credentials_enc=NULL WHERE id=? AND tenant=?", (connection_id, tenant))
         if not cur.rowcount:
             raise HTTPException(404, "Connection not found")
     return {"status": "revoked"}
@@ -852,7 +928,10 @@ def resources(connection_id: str, tenant: str = Depends(tenant_auth)):
         row = db.execute("SELECT type,status FROM connections WHERE id=? AND tenant=?", (connection_id, tenant)).fetchone()
     if not row:
         raise HTTPException(404, "Connection not found")
-    return {"connection_id": connection_id, "status": row["status"], "capabilities": describe(row["type"]) if row["status"] == "connected" else []}
+    caps = describe(row["type"])
+    if row["type"] == "erp_odoo":
+        caps = [item for item in describe("erp") if item["name"].startswith("erp.odoo.")]
+    return {"connection_id": connection_id, "status": row["status"], "capabilities": caps if row["status"] == "connected" else []}
 
 
 @app.post("/v1/tasks", status_code=201)
@@ -861,13 +940,30 @@ def create_task(body: TaskRequest, idempotency_key: str | None = Header(default=
 
 
 def connected_capabilities(db, tenant):
+    has_connected_erp = db.execute("SELECT 1 FROM connections WHERE tenant=? AND type IN ('erp_odoo','erp_demo') AND status='connected' LIMIT 1", (tenant,)).fetchone()
+    has_demo_erp = db.execute("SELECT 1 FROM connections WHERE tenant=? AND type='erp_demo' LIMIT 1", (tenant,)).fetchone()
+    if not has_connected_erp and not has_demo_erp:
+        demo = {"id": uid("conn"), "type": "erp_demo", "status": "connected", "name": "ERP Demo Gudang", "created_at": now()}
+        db.execute("INSERT INTO connections (id,tenant,type,status,created_at,name,config,credentials_enc) VALUES (?,?,?,?,?,?,?,?)", (demo["id"], tenant, demo["type"], demo["status"], demo["created_at"], demo["name"], json.dumps(erp_demo.default_state(), ensure_ascii=False), None))
+    has_demo_erp = db.execute("SELECT 1 FROM connections WHERE tenant=? AND type='erp_demo' AND status='connected' LIMIT 1", (tenant,)).fetchone()
+    has_demo_gateway = db.execute("SELECT 1 FROM sources WHERE tenant=? AND name='Gateway Penerimaan Gudang Demo' LIMIT 1", (tenant,)).fetchone()
+    if has_demo_erp and not has_demo_gateway:
+        sid, token, ts = uid("src"), secrets.token_urlsafe(32), now()
+        db.execute("INSERT INTO sources (id,tenant,name,kind,token_hash,status,created_at,last_seen,expected_interval_seconds) VALUES (?,?,?,?,?,?,?,?,?)", (sid, tenant, "Gateway Penerimaan Gudang Demo", "iot", hashlib.sha256(token.encode()).hexdigest(), "active", ts, ts, 90))
     connected = {r[0] for r in db.execute("SELECT type FROM connections WHERE tenant=? AND status='connected'", (tenant,))}
+    if "erp_odoo" in connected:
+        connected.add("erp")
     sources = db.execute("SELECT id,name,kind FROM sources WHERE tenant=? AND status='active'", (tenant,)).fetchall()
     if sources:
         connected.add("external_events")
-    available = [item for item in describe() if item["connector"] in connected]
+    available = [item for item in describe() if item["connector"] in connected or (item["connector"] == "erp" and "erp_odoo" in connected and item["name"].startswith("erp.odoo."))]
+    erp_connections = [dict(r) for r in db.execute("SELECT id,type,name,status FROM connections WHERE tenant=? AND status='connected' AND type IN ('erp_odoo','erp_demo')", (tenant,))]
     for item in available:
-        if item["name"] == "external.latest_event":
+        if item["name"].startswith("erp."):
+            expected_type = "erp_demo" if item["name"].startswith("erp.demo.") else "erp_odoo"
+            item["available_connections"] = [connection for connection in erp_connections if connection["type"] == expected_type]
+    for item in available:
+        if item["name"] in {"external.latest_event", "erp.demo.reconcile_source_receipt"}:
             source_info = []
             for row in sources:
                 source = dict(row)
@@ -928,7 +1024,10 @@ def create_task_internal(body: TaskRequest, idempotency_key: str | None, tenant:
         try:
             validate_steps(plan["steps"], connected)
             for step in plan["steps"]:
-                if step["capability"] == "external.latest_event" and not db.execute("SELECT 1 FROM sources WHERE id=? AND tenant=? AND status='active'", (step["arguments"]["source_id"], tenant)).fetchone():
+                source_required = step["capability"] in {"external.latest_event", "erp.demo.reconcile_source_receipt"}
+                source_query = "SELECT kind FROM sources WHERE id=? AND tenant=? AND status='active'" + (" AND kind='iot'" if step["capability"] == "erp.demo.reconcile_source_receipt" else "")
+                source_row = db.execute(source_query, (step["arguments"]["source_id"], tenant)).fetchone() if source_required else True
+                if not source_row:
                     raise ValueError("The requested source is inactive or unavailable.")
         except (ValueError, TypeError) as exc:
             raise HTTPException(422, str(exc)) from exc
@@ -946,6 +1045,7 @@ def create_task_internal(body: TaskRequest, idempotency_key: str | None, tenant:
             event(db, tenant, tid, "task.created.v1", {})
             if auto_start:
                 event(db, tenant, tid, "task.approved.v1", {"version": 1, "mode": "automatic_safe"})
+                acquire_task_source_automation(db, tid, tenant, plan)
             else:
                 event(db, tenant, tid, "task.approval_requested.v1", {"version": 1})
         except INTEGRITY_ERRORS:
@@ -1023,20 +1123,6 @@ def conversation_messages(cid: str, tenant: str = Depends(tenant_auth)):
                 item["task"] = task_dict(task) if task else None
             result.append(item)
         return result
-
-
-def demo_warehouse_camera_answer(text: str) -> str | None:
-    """Answer warehouse box-count questions from the UI's explicitly simulated camera card."""
-    normalized = text.casefold()
-    asks_about_boxes = re.search(r"\bdus\b|\bbox(?:es)?\b|\bkotak\b|\bkarton\b|\bcartons?\b", normalized)
-    mentions_warehouse = re.search(r"gudang|warehouse", normalized)
-    asks_to_count_or_check = re.search(r"berapa|jumlah|banyak|hitung|cek|periksa|lihat|count|how many|quantity|number|check|see", normalized)
-    if not (asks_about_boxes and mentions_warehouse and asks_to_count_or_check):
-        return None
-    english = bool(re.search(r"\b(warehouse|boxes|box|count|how many|quantity|number|check|see)\b", normalized))
-    if english:
-        return "The simulated warehouse camera preview detects about 3 boxes. This is a demo estimate, not a live camera count or inventory record."
-    return "The simulated warehouse camera snapshot shows about 3 boxes. This is a demo estimate, not a count from a live camera or inventory data."
 
 
 def integration_status_answer(text: str, tenant: str) -> str | None:
@@ -1138,7 +1224,7 @@ def task_history_answer(text: str, tenant: str) -> str | None:
 def route_chat_source_request(question: str, tenant: str):
     with connect() as db:
         sources = [dict(row) for row in db.execute(
-            "SELECT id,name,kind,status FROM sources WHERE tenant=? AND kind IN ('camera','iot') AND status!='deleted' ORDER BY name",
+            "SELECT id,name,kind,status FROM sources WHERE tenant=? AND kind IN ('camera','iot') AND status='active' ORDER BY name",
             (tenant,),
         )]
     if not sources:
@@ -1229,8 +1315,26 @@ async def send_message(cid: str, body: MessageRequest, tenant: str = Depends(ten
     except PlanningError:
         # Do not guess a source or initiate an external request when intent parsing fails.
         source_route = {'route': 'unavailable', 'reply': 'Sorry, I cannot identify the source you mean. Please try again shortly.'}
-    demo_answer = demo_warehouse_camera_answer(content)
-    direct_answer = demo_answer or integration_status_answer(content, tenant) or integration_inventory_answer(content, tenant) or task_history_answer(content, tenant)
+    planning_available = available
+    if source_route and source_route.get('route') == 'continue' and source_route.get('requires_source'):
+        allowed_source_ids = set(source_route.get('source_ids') or [])
+        if not allowed_source_ids:
+            source_route = {'route': 'clarify', 'reply': 'Please connect a suitable data source before setting up this monitoring task.'}
+        else:
+            planning_available = []
+            for capability in available:
+                if capability.get('name') not in {'external.latest_event', 'erp.demo.reconcile_source_receipt'}:
+                    planning_available.append(capability)
+                    continue
+                matching_sources = [source for source in capability.get('available_sources', []) if source.get('id') in allowed_source_ids]
+                if matching_sources:
+                    planning_available.append({**capability, 'available_sources': matching_sources})
+    is_source_monitoring_task = bool(source_route and source_route.get('route') == 'continue' and source_route.get('requires_source'))
+    direct_answer = None if is_source_monitoring_task else (
+        integration_status_answer(content, tenant)
+        or integration_inventory_answer(content, tenant)
+        or task_history_answer(content, tenant)
+    )
     try:
         if source_route and source_route['route'] == 'fetch':
             answer, task_id = await answer_routed_source_chat(content, tenant, source_route['source_ids']), None
@@ -1239,7 +1343,7 @@ async def send_message(cid: str, body: MessageRequest, tenant: str = Depends(ten
         elif direct_answer is not None:
             answer, task_id = direct_answer, None
         else:
-            plan = propose(content, available, history)
+            plan = propose(content, planning_available, history)
             for attempt in range(2):
                 if not isinstance(plan, dict):
                     raise ValueError("The model returned an invalid response.")
@@ -1267,14 +1371,14 @@ async def send_message(cid: str, body: MessageRequest, tenant: str = Depends(ten
                     except HTTPException as exc:
                         if exc.status_code != 422 or attempt:
                             raise
-                        plan = propose(content, available, history, feedback=f"Previous plan rejected: {exc.detail}. Choose the correct active source or ask for clarification.")
+                        plan = propose(content, planning_available, history, feedback=f"Previous plan rejected: {exc.detail}. Choose the correct active source or ask for clarification.")
                         continue
                 try:
                     task = create_task_internal(TaskRequest(instruction=content), None, tenant, proposed=plan, auto_approve_safe=True)
                 except HTTPException as exc:
                     if exc.status_code != 422 or attempt:
                         raise
-                    plan = propose(content, available, history, feedback=f"Previous plan rejected: {exc.detail}. Fix the format using available data or ask for clarification.")
+                    plan = propose(content, planning_available, history, feedback=f"Previous plan rejected: {exc.detail}. Fix the format using available data or ask for clarification.")
                     continue
                 answer = "Okay, I will work on it. The result will appear here." if task['status'] == 'scheduled' else "I have prepared a plan. Please review and approve it before I start."
                 task_id = task["id"]
@@ -1323,8 +1427,10 @@ def rerun_task(tid: str, tenant: str = Depends(tenant_auth)):
         try:
             validate_steps(plan['steps'], connected)
             for step in plan['steps']:
-                if step['capability'] == 'external.latest_event' and not db.execute("SELECT 1 FROM sources WHERE id=? AND tenant=? AND status='active'", (step['arguments']['source_id'], tenant)).fetchone():
-                    raise ValueError("Source inactive atau unavailable")
+                if step['capability'] in {'external.latest_event', 'erp.demo.reconcile_source_receipt'}:
+                    source_query = "SELECT kind FROM sources WHERE id=? AND tenant=? AND status='active'" + (" AND kind='iot'" if step['capability'] == 'erp.demo.reconcile_source_receipt' else "")
+                    if not db.execute(source_query, (step['arguments']['source_id'], tenant)).fetchone():
+                        raise ValueError("Source inactive or not suitable for ERP receipt reconciliation")
         except (ValueError, TypeError) as exc:
             raise HTTPException(422, str(exc)) from exc
         plan.pop('request_hash', None)
@@ -1357,6 +1463,7 @@ def update_schedule(tid: str, body: ScheduleUpdate, tenant: str = Depends(tenant
         version = row["version"] + 1
         db.execute("UPDATE tasks SET plan=?, version=?, status='awaiting_approval', updated_at=? WHERE id=?", (json.dumps(plan, ensure_ascii=False), version, now(), tid))
         db.execute("UPDATE schedules SET interval_seconds=?,max_runs=?,next_run=? WHERE task_id=?", (body.schedule.interval_seconds, body.schedule.max_runs, now(), tid))
+        release_task_source_automation(db, tid)
         event(db, tenant, tid, "task.approval_requested.v1", {"version": version, "reason": "schedule_updated"})
         return task_dict(db.execute("SELECT * FROM tasks WHERE id=?", (tid,)).fetchone())
 
@@ -1372,6 +1479,7 @@ def archive_task(tid: str, tenant: str = Depends(tenant_auth)):
         if row["status"] == "running":
             raise HTTPException(409, "Task is running; try again after it finishes")
         db.execute("UPDATE tasks SET archived=1,status=?,updated_at=? WHERE id=?", (status, now(), tid))
+        release_task_source_automation(db, tid)
         event(db, tenant, tid, "task.archived.v1", {"status": status})
         return {"status": status, "archived": True}
 
@@ -1393,6 +1501,7 @@ def approve(tid: str, body: Approval, tenant: str = Depends(tenant_auth)):
         if not cur.rowcount:
             raise HTTPException(409, "Task telah berubah")
         event(db, tenant, tid, "task.approved.v1", {"version": body.version})
+        acquire_task_source_automation(db, tid, tenant, json.loads(row['plan']))
         return task_dict(db.execute("SELECT * FROM tasks WHERE id=?", (tid,)).fetchone())
 
 
@@ -1404,6 +1513,7 @@ def cancel(tid: str, tenant: str = Depends(tenant_auth)):
         if not cur.rowcount:
             raise HTTPException(409, "Task cannot dibatalkan")
         event(db, tenant, tid, "task.cancelled.v1", {})
+        release_task_source_automation(db, tid)
     return {"status": "cancelled"}
 
 
@@ -1414,6 +1524,11 @@ def change_pause_status(tid: str, tenant: str, before: str, after: str):
         if not cur.rowcount:
             raise HTTPException(409, "The task status has changed or this action is unavailable")
         event(db, tenant, tid, "task.paused.v1" if after == "paused" else "task.resumed.v1", {"status": after})
+        if after == "paused":
+            release_task_source_automation(db, tid)
+        else:
+            task = db.execute("SELECT plan FROM tasks WHERE id=? AND tenant=?", (tid, tenant)).fetchone()
+            acquire_task_source_automation(db, tid, tenant, json.loads(task['plan']))
         return task_dict(db.execute("SELECT * FROM tasks WHERE id=? AND tenant=?", (tid, tenant)).fetchone())
 
 

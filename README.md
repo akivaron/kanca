@@ -50,6 +50,8 @@ Events are stored, visible in the UI, and emitted as `source.event.v1` for subsc
 
 Approved tasks can read the latest event from one active source through `external.latest_event` and trigger `external.escalate` as a `task.escalated.v1` event when a condition is met. The Integrations UI provides a threshold-rule builder for numeric fields already received; created tasks still require approval and emit at most one escalation per step. Data older than the freshness limit cannot be verified. Assign one Kanca source to each sensor or entity to prevent readings from different devices from overwriting one another. Events do not automatically wake tasks: tasks check data according to their approved schedule. An escalation is an event for a consumer, not a message sent directly.
 
+Recurring tasks created from chat can start the needed source updates automatically when they use an active camera or IoT source. Kanca temporarily enables source automation at 30-second intervals, enables camera vision while keeping audio disabled, and waits up to three minutes before the first check so the gateway can send fresh data. If a scheduled task encounters stale data before a lease exists, it starts source automation and retries; subsequent stale checks retry every 30 seconds up to ten times before failing. Previous source and media settings are restored when the task completes, fails, is cancelled, or is paused. API/MCP tasks still start only after approval. A camera count is a visual estimate, not a verified inventory total; direct messages to staff require a separately configured consumer such as a webhook.
+
 ### Device Gateways
 
 Examples in `gateways/` run separately from the API and worker; install optional dependencies with `pip install -r gateways/requirements.txt`. For each gateway, first create a source in the UI and set `KANCA_URL`, `KANCA_SOURCE_ID`, and `KANCA_SOURCE_TOKEN` in the gateway environment. Run the gateway on a machine that can access both Kanca and the device; do not commit tokens. For cross-machine connections, use HTTPS and a secure network gateway. The default Compose configuration does not expose ports to other devices.
@@ -98,6 +100,22 @@ curl -X POST http://localhost:8765/v1/tasks \
   -H 'Idempotency-Key: example-1' \
   -d '{"instruction":"Check the temperature","explicit_steps":[{"capability":"device.read_temperature","arguments":{}}]}'
 ```
+
+### Built-in ERP connector: Odoo
+
+Set a Fernet key in `KANCA_CREDENTIALS_KEY` before creating ERP connections. Generate one with `python -c 'from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())'` and keep it persistent: losing it makes stored ERP API keys unreadable. Connect an Odoo instance through `POST /v1/erp-connections/odoo` with `name`, `base_url`, optional `database`, and `api_key`. Kanca encrypts the API key at rest and never returns it. Use `POST /v1/erp-connections/{id}/test` to verify access and `GET /v1/connections/{id}/resources` to see capabilities.
+
+The current Odoo adapter reads stock quants and open purchase orders. Approved write actions can create an unconfirmed draft purchase order or update a note on a draft order. It does not confirm orders, send them to suppliers, or verify physical inventory. Odoo JSON-2 API access requires an Odoo Custom plan; use an API key with only the model access the integration needs. SAP Business One and Accurate Online are not implemented yet.
+
+Available task capabilities: `erp.odoo.stock_levels`, `erp.odoo.purchase_orders`, `erp.odoo.create_draft_purchase_order`, and `erp.odoo.update_draft_purchase_order_note`. Every ERP step must include its `connection_id`; write capabilities require task approval.
+
+### Simulated ERP for demos
+
+Create a ready-to-use, stateful demo ERP with `POST /v1/erp-connections/demo`. It includes sample stock and purchase orders. `KRT-001` starts at 1 carton with a minimum of 3; `KRT-002` starts at 0 with a minimum of 6 and open PO `PO-DEMO-1003` for 5 cartons. Read `GET /v1/connections/{id}/resources` for the connection ID and capabilities. The agent can read `erp.demo.inventory` and `erp.demo.purchase_orders`; after approving a task, `erp.demo.receive_shipment` records a simulated receipt and changes demo stock. If stock remains under its minimum, Kanca records `erp.demo.stock_threshold_alert.v1` with demo recipients `admin` and `warehouse_staff`. A configured webhook may deliver that event to its subscriber, but the simulation itself does not send staff messages. Reset sample data with `POST /v1/erp-connections/{id}/reset-demo`.
+
+When the demo ERP is available and no warehouse IoT source is registered, Kanca provisions `Gateway Penerimaan Gudang Demo` automatically. The worker sends a heartbeat every 30 seconds and a sample receipt every 15 minutes (`KRT-002`, quantity 2 against PO `PO-DEMO-1003` for 5), so the end-to-end task can be demonstrated without an external gateway. You can pause/resume it with `POST /v1/sources/{id}/demo-gateway`, using body `{"enabled":false}` to pause or `{"enabled":true}` to resume.
+
+For a real IoT/gateway source, send goods receipts using event type `goods_receipt`; the JSON `data` must contain `sku` and integer `quantity`, while `po_number` and `reference` are optional. For example: `{"type":"goods_receipt","data":{"sku":"KRT-002","quantity":2,"po_number":"PO-DEMO-1003","reference":"GR-DEMO-01"}}`. The task checks each new event against open demo POs, calculates stock after receipt and logs `task.escalated.v1` with the source and receipt details for mismatches, incomplete/ambiguous data, or a stock shortage of at least 3 cartons. A stale IoT source is retried and then escalated with its latest available observation. CCTV is excluded from quantity reconciliation. The task result is an owner escalation; staff messaging requires a configured webhook consumer.
 
 Get the `id` from the response, review the `plan`, then approve its version:
 
