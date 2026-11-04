@@ -360,6 +360,17 @@ textarea {
     font-size: 20px;
   }
 
+  .task-kanban {
+    grid-template-columns: repeat(7, minmax(min(82vw, 320px), 1fr));
+    margin-right: -14px;
+    padding-right: 14px;
+  }
+
+  .task-kanban-column { min-height: 190px; padding: 10px; }
+  .task-details-header { padding: 18px; }
+  .task-details-content { padding: 16px 18px; }
+  .task-details-footer { padding: 12px 18px; }
+
   .summary-divider {
     display: none;
   }

@@ -119,6 +119,15 @@ const englishTranslations = new Map([
   ["Pantau pekerjaan yang dibuat dari percakapanmu.", "Monitor tasks created from your conversations."],
   ["＋ Tugas baru", "＋ New task"],
   ["tugas aktif", "active tasks"],
+  ["Terjadwal", "Scheduled"],
+  ["Detail", "Details"],
+  ["Detail tugas", "Task details"],
+  ["Ringkasan", "Summary"],
+  ["Jadwal", "Schedule"],
+  ["Progres", "Progress"],
+  ["Kondisi", "Condition"],
+  ["detik", "seconds"],
+  ["Tutup", "Close"],
   ["menunggu persetujuan", "awaiting approval"],
   ["Belum ada tugas", "No tasks yet"],
   ["Ceritakan apa yang ingin dipantau. Rencana akan muncul di sini.", "Tell Kanca what you want to monitor. Plans will appear here."],
@@ -476,7 +485,7 @@ function formatRelativeTime(value, locale) {
   return relative.format(Math.round(elapsed / duration), unit);
 }
 
-const labels = {awaiting_approval:'Menunggu persetujuan', scheduled:'Dipantau', paused:'Dijeda', running:'Sedang berjalan', completed:'Selesai', failed:'Gagal', cancelled:'Dibatalkan'};
+const labels = {awaiting_approval:'Menunggu persetujuan', scheduled:'Terjadwal', paused:'Dijeda', running:'Sedang berjalan', completed:'Selesai', failed:'Gagal', cancelled:'Dibatalkan'};
 const capabilities = {'business.list_orders':'Membaca pesanan simulasi','business.check_orders':'Memeriksa pesanan dan selisih','business.remind':'Membuat pengingat simulasi','device.read_temperature':'Membaca suhu simulasi','device.turn_on_light':'Menyalakan lampu simulasi','external.latest_event':'Membaca data terbaru dari sumber eksternal','external.escalate':'Membuat pemberitahuan untuk pemilik'};
 const fields = {temperature_c:'suhu', unpacked_count:'jumlah pesanan yang belum dikemas', mismatch_count:'jumlah pesanan yang berbeda'};
 const operators = {eq:'sama dengan', ne:'tidak sama dengan', gt:'lebih dari', gte:'setidaknya', lt:'kurang dari', lte:'paling banyak'};
@@ -626,19 +635,52 @@ function TaskCard({ task, onAction, onRerun }) {
 function Workers({ tasks, onAction, onEdit, onArchive, onCreate, onRerun }) {
   const {t,dateLocale}=useLanguage();
   const [editing, setEditing] = useState(null);
+  const [selectedTask, setSelectedTask] = useState(null);
   const [interval, setInterval] = useState(60);
   const [runs, setRuns] = useState(1);
   const format = (template, values) => Object.entries(values).reduce((text,[key,value])=>text.replace(`{${key}}`,value),t(template));
   return <div className="workers"><div className="workers-header"><div><div className="eyebrow">{t('PEMANTAUAN')}</div><h1>{t('Tugas latar belakang')}</h1><p>{t('Pantau pekerjaan yang dibuat dari percakapanmu.')}</p></div><button className="primary" onClick={onCreate}>{t('＋ Tugas baru')}</button></div>
     <div className="worker-summary"><strong>{tasks.filter(t => t.status === 'scheduled' || t.status === 'running').length}</strong><span>{t('tugas aktif')}</span><span className="summary-divider"/><strong>{tasks.filter(t => t.status === 'awaiting_approval').length}</strong><span>{t('menunggu persetujuan')}</span></div>
     {!tasks.length && <div className="worker-empty"><strong>{t('Belum ada tugas')}</strong><p>{t('Ceritakan apa yang ingin dipantau. Rencana akan muncul di sini.')}</p><button className="secondary" onClick={onCreate}>{t('Mulai percakapan')}</button></div>}
-    <div className="worker-list">{tasks.map(task => <article className="worker-card" key={task.id}>
-      <div className="plan-top"><div><strong>{task.instruction}</strong><p>{task.plan.summary}</p></div><span className={`status ${task.status}`}>{t(labels[task.status] || task.status)}</span></div>
+    <div className="task-kanban">{[
+      ['awaiting_approval', 'Menunggu persetujuan'],
+      ['scheduled', 'Terjadwal'],
+      ['running', 'Sedang berjalan'],
+      ['paused', 'Dijeda'],
+      ['completed', 'Selesai'],
+      ['failed', 'Gagal'],
+      ['cancelled', 'Dibatalkan'],
+    ].map(([status, title]) => {
+      const columnTasks = tasks.filter(task => task.status === status);
+      return <section className={`task-kanban-column status-${status}`} key={status} aria-label={t(title)}>
+        <header className="task-kanban-heading"><span className="task-kanban-marker"/><h2>{t(title)}</h2><span className="task-kanban-count">{columnTasks.length}</span></header>
+        <div className="task-kanban-cards">{columnTasks.map(task => <article className="worker-card" key={task.id}>
+      <div className="plan-top"><div className="task-card-title"><strong>{task.instruction}</strong><p>{task.plan.summary}</p></div></div>
       <div className="worker-meta"><span>{task.plan.schedule?.max_runs === 1 ? t('Sekali') : format('Setiap {interval} detik',{interval:task.plan.schedule?.interval_seconds})}</span><span>{format('{done} / {max} pemeriksaan',{done:task.result?.runs_completed || 0,max:task.plan.schedule?.max_runs || 1})}</span><span>{t('Dibuat')} {new Date(task.created_at).toLocaleString(dateLocale)}</span></div>
       {editing === task.id && <form className="schedule-form" onSubmit={async e => {e.preventDefault(); if(await onEdit(task, Number(interval), Number(runs))) setEditing(null);}}><label>{t('Jeda pemeriksaan (detik)')}<input type="number" min="1" max="86400" required value={interval} onChange={e=>setInterval(e.target.value)}/></label><label>{t('Maksimal pemeriksaan')}<input type="number" min="1" max="1000" required value={runs} onChange={e=>setRuns(e.target.value)}/></label><p>{t('Perubahan membutuhkan persetujuan kembali sebelum tugas dilanjutkan.')}</p><div className="actions"><button className="primary">{t('Simpan perubahan')}</button><button type="button" className="secondary" onClick={()=>setEditing(null)}>{t('Batal')}</button></div></form>}
-      {task.status==='failed' && task.result?.error && <p className="worker-failure">{task.result.error}</p>}<div className="actions">{task.status === 'awaiting_approval' && <button className="primary" onClick={()=>onAction(task,'approve',{version:task.version})}>{t('Setujui & mulai')}</button>}{task.status === 'scheduled' && <button className="secondary" onClick={()=>onAction(task,'pause')}>{t('Jeda')}</button>}{task.status === 'paused' && <button className="primary" onClick={()=>onAction(task,'resume')}>{t('Lanjutkan')}</button>}{['awaiting_approval','scheduled','paused'].includes(task.status) && <><button className="secondary" onClick={()=>{setEditing(task.id);setInterval(task.plan.schedule?.interval_seconds || 1);setRuns(task.plan.schedule?.max_runs || 1);}}>{t('Ubah jadwal')}</button><button className="secondary" onClick={()=>onAction(task,'cancel')}>{t('Hentikan')}</button></>}{['completed','failed','cancelled'].includes(task.status) && <button className="secondary" onClick={()=>onRerun(task)}>{t('Jalankan ulang')}</button>}<button className="text-button" onClick={()=>onArchive(task)}>{t('Hapus dari daftar')}</button></div>
-    </article>)}</div>
+      {task.status==='failed' && task.result?.error && <p className="worker-failure">{task.result.error}</p>}<div className="actions"><button className="secondary" onClick={()=>setSelectedTask(task)}>{t('Detail')}</button>{task.status === 'awaiting_approval' && <button className="primary" onClick={()=>onAction(task,'approve',{version:task.version})}>{t('Setujui & mulai')}</button>}{task.status === 'scheduled' && <button className="secondary" onClick={()=>onAction(task,'pause')}>{t('Jeda')}</button>}{task.status === 'paused' && <button className="primary" onClick={()=>onAction(task,'resume')}>{t('Lanjutkan')}</button>}{['awaiting_approval','scheduled','paused'].includes(task.status) && <><button className="secondary" onClick={()=>{setEditing(task.id);setInterval(task.plan.schedule?.interval_seconds || 1);setRuns(task.plan.schedule?.max_runs || 1);}}>{t('Ubah jadwal')}</button><button className="secondary" onClick={()=>onAction(task,'cancel')}>{t('Hentikan')}</button></>}{['completed','failed','cancelled'].includes(task.status) && <button className="secondary" onClick={()=>onRerun(task)}>{t('Jalankan ulang')}</button>}<button className="text-button" onClick={()=>onArchive(task)}>{t('Hapus dari daftar')}</button></div>
+        </article>)}</div>
+      </section>;
+    })}</div>
+    {selectedTask && <TaskDetailsDialog task={selectedTask} onClose={()=>setSelectedTask(null)}/>}
   </div>;
+}
+
+function TaskDetailsDialog({task,onClose}) {
+  const {t,dateLocale}=useLanguage();
+  const dialog=useRef(null);
+  useEffect(()=>{dialog.current?.showModal();return()=>{if(dialog.current?.open)dialog.current.close();};},[]);
+  return <dialog className="task-details-dialog" ref={dialog} onCancel={event=>{event.preventDefault();onClose();}} aria-labelledby="task-details-title">
+    <div className="task-details-header"><div><div className="eyebrow">{t('Detail tugas')}</div><h2 id="task-details-title">{task.instruction}</h2></div><button className="icon-button" aria-label={t('Tutup')} onClick={onClose}><Icon name="close"/></button></div>
+    <div className="task-details-content"><div className="task-details-status"><span className={`status ${task.status}`}>{t(labels[task.status]||task.status)}</span><span>{t('Dibuat')} {new Date(task.created_at).toLocaleString(dateLocale)}</span></div>
+      {task.plan.summary && <section><h3>{t('Ringkasan')}</h3><p>{task.plan.summary}</p></section>}
+      <section><h3>{t('Rencana tugas')}</h3><ol>{(task.plan.steps||[]).map((step,index)=><li key={index}><strong>{t(capabilities[step.capability]||step.capability)}</strong>{step.arguments&&Object.keys(step.arguments).length>0&&<pre>{JSON.stringify(step.arguments,null,2)}</pre>}{step.condition&&<p>{t('Kondisi')}: {step.condition.field} {step.condition.operator} {String(step.condition.value)}</p>}</li>)}</ol></section>
+      {task.plan.schedule&&<section><h3>{t('Jadwal')}</h3><p>{task.plan.schedule.interval_seconds} {t('detik')} · {task.plan.schedule.max_runs} {t('pemeriksaan')}</p></section>}
+      <section><h3>{t('Progres')}</h3><p>{task.result?.runs_completed||0} / {task.plan.schedule?.max_runs||1} {t('pemeriksaan')}</p>{task.result?.error&&<p className="worker-failure">{task.result.error}</p>}</section>
+      {task.result&&<section><h3>{t('Hasil pemeriksaan')}</h3><pre>{JSON.stringify(task.result,null,2)}</pre></section>}
+    </div>
+    <div className="task-details-footer"><button className="secondary" onClick={onClose}>{t('Tutup')}</button></div>
+  </dialog>;
 }
 
 const notificationLabels = {'task.approval_requested.v1':'Tugas menunggu persetujuan','task.completed.v1':'Tugas selesai','task.failed.v1':'Tugas gagal','task.escalated.v1':'Ada hal yang perlu perhatianmu','task.cancelled.v1':'Tugas dihentikan','task.paused.v1':'Tugas dijeda','task.resumed.v1':'Tugas dilanjutkan'};

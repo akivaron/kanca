@@ -18,7 +18,7 @@ from datetime import datetime, timezone
 from typing import Any
 
 from fastapi import Depends, FastAPI, Header, HTTPException, Query, Request
-from fastapi.responses import FileResponsee, JSONResponsee, Responsee
+from fastapi.responses import FileResponse, JSONResponse, Response
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
@@ -278,13 +278,13 @@ def health():
 def home():
     index = FRONTEND_DIR / "index.html"
     if not index.is_file():
-        return JSONResponsee({"detail": "Frontend has not been built. Jalankan npm install && npm run build di folder frontend."}, status_code=503)
-    return FileResponsee(index)
+        return JSONResponse({"detail": "Frontend has not been built. Jalankan npm install && npm run build di folder frontend."}, status_code=503)
+    return FileResponse(index)
 
 
 @app.get("/v1/session", include_in_schema=False)
 def ui_session():
-    response = JSONResponsee({"status": "ok"} if os.getenv("KANCA_API_KEY") else {"detail": "KANCA_API_KEY not configured"}, status_code=200 if os.getenv("KANCA_API_KEY") else 503)
+    response = JSONResponse({"status": "ok"} if os.getenv("KANCA_API_KEY") else {"detail": "KANCA_API_KEY not configured"}, status_code=200 if os.getenv("KANCA_API_KEY") else 503)
     key = os.getenv("KANCA_API_KEY", "")
     if key:
         response.set_cookie("kanca_session", session_token(key), httponly=True, samesite="strict", path="/")
@@ -602,7 +602,7 @@ def export_rows(rows, fields, file_format, filename):
             values = {key: json.dumps(value, ensure_ascii=False) if isinstance(value, (dict, list)) else value for key, value in row.items()}
             writer.writerow({key: ("'" + value if isinstance(value, str) and value[:1] in ('=', '+', '-', '@', '\t', '\r') else value) for key, value in values.items()})
         content, media_type = output.getvalue(), 'text/csv; charset=utf-8'
-    return Responsee(content, media_type=media_type, headers={'Content-Disposition': f'attachment; filename="{filename}.{file_format}"'})
+    return Response(content, media_type=media_type, headers={'Content-Disposition': f'attachment; filename="{filename}.{file_format}"'})
 
 
 @app.get('/v1/sources/{sid}/events/export')
@@ -682,7 +682,7 @@ def get_source_preview(sid: str, tenant: str = Depends(tenant_auth)):
             content = mime = status = requested_at = None
     if content is None:
         raise HTTPException(404, "Belum ada cuplikan kamera baru.")
-    return Responsee(content=content, media_type=mime, headers={
+    return Response(content=content, media_type=mime, headers={
         "Cache-Control": "no-store, max-age=0",
         "X-Content-Type-Options": "nosniff",
         "X-Kanca-Preview-Status": status,
