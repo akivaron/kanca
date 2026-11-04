@@ -1,22 +1,158 @@
-# Kanca — Agent Platform Foundation
+# Kanca
 
-An API-first backend for cross-domain agent tasks. Business and device connector examples use **simulated** data and actions. See [PLAN.md](PLAN.md) for the project roadmap.
+Kanca is an API-first platform for AI-assisted monitoring and task automation across business systems and connected devices. It uses Baseten for natural-language planning, validates every generated plan on the server, and records task activity and escalations in a shared event stream.
 
-## Quick Start
+The project includes simulated business, device, ERP, and warehouse-gateway integrations for demos, plus a built-in Odoo connector for inventory and purchase orders.
 
-Requires Docker and Docker Compose. Copy `.env.example` to `.env`, update `KANCA_API_KEY` and `POSTGRES_PASSWORD`, then run:
+## Quick start
+
+Requirements: Docker and Docker Compose.
+
+1. Copy `.env.example` to `.env`.
+2. Set `KANCA_API_KEY` and `POSTGRES_PASSWORD`.
+3. Start Kanca:
+
+   ```bash
+   ./run.sh
+   ```
+
+Open the demo at [http://localhost:8765](http://localhost:8765). The API reference is at [http://localhost:8765/docs](http://localhost:8765/docs), and the health endpoint is `/health`.
+
+Use `./restart.sh` to rebuild and restart the API and worker while keeping database volumes. Use `./stop.sh` to stop the services. View service logs with `docker compose logs -f`.
+
+The web UI creates a local session automatically. External API clients authenticate with the `X-API-Key` header. Compose binds Kanca to localhost by default.
+
+## Demo workflow
+
+Create a conversation and send an instruction in natural language. Baseten turns monitoring requests into scheduled tasks using only capabilities available to the tenant. The server validates the plan before execution. Read-only plans and registered safe actions can start automatically; other actions require approval. Tasks created through the API or MCP require approval.
+
+The **Background tasks** view shows tasks from all conversations. You can pause, resume, update a schedule, rerun a finished task, or archive it. Schedule changes require renewed approval. The shared worker executes scheduled tasks and updates their results and event history.
+
+The **Notifications** view displays recent task events, including approvals, completions, failures, and escalations. Notification preferences and read status are stored per tenant. Events are also available through the API and webhooks.
+
+## ERP demo
+
+Kanca provides a stateful simulated ERP for demos. It contains sample stock and open purchase orders:
+
+| SKU | Item | Stock | Minimum | Open purchase order |
+| --- | --- | ---: | ---: | --- |
+| `KRT-001` | Demo Carton | 1 carton | 3 cartons | `PO-DEMO-1001`: 4 cartons |
+| `KRT-002` | Reserve Demo Carton | 0 cartons | 6 cartons | `PO-DEMO-1003`: 5 cartons |
+| `BRG-014` | Shelf Component | 24 pcs | 10 pcs | `PO-DEMO-1002`: 12 pcs |
+
+When no ERP is connected, Kanca provisions the demo ERP during planning. You can also create one directly with `POST /v1/erp-connections/demo`. Use `GET /v1/connections/{id}/resources` to view its capabilities and `POST /v1/erp-connections/{id}/reset-demo` to restore the sample data.
+
+The demo gateway, **Gateway Penerimaan Gudang Demo**, is provisioned with the demo ERP when no warehouse IoT source is registered. Its worker-generated heartbeat keeps the simulated sensor online, and it produces a sample goods receipt every 15 minutes. The sample receipt is two cartons of `KRT-002` against `PO-DEMO-1003`, whose ordered quantity is five cartons. This scenario demonstrates both a quantity discrepancy and a post-receipt stock shortage.
+
+Pause or resume the simulated gateway with `POST /v1/sources/{id}/demo-gateway` and either `{"enabled":false}` or `{"enabled":true}`. A paused gateway allows a monitoring task to demonstrate stale-source escalation.
+
+### Connect a real gateway
+
+Send receipts to the source ingest endpoint using event type `goods_receipt`. The event data must include a SKU and an integer quantity; the purchase order number and shipment reference are optional.
 
 ```bash
-./run.sh
+curl -X POST http://localhost:8765/v1/ingest/SOURCE_ID \
+  -H 'Authorization: Bearer SOURCE_TOKEN' \
+  -H 'Content-Type: application/json' \
+  -d '{"type":"goods_receipt","data":{"sku":"KRT-002","quantity":2,"po_number":"PO-DEMO-1003","reference":"GR-DEMO-01"}}'
 ```
 
-Run `./restart.sh` to rebuild the image and restart the API and worker without removing data volumes. To stop the services, run `./stop.sh`. View logs with `docker compose logs -f`.
+The recurring reconciliation task checks each new receipt against open demo purchase orders and calculates stock after receipt. It records a `task.escalated.v1` event with the source and receipt details when the receipt quantity differs from its purchase order, the data is incomplete or ambiguous, or stock is at least three cartons below the item's minimum. If the source stops sending data, Kanca retries and then records an escalation with the latest available observation. CCTV sources are not used for quantity reconciliation.
 
-The demo UI is available at `http://localhost:8765`. API documentation is at `http://localhost:8765/docs`, and the health check is at `http://localhost:8765/health`. The server uses `KANCA_API_KEY` from `.env` to create a local UI session; external API clients authenticate with the `X-API-Key` header. PostgreSQL is available only on the internal Compose network, and its data is stored in the `kanca-postgres` volume.
+The simulated reconciliation capabilities are `erp.demo.inventory`, `erp.demo.purchase_orders`, and `erp.demo.reconcile_source_receipt`. The `erp.demo.receive_shipment` action updates demo inventory and requires task approval. Escalations are stored in Kanca; a configured webhook consumer can forward them to other systems or staff.
 
-### Legacy SQLite Data
+## Odoo connector
 
-PostgreSQL is a new database; data from the old SQLite volume is **not migrated automatically**. To preserve that data before switching to the new database, stop the API and worker, make sure PostgreSQL is running, then run the migration once:
+Connect Odoo with `POST /v1/erp-connections/odoo`, supplying a connection name, HTTPS base URL, optional database name, and API key. The API key is encrypted in the Kanca database and is never returned by the API. New connections remain pending until verified with `POST /v1/erp-connections/{id}/test`.
+
+Set a persistent Fernet key in `KANCA_CREDENTIALS_KEY` before creating an Odoo connection. Generate a key with:
+
+```bash
+python -c 'from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())'
+```
+
+The Odoo connector reads inventory and open purchase orders. Approved write actions can create a draft purchase order or update a note on a draft order. It does not confirm or send purchase orders. Odoo JSON-2 API access requires an Odoo Custom plan; grant the API key only the model access needed by the integration.
+
+Available Odoo capabilities: `erp.odoo.stock_levels`, `erp.odoo.purchase_orders`, `erp.odoo.create_draft_purchase_order`, and `erp.odoo.update_draft_purchase_order_note`. Each step requires the connection's `connection_id`.
+
+## Device sources and gateways
+
+Under **Integrations → Device Sources**, create sources that send JSON events to Kanca. The server stores a hash of each source token; save the token when it is created. Events appear in the UI and are emitted as `source.event.v1` for subscribers.
+
+The **Public Sources** catalog includes 100 BMKG village-level forecast feeds and 400 public CCTV feeds. Public feeds are read on demand by default. Use **Get Data** or an AI-routed chat request for a one-time update, or enable source automation for regular polling. BMKG forecasts cover three days in three-hour intervals and update twice daily. Attribute BMKG when presenting its forecast data.
+
+Source health is estimated from the time of the latest event and the configured `expected_interval_seconds`. A monitoring task treats data as fresh for the greater of five minutes or twice the expected interval. Source events can be exported from `/v1/sources/{id}/events/export` and platform events from `/v1/events/export`; both endpoints support JSON or CSV and cursor-based pagination.
+
+Example gateways are in `gateways/`. Install their optional dependencies with `pip install -r gateways/requirements.txt`. Create a source in Kanca, then set `KANCA_URL`, `KANCA_SOURCE_ID`, and `KANCA_SOURCE_TOKEN` in the gateway environment.
+
+- **Home Assistant:** configure `HA_URL`, `HA_TOKEN`, and `HA_ENTITIES`, then run `python gateways/home_assistant.py`. The gateway forwards entity state every 30 seconds.
+- **MQTT:** configure `MQTT_HOST`, `MQTT_TOPIC`, and optional credentials, then run `python gateways/mqtt.py`. The broker should provide TLS on port `8883`.
+- **Camera motion:** set `CAMERA_SOURCE` to an OpenCV-compatible camera index or stream URL, then run `python gateways/camera_motion.py`. It forwards motion metadata; camera counts remain visual estimates.
+- **ESP32:** `examples/esp32/kanca_sensor.ino` demonstrates sending HTTPS readings. Configure Wi-Fi, the source URL and token, and the CA certificate before use.
+
+For Docker-based gateways, copy the appropriate `gateways/*.env.example` file to the matching ignored environment file, configure the source ID and token, then start a profile. For example:
+
+```bash
+docker compose -f compose.yaml -f compose.gateways.yaml --profile home-assistant up -d --build
+```
+
+Use `mqtt` or `camera` as the profile name for those gateways. Gateway examples send data to Kanca; device control is provided only by explicitly implemented, protocol-specific capabilities.
+
+## API usage
+
+Create a simulated device connection:
+
+```bash
+curl -X POST http://localhost:8765/v1/connections \
+  -H "X-API-Key: $KANCA_API_KEY" \
+  -H 'Content-Type: application/json' \
+  -d '{"type":"device_demo"}'
+```
+
+Create and approve a task:
+
+```bash
+curl -X POST http://localhost:8765/v1/tasks \
+  -H "X-API-Key: $KANCA_API_KEY" \
+  -H 'Content-Type: application/json' \
+  -H 'Idempotency-Key: temperature-check-1' \
+  -d '{"instruction":"Check the temperature","explicit_steps":[{"capability":"device.read_temperature","arguments":{}}]}'
+
+curl -X POST http://localhost:8765/v1/tasks/TASK_ID/approve \
+  -H "X-API-Key: $KANCA_API_KEY" \
+  -H 'Content-Type: application/json' \
+  -d '{"version":1}'
+```
+
+Set `BASETEN_API_KEY` to enable natural-language planning through Baseten and set `BASETEN_MODEL` to select the model. Without a Baseten key, create tasks with `explicit_steps`.
+
+Recurring schedules use an `interval_seconds` value and a `max_runs` count, for example `{"interval_seconds":60,"max_runs":5}`. Conditions can compare fields from earlier steps with `eq`, `ne`, `gt`, `gte`, `lt`, or `lte`. Each action runs once per step per task; check results are available at `/v1/tasks/{id}/runs`.
+
+## MCP integration
+
+Kanca provides a local MCP server over stdio. It can list sources and connections, read events and task results, answer questions about recent source observations, create task proposals, and propose reruns. Task and rerun proposals require approval.
+
+After `./run.sh`, start the MCP server from the project directory:
+
+```bash
+docker compose exec -T -e KANCA_URL=http://api:8000 api python -m app.mcp_server
+```
+
+Configure the MCP client to run `docker compose exec -T -e KANCA_URL=http://api:8000 api python -m app.mcp_server`. The API key is read from the container environment.
+
+## Webhooks
+
+Create a subscription with `POST /v1/webhook-subscriptions`, for example:
+
+```json
+{"url":"https://example.com/webhook","event_types":["task.escalated.v1"]}
+```
+
+Kanca returns the signing secret once when the subscription is created. Store it securely. Webhook requests include `X-Kanca-Timestamp` and `X-Kanca-Signature`; verify the HMAC-SHA256 signature, enforce a timestamp age limit, and deduplicate deliveries by event ID. Delivery is at least once with up to five attempts. Subscriptions accept HTTPS endpoints on port 443 and do not follow redirects.
+
+## Database migration
+
+Compose uses PostgreSQL. SQLite remains available for local development and existing SQLite data is not imported automatically. To migrate a legacy SQLite database, stop the API and worker, ensure PostgreSQL is running, then run:
 
 ```bash
 docker compose up -d db
@@ -26,137 +162,17 @@ docker compose run --rm --no-deps api python -m app.migrate_sqlite /data/kanca.d
 ./run.sh
 ```
 
-The migration reads SQLite without modifying it, preserves IDs and event cursors, and refuses to run if PostgreSQL already contains data. Do not allow the API, worker, or any other process to write to either database during migration. If the SQLite file is in another location, adjust the path inside the container. Check the result before removing the old volume; `./stop.sh` does not remove volumes.
+The migration preserves IDs and event cursors, reads SQLite without modifying it, and refuses to run if PostgreSQL already contains data. Do not allow processes to write to either database during migration. `POSTGRES_PASSWORD` is applied when the PostgreSQL volume is first created; changing it in `.env` does not change the stored database password.
 
-`POSTGRES_PASSWORD` is used when the PostgreSQL volume is first created. Changing it in `.env` after initialization does not automatically change the stored password. Use URL-safe characters for the Compose password.
+## Development
 
-To try the UI, select a simulated connector and send an instruction. **New conversation** starts a separate topic; use the sidebar to reopen conversation history. Kanca includes the latest 12 messages from the topic as model context, and each generated plan becomes its own task. Chat plans that only read data or use registered safe actions run automatically. Other actions require approval. Safe actions are currently limited to simulated reminders and escalation events. Task status updates automatically. Tasks created directly through the API or MCP, and reruns, require approval. The UI creates a local session automatically, so anyone who can access it can use the demo data and actions. Compose binds the app to localhost; add proper user authentication before exposing it to a network. After changing code, run `./run.sh` to rebuild the Docker image.
+The frontend uses React and Vite. Start the API on port `8765`, then run `npm install` and `npm run dev` from `frontend/`. Vite proxies `/v1` requests to the API. Build the frontend with `npm run build` to serve it through FastAPI.
 
-The **Background tasks** menu shows tasks from all conversations. New tasks are created through chat; schedules for unfinished tasks can be changed and must be approved again. Removing a task from the list stops an active task and archives it; its history and events remain stored. A task is work run by the shared worker, not a separate worker process.
-
-Use **Pause** to suspend the next check and **Resume** to reactivate it. Progress and completed actions remain stored. If a scheduled check is overdue when resumed, it may run immediately. Pausing does not cancel a check that has already started. Schedule changes made while paused still require approval again. API endpoints are available at `POST /v1/tasks/{id}/pause` and `POST /v1/tasks/{id}/resume`.
-
-The **Notifications** menu shows up to 100 recent task updates, including approvals, completions, failures, escalations, cancellations, pauses, and resumptions. Choose which notification types to display; preferences and read status are stored per tenant. Completed, failed, or stopped tasks can be rerun from a notification, the task list, or chat. A rerun creates a new task from scratch and requires approval; the original task history remains. These notifications appear in the app and are available through the API; they are not operating-system push notifications. Worker process termination is not detected automatically.
-
-Under **Integrations → Device Sources**, create and manage sources that send JSON events over HTTP. The **Public Sources** tab includes 100 BMKG village-level forecast feeds across 38 provinces and 400 public CCTV feeds. Public feeds are not polled on a schedule by default. **Get Data** and AI-routed chat requests fetch a single update; enable automation on a source to poll it regularly. BMKG forecasts cover three days in three-hour intervals and update twice daily. BMKG limits requests to 60 per minute per IP and requires attribution. Save the token when creating a source; the server stores only its hash. Example request from the same machine:
+To run without Docker, install `requirements.txt`, configure `KANCA_API_KEY` and `DATABASE_URL`, then start the API and worker in separate terminals:
 
 ```bash
-curl -X POST http://localhost:8765/v1/ingest/SOURCE_ID \
-  -H 'Authorization: Bearer SOURCE_TOKEN' -H 'Content-Type: application/json' \
-  -d '{"type":"temperature","data":{"value":29}}'
+uvicorn app.main:app --reload --port 8765
+python -m app.worker
 ```
 
-Events are stored, visible in the UI, and emitted as `source.event.v1` for subscribers. Each source stores `expected_interval_seconds` (default 300) to estimate its reception status: waiting for data, recent, overdue, or inactive. This status reflects only when the last event arrived; Kanca does not monitor the gateway process directly. A task considers data fresh for the greater of five minutes or twice the expected interval. The UI flags observations older than this limit and marks uncertain media results. Sources are soft-deleted so their history remains stored. Source event exports are available at `/v1/sources/{id}/events/export`; platform event exports are available at `/v1/events/export`. Both support `format=json|csv`, up to 1,000 rows per request, and an `after` cursor to continue an export. CSV exports protect text that spreadsheet software could interpret as formulas. The Compose app accepts localhost connections only; other devices require a secure gateway or deployment with HTTPS. Video streaming, QR/Bluetooth pairing, and device control are not available. Do not send video or photos through this endpoint (32 KiB limit).
-
-Approved tasks can read the latest event from one active source through `external.latest_event` and trigger `external.escalate` as a `task.escalated.v1` event when a condition is met. The Integrations UI provides a threshold-rule builder for numeric fields already received; created tasks still require approval and emit at most one escalation per step. Data older than the freshness limit cannot be verified. Assign one Kanca source to each sensor or entity to prevent readings from different devices from overwriting one another. Events do not automatically wake tasks: tasks check data according to their approved schedule. An escalation is an event for a consumer, not a message sent directly.
-
-Recurring tasks created from chat can start the needed source updates automatically when they use an active camera or IoT source. Kanca temporarily enables source automation at 30-second intervals, enables camera vision while keeping audio disabled, and waits up to three minutes before the first check so the gateway can send fresh data. If a scheduled task encounters stale data before a lease exists, it starts source automation and retries; subsequent stale checks retry every 30 seconds up to ten times before failing. Previous source and media settings are restored when the task completes, fails, is cancelled, or is paused. API/MCP tasks still start only after approval. A camera count is a visual estimate, not a verified inventory total; direct messages to staff require a separately configured consumer such as a webhook.
-
-### Device Gateways
-
-Examples in `gateways/` run separately from the API and worker; install optional dependencies with `pip install -r gateways/requirements.txt`. For each gateway, first create a source in the UI and set `KANCA_URL`, `KANCA_SOURCE_ID`, and `KANCA_SOURCE_TOKEN` in the gateway environment. Run the gateway on a machine that can access both Kanca and the device; do not commit tokens. For cross-machine connections, use HTTPS and a secure network gateway. The default Compose configuration does not expose ports to other devices.
-
-- **Home Assistant:** set `HA_URL`, `HA_TOKEN`, and `HA_ENTITIES` (for example, `sensor.temperature`), then run `python gateways/home_assistant.py`. The gateway reads entity state every 30 seconds; `GATEWAY_INTERVAL` can be changed. Matter devices already added to and supported by Home Assistant can be used through their available entities; Kanca does not pair Matter devices itself. State is forwarded as a string in `data.state`.
-- **MQTT:** set `MQTT_HOST`, `MQTT_TOPIC`, and, if needed, `MQTT_USERNAME` and `MQTT_PASSWORD`, then run `python gateways/mqtt.py`. The broker must provide trusted TLS; the default port is `8883`. Messages must be JSON objects and are placed in `data.payload`. Gateway delivery is best effort, with no local queue or guarantee against message loss.
-- **Camera:** set `CAMERA_SOURCE` to a camera index or stream URL supported by OpenCV, then run `python gateways/camera_motion.py`. The gateway sends only estimated motion metadata; it does not send frames, recognize objects, or verify packages. Motion can be caused by lighting changes, so treat it as a signal that needs review.
-- **ESP32:** `examples/esp32/kanca_sensor.ino` demonstrates sending dummy readings over HTTPS. Fill in the Wi-Fi, URL, token, and CA certificate configuration, then replace the dummy value with a sensor reading. The example has not been tested on physical hardware.
-
-These gateways have not been tested with hubs, brokers, cameras, or physical devices, do not have comprehensive recovery mechanisms, and do not provide device control. Use them for local experiments before building a production deployment. For the mini PC package that sends image or audio snapshots to the Kanca server for Baseten analysis, see [mini-pc-gateway/README.md](mini-pc-gateway/README.md).
-
-#### Run a Gateway with Docker
-
-To run a gateway with Docker on the same machine as Kanca:
-
-1. Create a source on the **External Sources** page and save the ID and token, which are shown only once.
-2. Copy one of `gateways/home-assistant.env.example`, `gateways/mqtt.env.example`, or `gateways/camera.env.example` to `gateways/.env.home-assistant`, `gateways/.env.mqtt`, or `gateways/.env.camera`. Fill in the ID, token, and relevant device or service configuration. These files are ignored by Git and are not copied into the image.
-3. Start the selected profile, for example:
-
-   ```bash
-   docker compose -f compose.yaml -f compose.gateways.yaml --profile home-assistant up -d --build
-   ```
-
-   Use the `mqtt` or `camera` profile for other gateways. For a network camera, `CAMERA_SOURCE` can be an RTSP URL supported by OpenCV; USB devices require appropriate host device access configuration, which is not provided automatically. `./stop.sh` stops all gateway profiles along with Kanca.
-
-Each Home Assistant gateway is configured for one entity and one Kanca source. Numeric values are provided as `data.value`, while the original value is available as `data.state`; `unknown` and `unavailable` are not forwarded as readings. MQTT skips retained messages because their measurement time cannot be confirmed. Kanca recognizes data structure only after data has been received; send an initial reading before requesting monitoring. Marking data as new based on its receipt time does not prove the device or hub took a new measurement at that time.
-
-### Frontend Development
-
-The frontend uses React and Vite in `frontend/`. For development, start the API on port 8765, then run `npm install` and `npm run dev` from that directory. Vite proxies `/v1` requests to the API. To serve the built frontend through FastAPI without Docker, run `npm run build` first.
-
-### Run Without Docker
-
-Create a virtual environment, install dependencies with `pip install -r requirements.txt`, and set `KANCA_API_KEY` and `DATABASE_URL` for PostgreSQL. Run `uvicorn app.main:app --reload --port 8765` and `python -m app.worker` in separate terminals. If `DATABASE_URL` is not set, SQLite through `KANCA_DB_PATH` remains available for testing and legacy migrations.
-
-## API Examples
-
-```bash
-export KANCA_API_KEY='change-me'
-curl -X POST http://localhost:8765/v1/connections \
-  -H "X-API-Key: $KANCA_API_KEY" -H 'Content-Type: application/json' \
-  -d '{"type":"device_demo"}'
-
-curl -X POST http://localhost:8765/v1/tasks \
-  -H "X-API-Key: $KANCA_API_KEY" -H 'Content-Type: application/json' \
-  -H 'Idempotency-Key: example-1' \
-  -d '{"instruction":"Check the temperature","explicit_steps":[{"capability":"device.read_temperature","arguments":{}}]}'
-```
-
-### Built-in ERP connector: Odoo
-
-Set a Fernet key in `KANCA_CREDENTIALS_KEY` before creating ERP connections. Generate one with `python -c 'from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())'` and keep it persistent: losing it makes stored ERP API keys unreadable. Connect an Odoo instance through `POST /v1/erp-connections/odoo` with `name`, `base_url`, optional `database`, and `api_key`. Kanca encrypts the API key at rest and never returns it. Use `POST /v1/erp-connections/{id}/test` to verify access and `GET /v1/connections/{id}/resources` to see capabilities.
-
-The current Odoo adapter reads stock quants and open purchase orders. Approved write actions can create an unconfirmed draft purchase order or update a note on a draft order. It does not confirm orders, send them to suppliers, or verify physical inventory. Odoo JSON-2 API access requires an Odoo Custom plan; use an API key with only the model access the integration needs. SAP Business One and Accurate Online are not implemented yet.
-
-Available task capabilities: `erp.odoo.stock_levels`, `erp.odoo.purchase_orders`, `erp.odoo.create_draft_purchase_order`, and `erp.odoo.update_draft_purchase_order_note`. Every ERP step must include its `connection_id`; write capabilities require task approval.
-
-### Simulated ERP for demos
-
-Create a ready-to-use, stateful demo ERP with `POST /v1/erp-connections/demo`. It includes sample stock and purchase orders. `KRT-001` starts at 1 carton with a minimum of 3; `KRT-002` starts at 0 with a minimum of 6 and open PO `PO-DEMO-1003` for 5 cartons. Read `GET /v1/connections/{id}/resources` for the connection ID and capabilities. The agent can read `erp.demo.inventory` and `erp.demo.purchase_orders`; after approving a task, `erp.demo.receive_shipment` records a simulated receipt and changes demo stock. If stock remains under its minimum, Kanca records `erp.demo.stock_threshold_alert.v1` with demo recipients `admin` and `warehouse_staff`. A configured webhook may deliver that event to its subscriber, but the simulation itself does not send staff messages. Reset sample data with `POST /v1/erp-connections/{id}/reset-demo`.
-
-When the demo ERP is available and no warehouse IoT source is registered, Kanca provisions `Gateway Penerimaan Gudang Demo` automatically. The worker sends a heartbeat every 30 seconds and a sample receipt every 15 minutes (`KRT-002`, quantity 2 against PO `PO-DEMO-1003` for 5), so the end-to-end task can be demonstrated without an external gateway. You can pause/resume it with `POST /v1/sources/{id}/demo-gateway`, using body `{"enabled":false}` to pause or `{"enabled":true}` to resume.
-
-For a real IoT/gateway source, send goods receipts using event type `goods_receipt`; the JSON `data` must contain `sku` and integer `quantity`, while `po_number` and `reference` are optional. For example: `{"type":"goods_receipt","data":{"sku":"KRT-002","quantity":2,"po_number":"PO-DEMO-1003","reference":"GR-DEMO-01"}}`. The task checks each new event against open demo POs, calculates stock after receipt and logs `task.escalated.v1` with the source and receipt details for mismatches, incomplete/ambiguous data, or a stock shortage of at least 3 cartons. A stale IoT source is retried and then escalated with its latest available observation. CCTV is excluded from quantity reconciliation. The task result is an owner escalation; staff messaging requires a configured webhook consumer.
-
-Get the `id` from the response, review the `plan`, then approve its version:
-
-```bash
-curl -X POST "http://localhost:8765/v1/tasks/TASK_ID/approve" \
-  -H "X-API-Key: $KANCA_API_KEY" -H 'Content-Type: application/json' \
-  -d '{"version":1}'
-curl "http://localhost:8765/v1/tasks/TASK_ID" -H "X-API-Key: $KANCA_API_KEY"
-curl "http://localhost:8765/v1/events" -H "X-API-Key: $KANCA_API_KEY"
-```
-
-For model mode, set `BASETEN_API_KEY` and submit a task without `explicit_steps`. Muse Spark Open on Baseten proposes capabilities and a schedule; the backend validates them and still requires approval. Configure the model with `BASETEN_MODEL`. Without a key, use `explicit_steps`; this is demo mode, not AI. `examples/poll_events.py` shows an external consumer reading events with a cursor; production consumers should store the cursor and IDs of processed events.
-
-## MCP Integration
-
-Kanca provides a local MCP server over stdio. Available tools include listing sources and connections, reading events and task results, asking natural-language questions about recent source observations (`ask_source`), creating task proposals, and proposing reruns. Questions and the latest events needed to answer them are sent to Baseten. Source answers use only received events and stored camera analysis; MCP cannot request a new camera frame. Task and rerun proposals still require owner approval in Kanca. Direct physical device control is not available; each control adapter must define its own specific actions and approval policy.
-
-After `./run.sh`, an MCP client that supports stdio can run the following command from the project directory:
-
-```bash
-docker compose exec -T -e KANCA_URL=http://api:8000 api python -m app.mcp_server
-```
-
-This command starts the MCP process; it is not an interactive command to type and use as a chat. Configure the MCP client with command `docker` and arguments `compose`, `exec`, `-T`, `-e`, `KANCA_URL=http://api:8000`, `api`, `python`, `-m`, `app.mcp_server`. Run it from the project directory so Compose can find its configuration. The API key is read from the container environment and is not sent through the model. Access to this process and API key gives the agent access to this demo account data; share access carefully. Use from another host requires separate transport and authentication; a public HTTP MCP endpoint is not available.
-
-### Recurring Monitoring
-
-Add a `schedule` to a task, for example: `{"interval_seconds":60,"max_runs":5}`. For explicit steps, an optional condition such as `{"step":0,"field":"temperature_c","operator":"gt","value":28}` checks the result of a previous step. Available operators are `eq`, `ne`, `gt`, `gte`, `lt`, and `lte`. Each action runs only once per step per task; each check result is available at `/v1/tasks/{id}/runs`. All connectors are currently simulated.
-
-### Webhooks
-
-Create a subscription with `POST /v1/webhook-subscriptions` using the body `{"url":"https://example.com/webhook"}`. The secret is returned only when the subscription is created; store it on the receiving side. Filter events with `event_types` when creating the subscription or with `PUT /v1/webhook-subscriptions/{id}/event-types`; the default `["*"]` means all events. New events and deliveries are created in the same transaction. The worker sends them with the `X-Kanca-Timestamp` and `X-Kanca-Signature: sha256=<hex>` headers, using HMAC-SHA256 over `timestamp + "." + raw_body`. Receivers must verify the signature, limit the timestamp age, and deduplicate by event ID. Delivery is at least once, with up to five attempts; see `/v1/webhook-deliveries`. Webhooks accept only HTTPS on port 443 and public IP addresses; redirects are not followed. A subscription receives only events created after it becomes active and matching its filter.
-
-## Current Status and Limitations
-
-This is a local MVP, not a complete implementation of PLAN.md. Compose uses PostgreSQL; one API key still maps to one tenant. Webhook secrets are stored in the database; secure the volume and use TLS in front of the API. LangGraph, Celery, universal pairing, SAM, and real-world actions are not included. Device integrations and Baseten require direct testing. Do not use this for production data or actions until multi-tenant authentication, secret storage, policies, and recovery are strengthened.
-
-## Verification
-
-```bash
-python -m pytest -q
-```
-
-Additional PostgreSQL tests run with `KANCA_TEST_DATABASE_URL` pointing to a test database that can create and drop schemas. Do not use a production database.
+Without `DATABASE_URL`, Kanca uses SQLite at `KANCA_DB_PATH`. Keep API keys, webhook secrets, ERP credentials, and source tokens out of source control. Use TLS and an appropriate authentication layer before exposing Kanca beyond localhost.
